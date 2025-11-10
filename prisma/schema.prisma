@@ -22,10 +22,13 @@ model User {
   image           String?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @default(now()) @updatedAt
-  username        String?
-  displayUsername String?
+  username        String
+  displayUsername String
   sessions        Session[]
   accounts        Account[]
+
+  userTeam     UserTeam[]
+  assignedTask AssignedTask[]
 
   @@unique([email])
   @@unique([username])
@@ -75,4 +78,82 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+model Team {
+  id   String @id @default(uuid())
+  name String
+
+  userTeams UserTeam[]
+  projects  Project[]
+}
+
+model UserTeam {
+  teamId String
+  team   Team   @relation(fields: [teamId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  role UserRole @default(PENDING)
+
+  @@id([teamId, userId])
+}
+
+enum UserRole {
+  OWNER
+  MEMBER
+  PENDING
+}
+
+model Project {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  deadline    DateTime?
+
+  team   Team   @relation(fields: [teamId], references: [id])
+  teamId String
+
+  tasks Task[]
+
+  status ProjectStatus @default(CREATED)
+}
+
+enum ProjectStatus {
+  CREATED
+  IN_PROGRESS
+  COMPLETED
+}
+
+model Task {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  deadline    DateTime?
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id])
+
+  assignedTasks AssignedTask[]
+
+  status      TaskStatus @default(CREATED)
+  dependsOn   Task[]     @relation("TaskDependencies")
+  requiredFor Task[]     @relation("TaskDependencies")
+}
+
+enum TaskStatus {
+  CREATED
+  IN_PROGRESS
+  COMPLETED
+}
+
+model AssignedTask {
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  taskId String
+  task   Task   @relation(fields: [taskId], references: [id])
+
+  @@id([userId, taskId])
 }

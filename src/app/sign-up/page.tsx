@@ -42,7 +42,7 @@ export default function SignUpPage() {
   }
 
   return (
-    <main className="max-w-md mx-auto p-6 space-y-4 text-white">
+    <div className="max-w-md mx-auto mt-16 p-6 space-y-4 text-white">
       <h1 className="text-2xl font-bold">Sign Up</h1>
 
       {error && <p className="text-red-500">{error}</p>}
@@ -86,6 +86,6 @@ export default function SignUpPage() {
           Create Account
         </button>
       </form>
-    </main>
+    </div>
   )
 }
