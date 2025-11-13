@@ -1,26 +1,44 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { authClient } from '@/lib/auth-client'
+import { UserDTO } from '@/app/data/user/user.dto'
+import { useActionState, useEffect } from 'react'
+import { signOutAction } from '@/app/actions/user'
+import { toast } from 'sonner'
+import { redirect } from 'next/navigation'
 
-export default function UserBlock() {
-  const { data: session, isPending } = authClient.useSession()
+type UserBlockProps = {
+  user: UserDTO
+}
 
-  if (isPending)
-    return null
+export default function UserBlock({ user }: UserBlockProps) {
+  const [state, action, pending] = useActionState(signOutAction, {})
 
-  const user = session?.user
+  useEffect(() => {
+    if (!pending) {
+      if (state.status === 'error') {
+        toast.error(state.message)
+      } else if (state.status === 'success') {
+        toast.success(state.message)
+        redirect('/dashboard')
+      }
+    }
+  }, [state.status])
 
   return (
-    user &&
     <div className="flex items-center justify-between gap-4">
-      <h2 className="hidden md:block text-md font-semibold">Здравствуйте, {user.name}!</h2>
-      <Button
-        variant="destructive"
-        onClick={() => authClient.signOut()}
-      >
-        Выйти
-      </Button>
+      <h2 className="hidden md:block text-md font-semibold">
+        Здравствуйте, {user.username}!
+      </h2>
+      <form action={action}>
+        <Button
+          type="submit"
+          variant="destructive"
+          disabled={pending}
+        >
+          {pending ? 'Выход...' : 'Выйти'}
+        </Button>
+      </form>
     </div>
   )
 }

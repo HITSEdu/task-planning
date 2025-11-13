@@ -44,7 +44,7 @@ export default function RootLayout({
       disableTransitionOnChange
     >
       <Header />
-      <main>{children}</main>
+      <main className="max-w-screen h-full flex flex-col">{children}</main>
       <Toaster
         richColors={true}
         closeButton={true}

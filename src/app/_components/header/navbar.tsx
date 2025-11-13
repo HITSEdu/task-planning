@@ -3,16 +3,14 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { sitePages } from '@/app/config/site.config'
-import { authClient } from '@/lib/auth-client'
+import { UserDTO } from '@/app/data/user/user.dto'
 
-export default function NavBar() {
+type NavBarProps = {
+  user: UserDTO | null
+}
+
+export default function NavBar({ user }: NavBarProps) {
   const pathname = usePathname()
-  const { data: session, isPending } = authClient.useSession()
-
-  if (isPending)
-    return <p className="text-center mt-8 text-white">Loading...</p>
-
-  const user = session?.user
 
   const links = [
     {

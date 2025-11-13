@@ -1,27 +1,19 @@
-'use client'
 import Link from 'next/link'
 import { ModeToggle } from '@/app/_components/header/mode-toggle'
-import NavBar from '@/app/_components/header/navbar'
 import { sitePages } from '@/app/config/site.config'
-import UserBlock from '@/app/_components/header/user-block'
-import useUserData from '@/hooks/useUserData'
-import HeaderSkeleton from '@/app/_components/header/header-skeleton'
+import { Skeleton } from '@/components/ui/skeleton'
 
-export default function Header() {
-  const { user, isPending } = useUserData()
-
-  if (isPending) {
-    return <HeaderSkeleton/>
-  }
-
+export default function HeaderSkeleton() {
   return (
     <header className="flex items-center justify-between w-full px-6 py-4 shadow-md">
       <div className="text-2xl font-bold tracking-tight">
         <Link href={sitePages.home.path}>{sitePages.home.labelKey}</Link>
       </div>
-      <NavBar user={user} />
+      <div className="flex gap-2">
+        <Skeleton className="h-8 w-32" />
+        <Skeleton className="h-8 w-32" />
+      </div>
       <div className="flex gap-8">
-        {!!user && <UserBlock user={user} />}
         <div className="flex items-center justify-between gap-2">
           <ModeToggle />
         </div>

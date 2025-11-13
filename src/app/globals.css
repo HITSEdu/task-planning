@@ -114,9 +114,10 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 p-0 m-0;
   }
-  body {
-    @apply bg-background text-foreground max-w-screen;
+
+  html, body {
+    @apply bg-background text-foreground max-w-screen h-full overflow-hidden;
   }
 }
