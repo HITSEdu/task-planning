@@ -19,6 +19,11 @@ export default function NavBar({ user }: NavBarProps) {
       condition: !!user
     },
     {
+      href: sitePages.teams.path,
+      label: sitePages.teams.labelKey,
+      condition: !!user
+    },
+    {
       href: sitePages.register.path,
       label: sitePages.register.labelKey,
       condition: !user
