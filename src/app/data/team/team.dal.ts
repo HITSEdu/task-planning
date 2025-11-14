@@ -15,7 +15,6 @@ import {
 } from '@/app/data/user/user.dto'
 import { createError } from '@/lib/utils'
 import { StateType } from '@/app/config/site.config'
-import { cacheTag } from 'next/cache'
 
 export class TeamDAL {
   private constructor(private readonly user: UserDTO) {
@@ -28,6 +27,12 @@ export class TeamDAL {
     } catch (error) {
       return null
     }
+  }
+
+  static async getTeamOwner(teamId: string) {
+    return prisma.userTeam.findFirst({
+      where: { teamId, role: 'OWNER' },
+    })
   }
 
   async createTeam(input: unknown): Promise<StateType<TeamDTO>> {
@@ -110,9 +115,19 @@ export class TeamDAL {
       message: 'Команда не найдена!'
     }
 
-    const teamOwner = await prisma.userTeam.findFirst({
-      where: { teamId, userId: this.user.id, role: 'OWNER' },
+    const mates = await prisma.userTeam.findMany({
+      where: { teamId },
+      include: { user: true }
     })
+
+    if (mates.map(m => m.user.username).includes(parsed.data.username)) {
+      return {
+        status: 'error',
+        message: 'Пользователь уже состоит в команде или ожидает подтверждения!'
+      }
+    }
+
+    const teamOwner = await TeamDAL.getTeamOwner(teamId)
 
     if (!isOwner(this.user, { ownerId: teamOwner?.userId })) {
       return {
@@ -144,9 +159,7 @@ export class TeamDAL {
   }
 
   async deleteTeam(teamId: string): Promise<StateType<TeamDTO>> {
-    const teamOwner = await prisma.userTeam.findFirst({
-      where: { teamId, userId: this.user.id, role: 'OWNER' },
-    })
+    const teamOwner = await TeamDAL.getTeamOwner(teamId)
 
     if (!isOwner(this.user, { ownerId: teamOwner?.userId })) {
       return {

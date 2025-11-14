@@ -1,0 +1,167 @@
+import 'server-only'
+import { requireUser } from '@/app/data/user/require-user'
+import {
+  ProjectChangeStatusSchema,
+  ProjectCreateInputSchema, ProjectDTO, ProjectUpdateInputSchema,
+} from './project.dto'
+import prisma from '@/lib/prisma'
+import {
+  UserDTO
+} from '@/app/data/user/user.dto'
+import { createError } from '@/lib/utils'
+import { StateType } from '@/app/config/site.config'
+import { TeamDAL } from '../team/team.dal'
+import { isOwner } from '../team/team.policy'
+
+export class ProjectDAL {
+  private constructor(private readonly user: UserDTO) {
+  }
+
+  static async create() {
+    try {
+      const user = await requireUser()
+      return new ProjectDAL(user)
+    } catch (error) {
+      return null
+    }
+  }
+
+  async createProject(teamId: string, input: unknown): Promise<StateType<ProjectDTO>> {
+    const parsed = ProjectCreateInputSchema.safeParse(input)
+    if (!parsed.success) {
+      return {
+        status: 'error',
+        message: createError(parsed.error.issues)
+      }
+    }
+
+    const owner = await TeamDAL.getTeamOwner(teamId)
+    if (!isOwner(this.user, { ownerId: owner?.userId })) {
+      return { status: 'error', message: 'Нет прав на создание проекта!' }
+    }
+
+    const project = await prisma.project.create({
+      data: {
+        title: parsed.data.title,
+        description: parsed.data.description,
+        deadline: parsed.data.deadline,
+        teamId
+      }
+    })
+
+    return {
+      status: 'success',
+      message: 'Проект успешно создан!',
+      data: project as ProjectDTO
+    }
+  }
+
+  async getUserProjects() {
+    const teams = await prisma.userTeam.findMany({
+      where: { userId: this.user.id },
+      include: {
+        team: {
+          include: { projects: true }
+        }
+      }
+    })
+
+    const allProjects = teams.flatMap(t => t.team.projects)
+
+    return allProjects.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+  }
+
+  async getProject(projectId: string) {
+    return prisma.project.findFirst({
+      where: {
+        id: projectId,
+        team: {
+          userTeams: { some: { userId: this.user.id } }
+        }
+      }
+    })
+  }
+
+  async updateProject(projectId: string, input: unknown): Promise<StateType<ProjectDTO>> {
+    const parsed = ProjectUpdateInputSchema.safeParse(input)
+    if (!parsed.success) return {
+      status: 'error',
+      message: createError(parsed.error.issues)
+    }
+
+    const project = await prisma.project.findUnique({
+      where: { id: projectId }
+    })
+
+    if (!project) return { status: 'error', message: 'Проект не найден' }
+
+    const teamOwner = await TeamDAL.getTeamOwner(project.teamId)
+    if (!isOwner(this.user, { ownerId: teamOwner?.userId })) {
+      return { status: 'error', message: 'Нет прав на изменение проекта' }
+    }
+
+    const updated = await prisma.project.update({
+      where: { id: projectId },
+      data: {
+        title: parsed.data.title,
+        description: parsed.data.description,
+        deadline: parsed.data.deadline,
+      }
+    })
+
+    return {
+      status: 'success',
+      message: 'Проект обновлён',
+      data: updated as ProjectDTO
+    }
+  }
+
+  async changeStatus(input: unknown): Promise<StateType<ProjectDTO>> {
+    const parsed = ProjectChangeStatusSchema.safeParse(input)
+    if (!parsed.success) {
+      return { status: 'error', message: createError(parsed.error.issues) }
+    }
+
+    const project = await prisma.project.findUnique({
+      where: { id: parsed.data.ProjectId }
+    })
+
+    if (!project) return { status: 'error', message: 'Проект не найден' }
+
+    const owner = await TeamDAL.getTeamOwner(project.teamId)
+    if (!isOwner(this.user, { ownerId: owner?.userId })) {
+      return { status: 'error', message: 'Нет прав!' }
+    }
+
+    const updated = await prisma.project.update({
+      where: { id: project.id },
+      data: { status: parsed.data.answer }
+    })
+
+    return {
+      status: 'success',
+      message: 'Статус обновлён',
+      data: updated as ProjectDTO
+    }
+  }
+
+  async deleteProject(projectId: string): Promise<StateType> {
+    const project = await prisma.project.findUnique({
+      where: { id: projectId }
+    })
+
+    if (!project) return { status: 'error', message: 'Проект не найден' }
+
+    const owner = await TeamDAL.getTeamOwner(project.teamId)
+    if (!isOwner(this.user, { ownerId: owner?.userId })) {
+      return { status: 'error', message: 'Нет прав!' }
+    }
+
+    await prisma.project.delete({ where: { id: projectId } })
+
+    return {
+      status: 'success',
+      message: 'Проект удалён'
+    }
+  }
+}
