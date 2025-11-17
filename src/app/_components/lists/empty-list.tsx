@@ -2,21 +2,28 @@ import {
   Empty, EmptyDescription, EmptyHeader, EmptyTitle
 } from '@/components/ui/empty'
 
-type EmptyTeamsProps = {
-  type: 'teams' | 'invites'
+type EmptyListProps = {
+  type: 'teams' | 'invites' | 'projects'
 }
 
 const phrases = {
   'teams': 'У вас пока нет команд.\n' +
     '          Вы можете создать свою или получить приглашение от других людей.',
-  'invites': 'У вас пока нет новых приглашений.'
+  'invites': 'У вас пока нет новых приглашений.',
+  'projects': 'У вас пока нет проектов.'
 }
 
-export default function EmptyTeams({ type }: EmptyTeamsProps) {
+const titles = {
+  'teams': 'команд',
+  'invites': 'приглашений',
+  'projects': 'проектов'
+}
+
+export default function EmptyList({ type }: EmptyListProps) {
   return (
     <Empty>
       <EmptyHeader>
-        <EmptyTitle>Нет {type === 'teams' ? 'команд' : 'приглашений'}</EmptyTitle>
+        <EmptyTitle>Нет {titles[type]}</EmptyTitle>
         <EmptyDescription>
           {phrases[type]}
         </EmptyDescription>

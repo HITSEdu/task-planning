@@ -2,7 +2,9 @@ import 'server-only'
 import { requireUser } from '@/app/data/user/require-user'
 import {
   ProjectChangeStatusSchema,
-  ProjectCreateInputSchema, ProjectDTO, ProjectUpdateInputSchema,
+  ProjectCreateInputSchema,
+  ProjectUpdateInputSchema,
+  ProjectWithStatusDTO,
 } from './project.dto'
 import prisma from '@/lib/prisma'
 import {
@@ -26,7 +28,7 @@ export class ProjectDAL {
     }
   }
 
-  async createProject(teamId: string, input: unknown): Promise<StateType<ProjectDTO>> {
+  async createProject(teamId: string, input: unknown): Promise<StateType<ProjectWithStatusDTO>> {
     const parsed = ProjectCreateInputSchema.safeParse(input)
     if (!parsed.success) {
       return {
@@ -52,37 +54,27 @@ export class ProjectDAL {
     return {
       status: 'success',
       message: 'Проект успешно создан!',
-      data: project as ProjectDTO
+      data: project as ProjectWithStatusDTO
     }
   }
 
-  async getUserProjects() {
-    const teams = await prisma.userTeam.findMany({
-      where: { userId: this.user.id },
-      include: {
-        team: {
-          include: { projects: true }
-        }
-      }
-    })
-
-    const allProjects = teams.flatMap(t => t.team.projects)
+  async getUserProjects(teamId: string) {
+    const allProjects = await prisma.project.findMany({
+      where: { teamId: teamId },
+    }) as ProjectWithStatusDTO[]
 
     return allProjects.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
   }
 
   async getProject(projectId: string) {
-    return prisma.project.findFirst({
+    return await prisma.project.findFirst({
       where: {
         id: projectId,
-        team: {
-          userTeams: { some: { userId: this.user.id } }
-        }
       }
-    })
+    }) as ProjectWithStatusDTO
   }
 
-  async updateProject(projectId: string, input: unknown): Promise<StateType<ProjectDTO>> {
+  async updateProject(projectId: string, input: unknown): Promise<StateType<ProjectWithStatusDTO>> {
     const parsed = ProjectUpdateInputSchema.safeParse(input)
     if (!parsed.success) return {
       status: 'error',
@@ -106,17 +98,17 @@ export class ProjectDAL {
         title: parsed.data.title,
         description: parsed.data.description,
         deadline: parsed.data.deadline,
-      }
+      },
     })
 
     return {
       status: 'success',
       message: 'Проект обновлён',
-      data: updated as ProjectDTO
+      data: updated as ProjectWithStatusDTO
     }
   }
 
-  async changeStatus(input: unknown): Promise<StateType<ProjectDTO>> {
+  async changeStatus(input: unknown): Promise<StateType<ProjectWithStatusDTO>> {
     const parsed = ProjectChangeStatusSchema.safeParse(input)
     if (!parsed.success) {
       return { status: 'error', message: createError(parsed.error.issues) }
@@ -135,13 +127,13 @@ export class ProjectDAL {
 
     const updated = await prisma.project.update({
       where: { id: project.id },
-      data: { status: parsed.data.answer }
+      data: { status: parsed.data.answer },
     })
 
     return {
       status: 'success',
       message: 'Статус обновлён',
-      data: updated as ProjectDTO
+      data: updated as ProjectWithStatusDTO
     }
   }
 

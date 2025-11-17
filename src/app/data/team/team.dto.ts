@@ -1,3 +1,4 @@
+import { UserRole } from '@/generated/prisma/enums'
 import 'server-only'
 import { z } from 'zod'
 
@@ -14,6 +15,10 @@ export const TeamDTOSchema = z.object({
 })
 
 export type TeamDTO = z.infer<typeof TeamDTOSchema>;
+
+export type TeamWithRoleDTO = TeamDTO & {
+  role: UserRole;
+}
 
 export const TeamAnswerSchema = z.object({
   teamId: z.string(),

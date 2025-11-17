@@ -2,8 +2,9 @@
 
 import { StateType } from '@/app/config/site.config'
 import { ProjectDAL } from '@/app/data/project/project.dal'
+import { ProjectWithStatusDTO } from '@/app/data/project/project.dto'
 
-export async function createProjectAction(teamId: string, _prev: StateType, formData: FormData) {
+export async function createProjectAction(teamId: string, _prev: StateType, formData: FormData): Promise<StateType<ProjectWithStatusDTO>> {
   const dal = await ProjectDAL.create()
   if (!dal) return { status: 'error', message: 'Сессия недействительна!' }
 
@@ -31,14 +32,14 @@ export async function updateProjectAction(projectId: string, _prev: StateType, f
   )
 }
 
-export async function deleteProjectAction(projectId: string, _prev: StateType) {
+export async function deleteProjectAction(projectId: string, _prev: StateType): Promise<StateType> {
   const dal = await ProjectDAL.create()
   if (!dal) return { status: 'error', message: 'Сессия недействительна!' }
 
   return await dal.deleteProject(projectId)
 }
 
-export async function changeProjectStatusAction(_prev: StateType, formData: FormData) {
+export async function changeProjectStatusAction(_prev: StateType, formData: FormData): Promise<StateType> {
   const dal = await ProjectDAL.create()
   if (!dal) return { status: 'error', message: 'Сессия недействительна!' }
 

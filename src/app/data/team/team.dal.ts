@@ -3,7 +3,7 @@ import { requireUser } from '@/app/data/user/require-user'
 import {
   TeamAnswerSchema,
   TeamCreateInputSchema,
-  TeamDTO,
+  TeamDTO, TeamWithRoleDTO,
 } from './team.dto'
 import {
   canCreateTeam,
@@ -15,6 +15,7 @@ import {
 } from '@/app/data/user/user.dto'
 import { createError } from '@/lib/utils'
 import { StateType } from '@/app/config/site.config'
+import { teamMapper } from '@/app/data/utils/team-mapper'
 
 export class TeamDAL {
   private constructor(private readonly user: UserDTO) {
@@ -32,6 +33,12 @@ export class TeamDAL {
   static async getTeamOwner(teamId: string) {
     return prisma.userTeam.findFirst({
       where: { teamId, role: 'OWNER' },
+    })
+  }
+
+  static async getUserRoleInTeam(teamId: string, userId: string) {
+    return prisma.userTeam.findFirst({
+      where: { teamId, userId },
     })
   }
 
@@ -80,17 +87,15 @@ export class TeamDAL {
       orderBy: { team: { createdAt: 'desc' } },
     })
 
-    const activeTeams: TeamDTO[] = userTeams
-      .filter((ut) => ut.role !== 'PENDING')
-      .map((ut) => ut.team)
+    const activeTeams = teamMapper(userTeams
+      .filter((ut) => ut.role !== 'PENDING'))
 
-    const pendingInvites: TeamDTO[] = userTeams
-      .filter((ut) => ut.role === 'PENDING')
-      .map((ut) => ut.team)
+    const pendingInvites = teamMapper(userTeams
+      .filter((ut) => ut.role === 'PENDING'))
 
     return {
-      teams: activeTeams,
-      invites: pendingInvites,
+      teams: activeTeams as TeamWithRoleDTO[],
+      invites: pendingInvites as TeamWithRoleDTO[],
     }
   }
 

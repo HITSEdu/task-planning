@@ -3,9 +3,9 @@ import { redirect } from 'next/navigation'
 import CreateTeamForm from '@/app/teams/_components/create-team-form'
 import InvitesList from '@/app/teams/_components/invites-list'
 import TeamsList from './_components/teams-list'
-import EmptyTeams from '@/app/teams/_components/empty-teams'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import EmptyList from '../_components/lists/empty-list'
 
 export default async function TeamsPage() {
   const dal = await TeamDAL.create()
@@ -25,7 +25,7 @@ export default async function TeamsPage() {
           <CardContent className="flex-1 overflow-hidden">
             <ScrollArea className="h-full pr-2">
               {teams.length === 0 ? (
-                <EmptyTeams type="teams" />
+                <EmptyList type="teams" />
               ) : (
                 <TeamsList teams={teams} />
               )}
@@ -44,7 +44,7 @@ export default async function TeamsPage() {
           <CardContent className="flex-1 overflow-hidden">
             <ScrollArea className="h-full pr-2">
               {invites.length === 0 ? (
-                <EmptyTeams type="invites" />
+                <EmptyList type="invites" />
               ) : (
                 <InvitesList invites={invites} />
               )}
