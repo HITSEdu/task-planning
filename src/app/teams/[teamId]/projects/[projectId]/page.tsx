@@ -7,6 +7,7 @@ import ProjectItem
   from '@/app/teams/[teamId]/projects/[projectId]/_components/project-item'
 import DeleteProjectForm
   from '@/app/teams/[teamId]/projects/[projectId]/_components/delete-project-form'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 type Props = {
   params: Promise<{
@@ -45,10 +46,37 @@ export default async function ProjectPage({ params }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-4 justify-center items-center">
-      <ProjectItem project={project} />
+    <div className="flex flex-col md:flex-row gap-6 p-4 md:p-8 justify-center items-stretch min-h-[calc(100vh-5rem)]">
+      <section className="flex-1 flex flex-col">
+        <Card className="h-full flex flex-col shadow-sm">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg md:text-xl font-semibold text-center md:text-left">
+              Информация о проекте
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex-1 overflow-hidden">
+            <div className="flex flex-col gap-4 justify-center items-center">
+              <ProjectItem project={project} />
+              {project.team.role === 'OWNER' && (
+                <DeleteProjectForm project={project} />)}
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
       {project.team.role === 'OWNER' && (
-        <DeleteProjectForm project={project} />)}
+        <section className="flex-1 flex flex-col">
+          <Card className="h-full flex flex-col shadow-sm p-6 md:p-8">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg md:text-xl font-semibold text-center md:text-left">
+                Управление проектом
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex justify-center w-full mt-4">
+            </CardContent>
+          </Card>
+        </section>
+      )}
     </div>
   )
 }

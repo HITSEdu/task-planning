@@ -3,6 +3,15 @@ import { TeamDAL } from '@/app/data/team/team.dal'
 import { redirect } from 'next/navigation'
 import TeamItem from '@/app/teams/[teamId]/_components/team-item'
 import DeleteTeamForm from '@/app/teams/[teamId]/_components/delete-team-form'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import MatesList from './_components/mates-list'
+import InviteForm from '@/app/teams/[teamId]/_components/invite-form'
 
 type Props = {
   params: Promise<{ teamId: string }>;
@@ -17,28 +26,78 @@ export default async function TeamPage({ params }: Props) {
 
   if (!team) {
     return (
-      <div className="p-8">
-        <h1 className="text-xl font-semibold">Команда не найдена</h1>
-        <Link
-          href="/teams"
-          className="text-blue-500 hover:underline"
-        >
-          Назад к списку команд
-        </Link>
+      <div className="p-8 flex items-center justify-center min-h-[400px] w-full">
+        <div className="text-center flex flex-col">
+          <h1 className="text-xl font-semibold">Команда не найдена...</h1>
+          <Link
+            href="/teams"
+            className="text-blue-500 hover:underline"
+          >
+            Назад к списку команд
+          </Link>
+        </div>
       </div>
     )
   }
 
+  const mates = await dal.getUsersInTeam(teamId)
+
   return (
-    <div className="flex flex-col gap-4 justify-center items-center">
-      <TeamItem team={team} />
-      <Link
-        href={`/teams/${team.id}/projects`}
-        className="font-medium hover:underline"
-      >
-        Проекты
-      </Link>
-      {team.role === 'OWNER' && (<DeleteTeamForm team={team} />)}
+    <div className="flex flex-col md:flex-row gap-6 p-4 md:p-8 justify-center items-stretch min-h-[calc(100vh-5rem)]">
+      <section className="flex-1 flex flex-col">
+        <Card className="h-full flex flex-col shadow-sm">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg md:text-xl font-semibold text-center md:text-left">
+              Информация о команде
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex-1 overflow-hidden">
+            <div className="flex flex-col gap-4">
+              <TeamItem team={team} />
+              <Link
+                href={`/teams/${team.id}/projects`}
+                className="font-medium hover:underline"
+              >
+                Проекты
+              </Link>
+              <div className="mt-auto">
+                {team.role === 'OWNER' && (
+                  <DeleteTeamForm team={team} />)}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
+      <section className="flex-1 flex flex-col">
+        <Card className="h-full flex flex-col shadow-sm">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg md:text-xl font-semibold text-center md:text-left">
+              Участники команды
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex-1 overflow-hidden">
+            <ScrollArea className="h-full pr-2">
+              <MatesList mates={mates} />
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      </section>
+
+      {team.role === 'OWNER' && (
+        <section className="flex-1 flex flex-col">
+          <Card className="h-full flex flex-col shadow-sm p-6 md:p-8">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg md:text-xl font-semibold text-center md:text-left">
+                Управление командой
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex justify-center w-full mt-4">
+              <InviteForm teamId={teamId} />
+            </CardContent>
+          </Card>
+        </section>
+      )}
     </div>
   )
 }

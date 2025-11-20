@@ -35,23 +35,20 @@ export default function CreateTeamForm() {
       className="flex w-full max-w-sm items-center bg-card p-2 rounded-lg"
     >
       <FieldGroup>
-        <FieldSet>
-          <FieldLegend>Создать команду</FieldLegend>
-          <FieldGroup>
-            <Field>
-              <FieldLabel htmlFor="checkout-team-name">
-                Название команды
-              </FieldLabel>
-              <Input
-                type="text"
-                name="name"
-                placeholder="Лучшая команда"
-                id="checkout-team-name"
-                required
-              />
-            </Field>
-          </FieldGroup>
-        </FieldSet>
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="checkout-team-name">
+              Название команды
+            </FieldLabel>
+            <Input
+              type="text"
+              name="name"
+              placeholder="Лучшая команда"
+              id="checkout-team-name"
+              required
+            />
+          </Field>
+        </FieldGroup>
         <Field orientation="horizontal">
           <Button type="submit"> {pending ? 'Создание...' : 'Создать'}</Button>
         </Field>

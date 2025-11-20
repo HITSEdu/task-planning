@@ -15,7 +15,7 @@ export default function ProjectItem({ project }: ProjectItemProps) {
       <p className="text-gray-500 mt-2">ID: {project.id}</p>
       <p className="text-gray-500 mt-2">Описание: {project.description ?? '-'}</p>
       <p className="text-gray-500 mt-2">Срок сдачи: {project.deadline?.toLocaleDateString() ?? '-'}</p>
-      <p className="text-gray-500 mt-2">Проект: {project.team.name}</p>
+      <p className="text-gray-500 mt-2">Команда: {project.team.name}</p>
     </div>
   )
 }

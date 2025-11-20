@@ -54,7 +54,12 @@ export default async function TeamsPage() {
       </section>
 
       <section className="flex-1 flex flex-col">
-        <Card className="h-full flex flex-col justify-center shadow-sm p-6 md:p-8">
+        <Card className="h-full flex flex-col shadow-sm p-6 md:p-8">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg md:text-xl font-semibold text-center md:text-left">
+              Создать команду
+            </CardTitle>
+          </CardHeader>
           <CardContent className="flex justify-center w-full mt-4">
             <CreateTeamForm />
           </CardContent>

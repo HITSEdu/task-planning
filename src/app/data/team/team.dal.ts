@@ -11,7 +11,7 @@ import {
 } from './team.policy'
 import prisma from '@/lib/prisma'
 import {
-  AddUserToTeamSchema, UserDTO
+  AddUserToTeamSchema, UserDTO, UserWithTeamDTO
 } from '@/app/data/user/user.dto'
 import { createError } from '@/lib/utils'
 import { StateType } from '@/app/config/site.config'
@@ -104,6 +104,26 @@ export class TeamDAL {
     return allTeams.teams.find((t) => t.id === teamId) ?? null
   }
 
+  async getUsersInTeam(teamId: string) {
+    const userTeams = await prisma.userTeam.findMany({
+      where: {
+        teamId: teamId,
+      },
+      include: {
+        user: true,
+      }
+    })
+
+    return userTeams.map(ut => ({
+      id: ut.user.id,
+      email: ut.user.email,
+      username: ut.user.username,
+      createdAt: ut.createdAt,
+      teamId: ut.teamId,
+      role: ut.role,
+    })) as UserWithTeamDTO[]
+  }
+
   async addUserToTeam(teamId: string, input: unknown): Promise<StateType<TeamDTO>> {
     const parsed = AddUserToTeamSchema.safeParse(input)
     if (!parsed.success) return {
@@ -142,7 +162,7 @@ export class TeamDAL {
     }
 
     const member = await prisma.user.findUnique({
-      where: { username: parsed.data.username },
+      where: { username: parsed.data.username.toLowerCase() },
     })
 
     if (!member) return {
