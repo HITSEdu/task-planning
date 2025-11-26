@@ -41,6 +41,7 @@ export default async function TeamPage({ params }: Props) {
   }
 
   const mates = await dal.getUsersInTeam(teamId)
+  const user = mates.find(el => el.id === dal.getUser().id)!
 
   return (
     <div className="flex flex-col md:flex-row gap-6 p-4 md:p-8 justify-center items-stretch min-h-[calc(100vh-5rem)]">
@@ -78,7 +79,10 @@ export default async function TeamPage({ params }: Props) {
           </CardHeader>
           <CardContent className="flex-1 overflow-hidden">
             <ScrollArea className="h-full pr-2">
-              <MatesList mates={mates} />
+              <MatesList
+                mates={mates}
+                user={user}
+              />
             </ScrollArea>
           </CardContent>
         </Card>

@@ -28,6 +28,16 @@ export class ProjectDAL {
     }
   }
 
+  static async getUserRoleInTeamByProject(projectId: string, userId: string) {
+    const project = await prisma.project.findFirst({
+      where: {
+        id: projectId,
+      }
+    })
+    if (!project) return null
+    return await TeamDAL.getUserRoleInTeam(project.teamId, userId)
+  }
+
   async createProject(teamId: string, input: unknown): Promise<StateType<ProjectWithStatusDTO>> {
     const parsed = ProjectCreateInputSchema.safeParse(input)
     if (!parsed.success) {
@@ -59,6 +69,9 @@ export class ProjectDAL {
   }
 
   async getUserProjects(teamId: string) {
+    const inTeam = await TeamDAL.isUserInTeam(teamId, this.user.id)
+    if (!inTeam) return []
+
     const allProjects = await prisma.project.findMany({
       where: { teamId: teamId },
     }) as ProjectWithStatusDTO[]
@@ -67,11 +80,17 @@ export class ProjectDAL {
   }
 
   async getProject(projectId: string) {
-    return await prisma.project.findFirst({
+    const project = await prisma.project.findFirst({
       where: {
         id: projectId,
       }
-    }) as ProjectWithStatusDTO
+    }) as ProjectWithStatusDTO | null
+
+    if (!project) return null
+
+    const inTeam = await TeamDAL.isUserInTeam(project.teamId, this.user.id)
+    if (!inTeam) return null
+    return project
   }
 
   async updateProject(projectId: string, input: unknown): Promise<StateType<ProjectWithStatusDTO>> {

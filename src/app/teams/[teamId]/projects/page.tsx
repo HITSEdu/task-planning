@@ -52,13 +52,15 @@ export default async function ProjectsPage({ params }: Props) {
         </Card>
       </section>
 
-      <section className="flex-1 flex flex-col">
-        <Card className="h-full flex flex-col justify-center shadow-sm p-6 md:p-8">
-          <CardContent className="flex justify-center w-full mt-4">
-            <CreateProjectForm teamId={teamId} />
-          </CardContent>
-        </Card>
-      </section>
+      {team.role === 'OWNER' && (
+        <section className="flex-1 flex flex-col">
+          <Card className="h-full flex flex-col justify-center shadow-sm p-6 md:p-8">
+            <CardContent className="flex justify-center w-full mt-4">
+              <CreateProjectForm teamId={teamId} />
+            </CardContent>
+          </Card>
+        </section>
+      )}
     </div>
   )
 }

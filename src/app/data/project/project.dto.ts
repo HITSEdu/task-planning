@@ -16,7 +16,9 @@ export type ProjectCreateInput = z.infer<typeof ProjectCreateInputSchema>
 export const ProjectUpdateInputSchema = z.object({
   title: z.string().min(2, 'Название проекта должно быть не короче 2 символов').optional(),
   description: z.string().optional(),
-  deadline: z.date().optional(),
+  deadline: z.date()
+    .min(new Date(), 'Срок сдачи не может быть в прошлом')
+    .optional(),
 })
 
 export type ProjectUpdateInput = z.infer<typeof ProjectUpdateInputSchema>

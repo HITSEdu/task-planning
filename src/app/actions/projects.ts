@@ -25,7 +25,7 @@ export async function updateProjectAction(projectId: string, _prev: StateType, f
   return await dal.updateProject(
     projectId,
     {
-      title: formData.get('title') ?? undefined,
+      title: formData.get('title'),
       description: formData.get('description') ?? undefined,
       deadline: formData.get('deadline') ? new Date(formData.get('deadline') as string) : undefined,
     }

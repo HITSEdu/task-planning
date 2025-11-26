@@ -36,10 +36,19 @@ export class TeamDAL {
     })
   }
 
+  getUser() {
+    return this.user
+  }
+
   static async getUserRoleInTeam(teamId: string, userId: string) {
     return prisma.userTeam.findFirst({
       where: { teamId, userId },
     })
+  }
+
+  static async isUserInTeam(teamId: string, userId: string) {
+    const userTeam = await TeamDAL.getUserRoleInTeam(teamId, userId)
+    return (userTeam !== null && userTeam.role !== 'PENDING')
   }
 
   async createTeam(input: unknown): Promise<StateType<TeamDTO>> {
@@ -105,6 +114,9 @@ export class TeamDAL {
   }
 
   async getUsersInTeam(teamId: string) {
+    const inTeam = await TeamDAL.isUserInTeam(teamId, this.user.id)
+    if (!inTeam) return []
+
     const userTeams = await prisma.userTeam.findMany({
       where: {
         teamId: teamId,
@@ -201,6 +213,46 @@ export class TeamDAL {
     }
   }
 
+  async kickUserFromTeam(teamId: string, userId: string): Promise<StateType> {
+    const teamOwner = await TeamDAL.getTeamOwner(teamId)
+    const isOwnerUser = isOwner(this.user, { ownerId: teamOwner?.userId })
+    const isSelf = this.user.id === userId
+
+    if (userId === teamOwner?.userId) {
+      return {
+        status: 'error',
+        message: 'Лидер команды может только удалить команду!'
+      }
+    }
+
+    if (!isSelf && !isOwnerUser) {
+      return {
+        status: 'error',
+        message: 'Нет прав!'
+      }
+    }
+
+    const membership = await prisma.userTeam.findUnique({
+      where: {
+        teamId_userId: { teamId, userId },
+      },
+    })
+
+    if (!membership) return {
+      status: 'error',
+      message: 'Участник не в команде!'
+    }
+
+    await prisma.userTeam.delete({
+      where: { teamId_userId: { teamId, userId } },
+    })
+
+    return {
+      status: 'success',
+      message: isSelf ? 'Вы покинули команду!' : 'Пользователь удалён!'
+    }
+  }
+
   async giveAnswerToInvite(input: unknown): Promise<StateType<TeamDTO>> {
     const parsed = TeamAnswerSchema.safeParse(input)
     if (!parsed.success) return {
@@ -230,7 +282,7 @@ export class TeamDAL {
       case 'accept': {
         await prisma.userTeam.update({
           where: { teamId_userId: { teamId, userId: this.user.id } },
-          data: { role: 'MEMBER' },
+          data: { role: 'MEMBER', createdAt: new Date() },
         })
 
         return {
