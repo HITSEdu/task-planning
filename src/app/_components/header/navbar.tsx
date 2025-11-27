@@ -36,13 +36,15 @@ export default function NavBar({ user }: NavBarProps) {
   ]
 
   return (
-    <nav className="flex gap-2 items-center justify-center">
+    <nav className="flex gap-8 items-center justify-center">
       {links.filter(el => el.condition).map((link) => (
         <Link
           key={link.href}
           href={link.href}
-          className={`transition-colors hover:text-indigo-400 ${
-            pathname === link.href ? 'text-indigo-500 font-semibold' : 'text-gray-700 dark:text-gray-300'
+          className={`transition-colors hover:text-primary ${
+            pathname === link.href 
+              ? 'text-primary font-semibold' 
+              : 'text-muted-foreground'
           }`}
         >
           {link.label}

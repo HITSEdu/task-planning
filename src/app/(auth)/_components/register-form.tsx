@@ -14,6 +14,8 @@ import { useActionState, useEffect } from 'react'
 import { signUpAction } from '@/app/actions/user'
 import { toast } from 'sonner'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
+import { sitePages } from '@/app/config/site.config'
 
 export default function RegisterForm() {
   const [state, action, pending] = useActionState(signUpAction, {})
@@ -32,13 +34,13 @@ export default function RegisterForm() {
   return (
     <form
       action={action}
-      className="flex w-full max-w-sm items-center bg-card p-2 rounded-lg"
+      className="flex w-full max-w-sm items-center bg-card p-4 rounded-lg"
     >
       <FieldGroup>
         <FieldSet>
           <FieldLegend className="text-center">Регистрация</FieldLegend>
           <FieldDescription>
-            Создайте свой аккаунт для планирования задач
+            Создать новый аккаунт
           </FieldDescription>
           <FieldGroup>
             <Field>
@@ -49,7 +51,7 @@ export default function RegisterForm() {
                 id="checkout-full-name"
                 type="text"
                 name="name"
-                placeholder="Денис Мосин"
+                placeholder="name"
                 required
               />
             </Field>
@@ -61,7 +63,7 @@ export default function RegisterForm() {
                 type="email"
                 name="email"
                 id="checkout-email"
-                placeholder="mail@example.com"
+                placeholder="email"
                 required
               />
             </Field>
@@ -73,7 +75,7 @@ export default function RegisterForm() {
                 type="text"
                 name="username"
                 id="checkout-username"
-                placeholder="example_user"
+                placeholder="username"
                 required
               />
             </Field>
@@ -85,7 +87,7 @@ export default function RegisterForm() {
                 type="password"
                 name="password"
                 id="checkout-password"
-                placeholder="Str0nG_p4ssw0rd"
+                placeholder="password"
                 required
               />
             </Field>
@@ -93,12 +95,13 @@ export default function RegisterForm() {
         </FieldSet>
         <Field orientation="horizontal">
           <Button type="submit"> {pending ? 'Регистрация...' : 'Зарегистрироваться'}</Button>
-          <Button
-            variant="outline"
-            type="button"
+          <Link
+            key={sitePages.login.path}
+            href={sitePages.login.path}
+            className={`transition-colors hover:text-primary`}
           >
-            Есть аккаунт?
-          </Button>
+            {sitePages.login.labelKey}
+          </Link>
         </Field>
       </FieldGroup>
     </form>

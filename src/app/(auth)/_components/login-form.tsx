@@ -13,6 +13,8 @@ import {
   FieldSet
 } from '@/components/ui/field'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
+import { sitePages } from '@/app/config/site.config'
 
 export default function LoginForm() {
   const [state, action, pending] = useActionState(signInAction, {})
@@ -31,13 +33,13 @@ export default function LoginForm() {
   return (
     <form
       action={action}
-      className="flex w-full max-w-sm items-center bg-card p-2 rounded-lg"
+      className="flex w-full max-w-sm items-center bg-card p-4 rounded-lg"
     >
       <FieldGroup>
         <FieldSet>
           <FieldLegend>Вход в аккаунт</FieldLegend>
           <FieldDescription>
-            Войдите в аккаунт для работы
+            Войдите в аккаунт, чтобы продолжить работу
           </FieldDescription>
           <FieldGroup>
             <Field>
@@ -48,7 +50,7 @@ export default function LoginForm() {
                 type="text"
                 name="username"
                 id="checkout-username"
-                placeholder="example_user"
+                placeholder="username"
                 required
               />
             </Field>
@@ -60,7 +62,7 @@ export default function LoginForm() {
                 type="password"
                 name="password"
                 id="checkout-password"
-                placeholder="Str0nG_p4ssw0rd"
+                placeholder="password"
                 required
               />
             </Field>
@@ -68,12 +70,13 @@ export default function LoginForm() {
         </FieldSet>
         <Field orientation="horizontal">
           <Button type="submit"> {pending ? 'Вход...' : 'Войти в аккаунт'}</Button>
-          <Button
-            variant="outline"
-            type="button"
+          <Link
+            key={sitePages.register.path}
+            href={sitePages.register.path}
+            className={`transition-colors hover:text-primary`}
           >
-            Впервые на сайте?
-          </Button>
+           {sitePages.register.labelKey}
+          </Link>
         </Field>
       </FieldGroup>
     </form>

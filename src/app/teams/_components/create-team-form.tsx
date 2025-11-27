@@ -43,7 +43,7 @@ export default function CreateTeamForm() {
             <Input
               type="text"
               name="name"
-              placeholder="Лучшая команда"
+              placeholder="Название"
               id="checkout-team-name"
               required
             />
