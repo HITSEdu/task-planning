@@ -11,10 +11,9 @@ export default function InvitesList({ invites }: InvitesListProps) {
       {invites.map((team) => (
         <li
           key={team.id}
-          className="border rounded-xl p-4 flex items-center justify-between hover:bg-muted/40 transition"
+          className="border rounded-xl p-2 flex items-center hover:bg-muted/40 transition"
         >
-          <span className="font-medium">{team.name}</span>
-          <GiveAnswerForm teamId={team.id} />
+          <GiveAnswerForm teamId={team.id} teamName={team.name} />
         </li>
       ))}
     </ul>

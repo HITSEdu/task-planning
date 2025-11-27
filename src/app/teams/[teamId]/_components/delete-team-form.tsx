@@ -34,7 +34,7 @@ export default function DeleteTeamForm({ team }: DeleteTeamFormProps) {
   return (
     <form
       action={action}
-      className="flex w-full max-w-sm items-center bg-card p-2 rounded-lg"
+      className="flex w-full max-w-sm items-center bg-card rounded-lg"
     >
       <FieldGroup>
         <Field orientation="horizontal">

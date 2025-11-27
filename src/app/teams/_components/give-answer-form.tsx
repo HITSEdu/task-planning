@@ -11,9 +11,10 @@ import { answerInviteAction } from '@/app/actions/teams'
 
 type CreateTeamFormProps = {
   teamId: string
+  teamName: string
 }
 
-export default function GiveAnswerForm({ teamId }: CreateTeamFormProps) {
+export default function GiveAnswerForm({ teamId, teamName }: CreateTeamFormProps) {
   const [state, action, pending] = useActionState(answerInviteAction, {})
 
   useEffect(() => {
@@ -34,12 +35,15 @@ export default function GiveAnswerForm({ teamId }: CreateTeamFormProps) {
         value={teamId}
       />
       <FieldGroup>
-        <FieldLegend>Приглашение в команду</FieldLegend>
-        <div className="flex gap-2">
+        <FieldLegend
+          variant="label"
+        >{teamName}</FieldLegend>
+        <div className="flex gap-4">
           <Button
             type="submit"
             name="answer"
             value="accept"
+            size="sm"
             disabled={pending}
           >
             {pending ? 'Отправка...' : 'Принять'}
@@ -49,6 +53,7 @@ export default function GiveAnswerForm({ teamId }: CreateTeamFormProps) {
             name="answer"
             value="reject"
             variant="destructive"
+            size="sm"
             disabled={pending}
           >
             {pending ? 'Отправка...' : 'Отклонить'}

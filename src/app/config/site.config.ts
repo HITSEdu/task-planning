@@ -8,7 +8,7 @@ export const sitePages: Record<string, PageLinkType> = {
   register: { path: '/sign-up', labelKey: 'Регистрация' },
   home: { path: '/', labelKey: 'Главная' },
   teams: { path: '/teams', labelKey: 'Команды' },
-  dashboard: { path: '/dashboard', labelKey: '???' },
+  dashboard: { path: '/dashboard', labelKey: 'Dashboard' }, // TODO: /dashboard -> profile?
 } as const
 
 export type SitePageKey = keyof typeof sitePages
