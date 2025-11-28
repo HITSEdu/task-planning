@@ -36,7 +36,7 @@ export default async function TasksPage({ params }: Props) {
         <h1 className="text-xl font-semibold">Проект не найден</h1>
         <Link
           href={`/teams/${teamId}/projects`}
-          className="text-blue-500 hover:underline"
+          className="text-primary hover:underline"
         >
           Назад к списку проектов
         </Link>
@@ -56,7 +56,7 @@ export default async function TasksPage({ params }: Props) {
             </CardTitle>
             <Link
               href={`/teams/${teamId}/projects/${projectId}`}
-              className="text-blue-500 hover:underline"
+              className="text-primary hover:underline"
             >
               Назад к проекту
             </Link>

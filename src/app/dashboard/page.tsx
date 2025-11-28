@@ -23,6 +23,8 @@ export default function DashboardPage() {
 
   return (
     <div className="flex items-center justify-center mt-16">
+      {/* TODO(Сделать диаграмму ганта в виде матрица для каждого проекта) */}
+      {/* TODO(Выделять задачи, которые принадлежат пользователю) */}
       <p>UserName: {user.username}</p>
     </div>
   )

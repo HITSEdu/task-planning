@@ -51,6 +51,7 @@ export class TaskDAL {
     }
 
     const { dependsOn, ...data } = parsed.data
+    // TODO(Сделать проверку на циклические зависимости)
 
     const deps = await prisma.task.findMany({
       where: { id: { in: dependsOn } },

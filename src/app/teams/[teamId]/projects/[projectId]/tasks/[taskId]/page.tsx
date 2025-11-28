@@ -58,14 +58,15 @@ export default async function TaskPage({ params }: Props) {
           </CardContent>
         </Card>
       </section>
-
       {team.role === 'OWNER' && (
         <section className="flex-1 flex flex-col">
           <Card className="h-full flex flex-col bg-card/70 backdrop-blur shadow-md">
             <CardHeader>
               <CardTitle className="text-xl">Управление задачей</CardTitle>
             </CardHeader>
-
+            {/* TODO(Назначить пользователя на задачу) */}
+            {/* TODO(Изменить статус выполнения задачи/edit) */}
+            {/* TODO(Показывать кому назначена задача) */}
             <CardContent className="flex-1 overflow-auto">
             </CardContent>
           </Card>

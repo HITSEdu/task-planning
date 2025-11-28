@@ -57,7 +57,7 @@ export default async function TeamPage({ params }: Props) {
               <TeamItem team={team} />
               <Link
                 href={`/teams/${team.id}/projects`}
-                className="font-medium hover:underline"
+                className="p-2 w-fit border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:hover:bg-input/50 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all"
               >
                 Проекты
               </Link>

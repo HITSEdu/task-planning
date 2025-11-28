@@ -44,7 +44,7 @@ export default function InviteForm({ teamId }: InviteFormProps) {
               <Input
                 type="text"
                 name="username"
-                placeholder="user_new"
+                placeholder="username"
                 id="checkout-username"
                 required
               />

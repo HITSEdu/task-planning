@@ -61,7 +61,7 @@ export default function CreateProjectForm({ teamId }: CreateProjectFormProps) {
               <Input
                 type="text"
                 name="title"
-                placeholder="Лучший проект"
+                placeholder="Название"
                 id="checkout-project-title"
                 required
               />
@@ -73,7 +73,7 @@ export default function CreateProjectForm({ teamId }: CreateProjectFormProps) {
               <Input
                 type="text"
                 name="description"
-                placeholder="Что-то важное..."
+                placeholder="Описание"
                 id="checkout-project-description"
               />
             </Field>
