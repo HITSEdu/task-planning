@@ -5,7 +5,19 @@ import { TeamDAL } from '@/app/data/team/team.dal'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { TaskDAL } from '@/app/data/task/task.dal'
 import TaskItem
-  from '@/app/teams/[teamId]/projects/[projectId]/tasks/[taskId]/_components/task-item'
+  from '@/app/teams/[teamId]/projects/[projectId]/tasks/[taskId]/_components/task-item/task-item'
+import DeleteTaskForm
+  from '@/app/teams/[teamId]/projects/[projectId]/tasks/[taskId]/_components/task-item/delete-task-form'
+import EditTaskForm
+  from '@/app/teams/[teamId]/projects/[projectId]/tasks/[taskId]/_components/task-item/edit-task-form'
+import AssignUserForm
+  from '@/app/teams/[teamId]/projects/[projectId]/tasks/[taskId]/_components/task-item/assign-user-form'
+import AssignYourselfForm
+  from '@/app/teams/[teamId]/projects/[projectId]/tasks/[taskId]/_components/task-item/assign-yourself-form'
+import UnassignUserForm
+  from '@/app/teams/[teamId]/projects/[projectId]/tasks/[taskId]/_components/task-item/unassign-user-form'
+import ChangeTaskStatusForm
+  from '@/app/teams/[teamId]/projects/[projectId]/tasks/[taskId]/_components/task-item/change-task-status-form'
 
 type Props = {
   params: Promise<{
@@ -40,7 +52,15 @@ export default async function TaskPage({ params }: Props) {
       </div>
     )
 
-  const isAssigned = !!(await TaskDAL.getAssignedTask(taskId, teamDal.getUser().id))
+  const user = teamDal.getUser()
+  const isAssigned = !!(await TaskDAL.getAssignedTask(taskId, user.id))
+  const isOwner = team.role === 'OWNER'
+  const assignedUsers = await taskDal.getAssignedUsers(taskId)
+  const teamMembers = await teamDal.getUsersInTeam(teamId)
+
+  const unAssignedUsers = teamMembers.filter(u => !assignedUsers.map(i => i.id).includes(u.id))
+
+  const allTasks = await taskDal.getProjectTasks(projectId)
 
   return (
     <div className="flex flex-col md:flex-row gap-6 p-4 md:p-8 min-h-[calc(100vh-5rem)]">
@@ -53,25 +73,43 @@ export default async function TaskPage({ params }: Props) {
             <TaskItem
               task={task}
               role={team.role}
-              isAssigned={isAssigned}
+              assignedUsers={assignedUsers}
             />
           </CardContent>
         </Card>
       </section>
-      {team.role === 'OWNER' && (
-        <section className="flex-1 flex flex-col">
-          <Card className="h-full flex flex-col bg-card/70 backdrop-blur shadow-md">
-            <CardHeader>
-              <CardTitle className="text-xl">Управление задачей</CardTitle>
-            </CardHeader>
-            {/* TODO(Назначить пользователя на задачу) */}
-            {/* TODO(Изменить статус выполнения задачи/edit) */}
-            {/* TODO(Показывать кому назначена задача) */}
-            <CardContent className="flex-1 overflow-auto">
-            </CardContent>
-          </Card>
-        </section>
-      )}
+      <section className="flex-1 flex flex-col">
+        <Card className="h-full flex flex-col bg-card/70 backdrop-blur shadow-md">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg md:text-xl font-semibold text-center md:text-left">
+              Управление задачей
+            </CardTitle>
+          </CardHeader>
+          {/* TODO(Изменить статус выполнения задачи/edit) */}
+          <CardContent className="flex flex-col gap-4 mt-4 items-start">
+            {isAssigned ? <UnassignUserForm
+              task={task}
+              userId={user.id}
+            /> : <AssignYourselfForm task={task} />}
+            <ChangeTaskStatusForm task={task} />
+            {isOwner && (
+              <>
+                <DeleteTaskForm
+                  task={task}
+                />
+                <EditTaskForm
+                  task={task}
+                  availableTasks={allTasks}
+                />
+                <AssignUserForm
+                  task={task}
+                  availableUsers={unAssignedUsers}
+                />
+              </>
+            )}
+          </CardContent>
+        </Card>
+      </section>
     </div>
   )
 }

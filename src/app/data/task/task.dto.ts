@@ -48,3 +48,7 @@ export const TaskChangeStatusSchema = z.object({
   TaskId: z.string(),
   answer: z.enum(['CREATED', 'IN_PROGRESS', 'COMPLETED']),
 })
+
+export const TaskAssignUserSchema = z.object({
+  UserId: z.string(),
+})

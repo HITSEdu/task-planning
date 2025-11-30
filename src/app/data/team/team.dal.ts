@@ -87,6 +87,41 @@ export class TeamDAL {
     }
   }
 
+  async updateTeam(teamId: string, input: unknown): Promise<StateType<TeamDTO>> {
+    const parsed = TeamCreateInputSchema.safeParse(input)
+    if (!parsed.success) return {
+      status: 'error',
+      message: createError(parsed.error.issues)
+    }
+
+    const team = await prisma.team.findUnique({
+      where: { id: teamId }
+    })
+
+    if (!team) return { status: 'error', message: 'Команда не найдена' }
+
+    const teamOwner = await TeamDAL.getTeamOwner(teamId)
+    if (!isOwner(this.user, { ownerId: teamOwner?.userId })) {
+      return {
+        status: 'error',
+        message: 'Невозможно редактировать команду!'
+      }
+    }
+
+    const updated = await prisma.team.update({
+      where: { id: teamId },
+      data: {
+        name: parsed.data.name,
+      },
+    })
+
+    return {
+      status: 'success',
+      message: 'Команда обновлена',
+      data: updated as TeamDTO,
+    }
+  }
+
   async getUserTeams() {
     const userTeams = await prisma.userTeam.findMany({
       where: { userId: this.user.id },

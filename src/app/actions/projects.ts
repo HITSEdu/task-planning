@@ -3,6 +3,7 @@
 import { StateType } from '@/app/config/site.config'
 import { ProjectDAL } from '@/app/data/project/project.dal'
 import { ProjectWithStatusDTO } from '@/app/data/project/project.dto'
+import { revalidatePath } from 'next/cache'
 
 export async function createProjectAction(teamId: string, _prev: StateType, formData: FormData): Promise<StateType<ProjectWithStatusDTO>> {
   const dal = await ProjectDAL.create()
@@ -18,11 +19,11 @@ export async function createProjectAction(teamId: string, _prev: StateType, form
   )
 }
 
-export async function updateProjectAction(projectId: string, _prev: StateType, formData: FormData) {
+export async function updateProjectAction(projectId: string, _prev: StateType, formData: FormData): Promise<StateType> {
   const dal = await ProjectDAL.create()
   if (!dal) return { status: 'error', message: 'Сессия недействительна!' }
 
-  return await dal.updateProject(
+  const result = await dal.updateProject(
     projectId,
     {
       title: formData.get('title'),
@@ -30,6 +31,10 @@ export async function updateProjectAction(projectId: string, _prev: StateType, f
       deadline: formData.get('deadline') ? new Date(formData.get('deadline') as string) : undefined,
     }
   )
+
+  if (result.status === 'success') revalidatePath('/teams/[teamId]/projects/[projectId]', 'page')
+
+  return result
 }
 
 export async function deleteProjectAction(projectId: string, _prev: StateType): Promise<StateType> {

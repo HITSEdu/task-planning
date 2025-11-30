@@ -1,8 +1,9 @@
 import 'server-only'
 import { requireUser } from '@/app/data/user/require-user'
-import { UserDTO } from '@/app/data/user/user.dto'
+import { UserDTO, UserWithTaskDTO } from '@/app/data/user/user.dto'
 import { StateType } from '@/app/config/site.config'
 import {
+  TaskAssignUserSchema,
   TaskChangeStatusSchema,
   TaskCreateInputSchema,
   TaskUpdateInputSchema, TaskWithDependenciesDTO, TaskWithStatusDTO
@@ -32,6 +33,25 @@ export class TaskDAL {
     })
   }
 
+  async getAssignedUsers(taskId: string) {
+    const raw = await prisma.assignedTask.findMany({
+      where: { taskId },
+      include: { user: true }
+    })
+
+    return raw.map(el => {
+      const data: UserWithTaskDTO = {
+        id: el.userId,
+        username: el.user.username,
+        email: el.user.email,
+        createdAt: el.user.createdAt,
+        assignedAt: el.createdAt,
+        taskId: el.taskId,
+      }
+      return data
+    })
+  }
+
   async createTask(projectId: string, input: unknown): Promise<StateType<TaskWithStatusDTO>> {
     const parsed = TaskCreateInputSchema.safeParse(input)
     if (!parsed.success) {
@@ -51,7 +71,6 @@ export class TaskDAL {
     }
 
     const { dependsOn, ...data } = parsed.data
-    // TODO(Сделать проверку на циклические зависимости)
 
     const deps = await prisma.task.findMany({
       where: { id: { in: dependsOn } },
@@ -114,7 +133,17 @@ export class TaskDAL {
     return task
   }
 
-  async assignUser(taskId: string, userId: string): Promise<StateType> {
+  async assignUser(taskId: string, input: unknown): Promise<StateType> {
+    const parsed = TaskAssignUserSchema.safeParse(input)
+    if (!parsed.success) {
+      return {
+        status: 'error',
+        message: createError(parsed.error.issues)
+      }
+    }
+
+    const userId = parsed.data.UserId
+
     const task = await prisma.task.findUnique({
       where: { id: taskId },
       include: { project: true },
@@ -178,6 +207,28 @@ export class TaskDAL {
     return { status: 'success', message: 'Вы успешно назначены на задачу!' }
   }
 
+  async unassignUser(taskId: string, userId: string): Promise<StateType> {
+    const task = await prisma.task.findUnique({
+      where: { id: taskId },
+      include: { project: true },
+    })
+
+    if (!task) return { status: 'error', message: 'Задача не найдена' }
+
+    if (userId !== this.user.id) {
+      const owner = await TeamDAL.getTeamOwner(task.project.teamId)
+      if (!isOwner(this.user, { ownerId: owner?.userId })) {
+        return { status: 'error', message: 'Нет прав' }
+      }
+    }
+
+    await prisma.assignedTask.delete({
+      where: { userId_taskId: { userId, taskId } }
+    })
+
+    return { status: 'success', message: 'Успешное снятие с задачи!' }
+  }
+
   async updateTask(taskId: string, input: unknown): Promise<StateType> {
     const parsed = TaskUpdateInputSchema.safeParse(input)
     if (!parsed.success) {
@@ -219,6 +270,13 @@ export class TaskDAL {
       }
     }
 
+    if (dependsOn && await this.checkCyclicDependency(taskId, task.projectId, dependsOn)) {
+      return {
+        status: 'error',
+        message: 'Циклическая зависимость в задачах!'
+      }
+    }
+
     await prisma.task.update({
       where: { id: taskId },
       data: {
@@ -241,7 +299,7 @@ export class TaskDAL {
 
     const task = await prisma.task.findUnique({
       where: { id: parsed.data.TaskId },
-      include: { project: true },
+      include: { project: true, dependsOn: true },
     })
 
     if (!task) return { status: 'error', message: 'Задача не найдена' }
@@ -249,6 +307,13 @@ export class TaskDAL {
     const owner = await TeamDAL.getTeamOwner(task.project.teamId)
     if (!isOwner(this.user, { ownerId: owner?.userId })) {
       return { status: 'error', message: 'Нет прав!' }
+    }
+
+    if (task.dependsOn.find(t => t.status !== 'COMPLETED')) {
+      return {
+        status: 'error',
+        message: 'Сначала нужно выполнить предыдущие задачи!'
+      }
     }
 
     await prisma.task.update({
@@ -262,7 +327,7 @@ export class TaskDAL {
   async deleteTask(taskId: string): Promise<StateType> {
     const task = await prisma.task.findUnique({
       where: { id: taskId },
-      include: { project: true },
+      include: { project: true, requiredFor: true },
     })
 
     if (!task) return { status: 'error', message: 'Задача не найдена' }
@@ -272,8 +337,56 @@ export class TaskDAL {
       return { status: 'error', message: 'Нет прав!' }
     }
 
+    if (task.requiredFor.length > 0) {
+      return {
+        status: 'error',
+        message: 'Нельзя удалить задачу — другие задачи зависят от неё!',
+      }
+    }
+
     await prisma.task.delete({ where: { id: taskId } })
 
     return { status: 'success', message: 'Задача удалена' }
+  }
+
+  private async checkCyclicDependency(taskId: string, projectId: string, dependsOn: string[]): Promise<boolean> {
+    const graph = new Map<string, string[]>()
+
+    const tasks = await prisma.task.findMany({
+      where: { projectId },
+      include: { dependsOn: true, requiredFor: true }
+    })
+
+    tasks.forEach(t => {
+      graph.set(t.id, [])
+    })
+
+    tasks.forEach(t => {
+      t.dependsOn?.forEach(dep => {
+        graph.get(t.id)!.push(dep.id)
+      })
+    })
+
+    if (taskId) graph.set(taskId, dependsOn)
+
+    const visited = new Set<string>()
+    const stack = new Set<string>()
+
+    const dfs = (id: string): boolean => {
+      if (stack.has(id)) return true
+      if (visited.has(id)) return false
+
+      visited.add(id)
+      stack.add(id)
+
+      for (const next of graph.get(id) || []) {
+        if (dfs(next)) return true
+      }
+
+      stack.delete(id)
+      return false
+    }
+
+    return dfs(taskId)
   }
 }

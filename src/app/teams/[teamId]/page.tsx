@@ -1,8 +1,6 @@
 import Link from 'next/link'
 import { TeamDAL } from '@/app/data/team/team.dal'
 import { redirect } from 'next/navigation'
-import TeamItem from '@/app/teams/[teamId]/_components/team-item'
-import DeleteTeamForm from '@/app/teams/[teamId]/_components/delete-team-form'
 import {
   Card,
   CardContent,
@@ -12,6 +10,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area'
 import MatesList from './_components/mates-list'
 import InviteForm from '@/app/teams/[teamId]/_components/invite-form'
+import TeamItem from '@/app/teams/[teamId]/_components/team-item/team-item'
 
 type Props = {
   params: Promise<{ teamId: string }>;
@@ -53,19 +52,7 @@ export default async function TeamPage({ params }: Props) {
             </CardTitle>
           </CardHeader>
           <CardContent className="flex-1 overflow-hidden">
-            <div className="flex flex-col gap-4">
-              <TeamItem team={team} />
-              <Link
-                href={`/teams/${team.id}/projects`}
-                className="p-2 w-fit border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:hover:bg-input/50 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all"
-              >
-                Проекты
-              </Link>
-              <div className="mt-auto">
-                {team.role === 'OWNER' && (
-                  <DeleteTeamForm team={team} />)}
-              </div>
-            </div>
+            <TeamItem team={team} />
           </CardContent>
         </Card>
       </section>

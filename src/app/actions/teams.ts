@@ -16,6 +16,16 @@ export async function createTeamAction(_prevState: StateType, formData: FormData
   return await dal.createTeam({ name: formData.get('name') })
 }
 
+export async function updateTeamAction(teamId: string, _prevState: StateType, formData: FormData): Promise<StateType<TeamDTO>> {
+  const dal = await TeamDAL.create()
+  if (!dal) return {
+    status: 'error',
+    message: 'Сессия недействительна!'
+  }
+
+  return await dal.updateTeam(teamId, { name: formData.get('name') })
+}
+
 export async function deleteTeamAction(teamId: string, _prevState: StateType): Promise<StateType<TeamDTO>> {
   const dal = await TeamDAL.create()
   if (!dal) return {
