@@ -9,10 +9,10 @@ export default function HeaderSkeleton() {
       <div className="text-2xl font-bold tracking-tight">
         <Link href={sitePages.home.path}>{sitePages.home.labelKey}</Link>
       </div>
-      <div className="flex gap-2">
+      {/* <div className="flex gap-2">
         <Skeleton className="h-8 w-32" />
         <Skeleton className="h-8 w-32" />
-      </div>
+      </div> */}
       <div className="flex gap-8">
         <div className="flex items-center justify-between gap-2">
           <ModeToggle />

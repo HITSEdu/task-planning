@@ -17,9 +17,9 @@ export default function Header() {
   return (
     <header className="flex items-center justify-between w-full px-6 py-4 shadow-md">
       <div className="text-2xl font-bold tracking-tight">
-        <Link href={sitePages.home.path}>{sitePages.home.labelKey}</Link>
+        <Link href={sitePages.teams.path}>{sitePages.teams.labelKey}</Link>
       </div>
-      <NavBar user={user} />
+      {/* <NavBar user={user} /> */}
       <div className="flex gap-8">
         {!!user && <UserBlock user={user} />}
         <div className="flex items-center justify-between gap-2">

@@ -83,6 +83,9 @@ importers:
       react-hook-form:
         specifier: ^7.66.0
         version: 7.66.0(react@19.2.0)
+      react-modern-gantt:
+        specifier: ^0.6.1
+        version: 0.6.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
@@ -1376,6 +1379,13 @@ packages:
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
+
+  react-modern-gantt@0.6.1:
+    resolution: {integrity: sha512-HSTBz5ZJAB6nqRitqxn/EB9tUTAJuyx7c/pKjLKqX24wfwcE95SYuZWEGLbAyEIqQaDgdkCkXlyQmOU4XMxRMQ==}
+    peerDependencies:
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
+      typescript: ^4.0.0 || ^5.0.0
 
   react-remove-scroll-bar@2.3.8:
     resolution: {integrity: sha512-9r+yi9+mgU33AKcj6IbT9oRCO78WriSj6t/cF8DWBZJ9aOGPOTEDvdUDz1FwKim7QXWwmHqtdHnRJfhAxEG46Q==}
@@ -2706,6 +2716,13 @@ snapshots:
   react-hook-form@7.66.0(react@19.2.0):
     dependencies:
       react: 19.2.0
+
+  react-modern-gantt@0.6.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3):
+    dependencies:
+      date-fns: 4.1.0
+      react: 19.2.0
+      react-dom: 19.2.0(react@19.2.0)
+      typescript: 5.9.3
 
   react-remove-scroll-bar@2.3.8(@types/react@19.2.2)(react@19.2.0):
     dependencies:
