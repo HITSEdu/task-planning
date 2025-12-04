@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { ProjectWithTeamDTO } from '@/app/data/project/project.dto'
+import { Badge } from '@/components/ui/badge'
 
 type ProjectItemProps = {
   project: ProjectWithTeamDTO
@@ -22,7 +23,12 @@ export default function ProjectItem({ project }: ProjectItemProps) {
       className="flex flex-col gap-4 items-start"
     >
       <ItemContent>
-        <ItemTitle>{project.title}</ItemTitle>
+        <ItemTitle className="flex items-center gap-2">
+          {project.title}
+          <Badge variant={project.status === 'COMPLETED' ? 'default' : 'secondary'}>
+            {project.status}
+          </Badge>
+        </ItemTitle>
         <ItemDescription>Описание: {project.description ?? '-'}</ItemDescription>
         <ItemDescription>Срок сдачи: {project.deadline?.toLocaleDateString() ?? '-'}</ItemDescription>
         <ItemDescription>Команда: {project.team.name}</ItemDescription>

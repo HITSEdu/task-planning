@@ -48,7 +48,7 @@ export default async function ProjectsPage({ params }: Props) {
             </Link>
           </CardHeader>
           <CardContent className="flex-1 overflow-hidden">
-            <ScrollArea className="h-full pr-2">
+            <ScrollArea className="h-full pr-4 pb-12">
               {projects.length === 0 ? (
                 <EmptyList type="projects" />
               ) : (

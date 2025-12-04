@@ -7,9 +7,13 @@ import { revalidatePath } from 'next/cache'
 
 export async function createTaskAction(projectId: string, _prev: StateType, formData: FormData): Promise<StateType<TaskWithStatusDTO>> {
   const dal = await TaskDAL.create()
-  if (!dal) return { status: 'error', message: 'Сессия недействительна!' }
+  if (!dal) return {
+    status: 'error',
+    message: 'Сессия недействительна!',
+    time: Date.now()
+  }
 
-  return await dal.createTask(
+  const result = await dal.createTask(
     projectId,
     {
       title: formData.get('title'),
@@ -18,6 +22,17 @@ export async function createTaskAction(projectId: string, _prev: StateType, form
       dependsOn: formData.getAll('dependsOn')
     }
   )
+
+  if (result.status === 'success') {
+    revalidatePath('/teams/[teamId]/projects/[projectId]/tasks/[taskId]', 'page')
+  }
+
+  return {
+    status: result.status,
+    message: result.message,
+    data: result.data,
+    time: Date.now()
+  }
 }
 
 export async function assignUserAction(taskId: string, _prev: StateType, formData: FormData): Promise<StateType> {

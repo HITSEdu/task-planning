@@ -23,7 +23,7 @@ export default async function TeamsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="flex-1 overflow-hidden">
-            <ScrollArea className="h-full pr-2">
+            <ScrollArea className="h-full pr-4 pb-12">
               {teams.length === 0 ? (
                 <EmptyList type="teams" />
               ) : (
@@ -42,7 +42,7 @@ export default async function TeamsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="flex-1 overflow-hidden">
-            <ScrollArea className="h-full pr-2">
+            <ScrollArea className="h-full pr-4 pb-12">
               {invites.length === 0 ? (
                 <EmptyList type="invites" />
               ) : (

@@ -1,7 +1,6 @@
 'use client'
 import Link from 'next/link'
 import { ModeToggle } from '@/app/_components/header/mode-toggle'
-import NavBar from '@/app/_components/header/navbar'
 import { sitePages } from '@/app/config/site.config'
 import UserBlock from '@/app/_components/header/user-block'
 import useUserData from '@/hooks/useUserData'
@@ -19,7 +18,6 @@ export default function Header() {
       <div className="text-2xl font-bold tracking-tight">
         <Link href={sitePages.teams.path}>{sitePages.teams.labelKey}</Link>
       </div>
-      {/* <NavBar user={user} /> */}
       <div className="flex gap-8">
         {!!user && <UserBlock user={user} />}
         <div className="flex items-center justify-between gap-2">

@@ -118,6 +118,6 @@
   }
 
   html, body {
-    @apply bg-background text-foreground max-w-screen h-full overflow-hidden;
+    @apply bg-background text-foreground max-w-screen min-h-full overflow-hidden;
   }
 }

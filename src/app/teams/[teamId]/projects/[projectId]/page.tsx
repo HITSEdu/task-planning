@@ -9,6 +9,8 @@ import DeleteProjectForm
   from '@/app/teams/[teamId]/projects/[projectId]/_components/project-item/delete-project-form'
 import EditProjectForm
   from '@/app/teams/[teamId]/projects/[projectId]/_components/project-item/edit-project-form'
+import ChangeProjectStatusForm
+  from '@/app/teams/[teamId]/projects/[projectId]/_components/project-item/change-project-status-form'
 
 type Props = {
   params: Promise<{
@@ -76,6 +78,7 @@ export default async function ProjectPage({ params }: Props) {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-4 mt-4 items-start">
+              <ChangeProjectStatusForm project={project} />
               <DeleteProjectForm project={project} />
               <EditProjectForm project={project} />
             </CardContent>

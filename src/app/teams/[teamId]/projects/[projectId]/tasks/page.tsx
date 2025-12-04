@@ -48,7 +48,7 @@ export default async function TasksPage({ params }: Props) {
   const isOwner = team.role === 'OWNER'
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 p-4 md:p-8 justify-center items-stretch min-h-[calc(100vh-5rem)]">
+    <div className="flex flex-col md:flex-row gap-6 p-4 md:p-8 justify-center items-stretch h-[calc(100vh-5rem)]">
       <section className="flex-1 flex flex-col">
         <Card className="h-full flex flex-col shadow-sm bg-card/70 backdrop-blur">
           <CardHeader className="border-b pb-2 flex justify-between items-center">
@@ -64,13 +64,15 @@ export default async function TasksPage({ params }: Props) {
           </CardHeader>
           <CardContent className="flex-1 overflow-hidden">
             <div className="flex flex-col gap-4 h-full">
+              {tasks.length > 0 &&
                 <Link
-                    href={`/teams/${teamId}/projects/${projectId}/tasks/dashboard`}
-                    className="text-primary hover:underline flex items-center gap-1"
-                  >
-                  Dashboard  <ArrowRight className="w-4 h-4" />
+                  href={`/teams/${teamId}/projects/${projectId}/tasks/dashboard`}
+                  className="text-primary hover:underline flex items-center gap-1"
+                >
+                  Dashboard <ArrowRight className="w-4 h-4" />
                 </Link>
-              <ScrollArea className="h-full pr-2">
+              }
+              <ScrollArea className="h-full pr-4 pb-12">
                 {tasks.length === 0 ? (
                   <EmptyList type="tasks" />
                 ) : (

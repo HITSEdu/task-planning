@@ -48,9 +48,15 @@ export async function changeProjectStatusAction(_prev: StateType, formData: Form
   const dal = await ProjectDAL.create()
   if (!dal) return { status: 'error', message: 'Сессия недействительна!' }
 
-  return await dal.changeStatus({
+  const result = await dal.changeStatus({
     ProjectId: formData.get('projectId'),
     answer: formData.get('status'),
   })
+
+  if (result.status === 'success') {
+    revalidatePath('/teams/[teamId]/projects/[projectId]', 'page')
+  }
+
+  return result
 }
 
