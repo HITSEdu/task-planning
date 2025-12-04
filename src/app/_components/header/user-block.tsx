@@ -8,8 +8,8 @@ import { toast } from 'sonner'
 import { redirect } from 'next/navigation'
 
 type UserBlockProps = {
-  user: UserDTO
-}
+  user: UserDTO;
+};
 
 export default function UserBlock({ user }: UserBlockProps) {
   const [state, action, pending] = useActionState(signOutAction, {})
@@ -20,7 +20,7 @@ export default function UserBlock({ user }: UserBlockProps) {
         toast.error(state.message)
       } else if (state.status === 'success') {
         toast.success(state.message)
-        redirect('/dashboard')
+        redirect('/sign-in')
       }
     }
   }, [state.status])

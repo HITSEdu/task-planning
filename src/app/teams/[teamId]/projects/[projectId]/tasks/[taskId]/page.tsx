@@ -45,7 +45,7 @@ export default async function TaskPage({ params }: Props) {
         <h1 className="text-xl font-semibold">Задача не найдена</h1>
         <Link
           href={`/teams/${teamId}/projects/${projectId}/tasks`}
-          className="text-blue-500 hover:underline"
+          className="text-primary hover:underline"
         >
           Назад к списку задач
         </Link>
@@ -66,8 +66,16 @@ export default async function TaskPage({ params }: Props) {
     <div className="flex flex-col md:flex-row gap-6 p-4 md:p-8 min-h-[calc(100vh-5rem)]">
       <section className="flex-1 flex flex-col">
         <Card className="h-full flex flex-col bg-card/70 backdrop-blur shadow-md">
-          <CardHeader>
-            <CardTitle className="text-xl">Информация о задаче</CardTitle>
+          <CardHeader className="border-b pb-2 flex justify-between items-center">
+          <CardTitle className="text-lg md:text-xl font-semibold">
+              Информация о задаче
+            </CardTitle>
+            <Link
+              href={`/teams/${teamId}/projects/${projectId}/tasks`}
+              className="text-primary hover:underline"
+            >
+              Назад к списку задач
+            </Link>
           </CardHeader>
           <CardContent className="flex-1 overflow-auto">
             <TaskItem

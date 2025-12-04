@@ -9,6 +9,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import EmptyList from '@/app/_components/lists/empty-list'
 import TasksList
   from '@/app/teams/[teamId]/projects/[projectId]/tasks/_components/tasks-list'
+import { ArrowRight } from 'lucide-react'
 
 type Props = {
   params: Promise<{
@@ -47,7 +48,7 @@ export default async function TasksPage({ params }: Props) {
   const isOwner = team.role === 'OWNER'
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 p-4 md:p-8 justify-center items-stretch min-h-[calc(100vh-5rem)]">
+    <div className="flex flex-col md:flex-row gap-6 p-4 md:p-8 justify-center items-stretch h-[calc(100vh-5rem)]">
       <section className="flex-1 flex flex-col">
         <Card className="h-full flex flex-col shadow-sm bg-card/70 backdrop-blur">
           <CardHeader className="border-b pb-2 flex justify-between items-center">
@@ -62,16 +63,26 @@ export default async function TasksPage({ params }: Props) {
             </Link>
           </CardHeader>
           <CardContent className="flex-1 overflow-hidden">
-            <ScrollArea className="h-full pr-2">
-              {tasks.length === 0 ? (
-                <EmptyList type="tasks" />
-              ) : (
-                <TasksList
-                  tasks={tasks}
-                  teamId={teamId}
-                />
-              )}
-            </ScrollArea>
+            <div className="flex flex-col gap-4 h-full">
+              {tasks.length > 0 &&
+                <Link
+                  href={`/teams/${teamId}/projects/${projectId}/tasks/dashboard`}
+                  className="text-primary hover:underline flex items-center gap-1"
+                >
+                  Dashboard <ArrowRight className="w-4 h-4" />
+                </Link>
+              }
+              <ScrollArea className="h-full pr-4 pb-12">
+                {tasks.length === 0 ? (
+                  <EmptyList type="tasks" />
+                ) : (
+                  <TasksList
+                    tasks={tasks}
+                    teamId={teamId}
+                  />
+                )}
+              </ScrollArea>
+            </div>
           </CardContent>
         </Card>
       </section>

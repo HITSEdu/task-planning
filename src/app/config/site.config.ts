@@ -17,4 +17,5 @@ export type StateType<T = unknown> = {
   status?: 'success' | 'error'
   message?: string | null
   data?: T | null
+  time?: number | null
 }

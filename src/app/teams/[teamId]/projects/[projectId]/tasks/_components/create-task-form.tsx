@@ -1,7 +1,6 @@
 'use client'
 
 import { useActionState, useEffect, useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
@@ -37,21 +36,12 @@ export default function CreateTaskForm({
 
   const [state, action, pending] = useActionState(createTaskAction.bind(null, projectId), {})
 
-  const router = useRouter()
-  const pathname = usePathname()
-
   useEffect(() => {
-    if (!pending) {
+    if (!pending && state.time && state.time + 10 > Date.now()) {
       if (state.status === 'error') {
         toast.error(state.message)
       } else if (state.status === 'success') {
         toast.success(state.message)
-
-        const taskId = state.data?.id
-        if (taskId) {
-          const newPath = pathname + '/' + taskId
-          router.push(newPath)
-        }
       }
     }
   }, [state.status, pending])

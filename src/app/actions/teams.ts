@@ -4,7 +4,6 @@ import { StateType } from '@/app/config/site.config'
 import { TeamDAL } from '../data/team/team.dal'
 import { TeamDTO } from '@/app/data/team/team.dto'
 import { revalidatePath } from 'next/cache'
-import { toast } from 'sonner'
 
 export async function createTeamAction(_prevState: StateType, formData: FormData): Promise<StateType<TeamDTO>> {
   const dal = await TeamDAL.create()
@@ -43,10 +42,13 @@ export async function answerInviteAction(_prevState: StateType, formData: FormDa
     message: 'Сессия недействительна!'
   }
 
-  return await dal.giveAnswerToInvite({
+  const result = await dal.giveAnswerToInvite({
     teamId: formData.get('teamId'),
     answer: formData.get('answer'),
   })
+
+  if (result.status === 'success') revalidatePath(`/teams`)
+  return result
 }
 
 export async function inviteAction(teamId: string, _prevState: StateType, formData: FormData): Promise<StateType> {

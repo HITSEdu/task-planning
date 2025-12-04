@@ -25,7 +25,7 @@ export default function LoginForm() {
         toast.error(state.message)
       } else if (state.status === 'success') {
         toast.success(state.message)
-        redirect('/dashboard')
+        redirect('/teams')
       }
     }
   }, [state.status])
@@ -70,13 +70,18 @@ export default function LoginForm() {
         </FieldSet>
         <Field orientation="horizontal">
           <Button type="submit"> {pending ? 'Вход...' : 'Войти в аккаунт'}</Button>
-          <Link
-            key={sitePages.register.path}
-            href={sitePages.register.path}
-            className={`transition-colors hover:text-primary`}
+          <Button
+            variant='outline'
+            asChild
           >
-           {sitePages.register.labelKey}
-          </Link>
+            <Link
+              key={sitePages.register.path}
+              href={sitePages.register.path}
+              className={`transition-colors hover:text-primary`}
+            >
+            {sitePages.register.labelKey}
+            </Link>
+          </Button>
         </Field>
       </FieldGroup>
     </form>

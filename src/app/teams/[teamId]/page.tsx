@@ -30,7 +30,7 @@ export default async function TeamPage({ params }: Props) {
           <h1 className="text-xl font-semibold">Команда не найдена...</h1>
           <Link
             href="/teams"
-            className="text-blue-500 hover:underline"
+            className="text-primary hover:underline"
           >
             Назад к списку команд
           </Link>
@@ -43,13 +43,19 @@ export default async function TeamPage({ params }: Props) {
   const user = mates.find(el => el.id === dal.getUser().id)!
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 p-4 md:p-8 justify-center items-stretch min-h-[calc(100vh-5rem)]">
+    <div className="overflow-y-auto flex flex-col md:flex-row gap-6 p-4 md:p-8 justify-center items-stretch min-h-[calc(100vh-5rem)]">
       <section className="flex-1 flex flex-col">
         <Card className="h-full flex flex-col shadow-sm">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg md:text-xl font-semibold text-center md:text-left">
+          <CardHeader className="border-b pb-2 flex justify-between items-center">
+            <CardTitle className="text-lg md:text-xl font-semibold">
               Информация о команде
             </CardTitle>
+            <Link
+              href={`/teams`}
+              className="text-primary hover:underline"
+            >
+              Назад к списку команд
+            </Link>
           </CardHeader>
           <CardContent className="flex-1 overflow-hidden">
             <TeamItem team={team} />

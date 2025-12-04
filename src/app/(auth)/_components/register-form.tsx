@@ -26,7 +26,7 @@ export default function RegisterForm() {
         toast.error(state.message)
       } else if (state.status === 'success') {
         toast.success(state.message)
-        redirect('/dashboard')
+        redirect('/teams')
       }
     }
   }, [state.status])
@@ -95,13 +95,18 @@ export default function RegisterForm() {
         </FieldSet>
         <Field orientation="horizontal">
           <Button type="submit"> {pending ? 'Регистрация...' : 'Зарегистрироваться'}</Button>
-          <Link
-            key={sitePages.login.path}
-            href={sitePages.login.path}
-            className={`transition-colors hover:text-primary`}
+          <Button
+            variant='outline'
+            asChild
           >
-            {sitePages.login.labelKey}
-          </Link>
+            <Link
+              key={sitePages.login.path}
+              href={sitePages.login.path}
+              className={`transition-colors hover:text-primary`}
+            >
+              {sitePages.login.labelKey}
+            </Link>
+          </Button>
         </Field>
       </FieldGroup>
     </form>

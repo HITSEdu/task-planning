@@ -11,9 +11,13 @@ export default async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL('/sign-in', request.url))
   }
 
+  if (request.nextUrl.pathname === '/') {
+    return NextResponse.rewrite(new URL('/teams', request.url))
+  }
+
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/dashboard', '/teams/:path*', '/projects/:path*'],
+  matcher: ['/', '/teams/:path*'],
 }

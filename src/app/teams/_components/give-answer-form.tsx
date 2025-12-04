@@ -4,8 +4,7 @@ import { useActionState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
-  FieldGroup,
-  FieldLegend,
+  FieldLegend, FieldSet,
 } from '@/components/ui/field'
 import { answerInviteAction } from '@/app/actions/teams'
 
@@ -14,7 +13,10 @@ type CreateTeamFormProps = {
   teamName: string
 }
 
-export default function GiveAnswerForm({ teamId, teamName }: CreateTeamFormProps) {
+export default function GiveAnswerForm({
+                                         teamId,
+                                         teamName
+                                       }: CreateTeamFormProps) {
   const [state, action, pending] = useActionState(answerInviteAction, {})
 
   useEffect(() => {
@@ -27,14 +29,14 @@ export default function GiveAnswerForm({ teamId, teamName }: CreateTeamFormProps
   return (
     <form
       action={action}
-      className="flex gap-3 items-center bg-card p-3 rounded-lg"
+      className="flex w-full gap-3 items-center bg-card p-3 rounded-lg"
     >
       <input
         type="hidden"
         name="teamId"
         value={teamId}
       />
-      <FieldGroup>
+      <FieldSet className="w-full">
         <FieldLegend
           variant="label"
         >{teamName}</FieldLegend>
@@ -59,7 +61,7 @@ export default function GiveAnswerForm({ teamId, teamName }: CreateTeamFormProps
             {pending ? 'Отправка...' : 'Отклонить'}
           </Button>
         </div>
-      </FieldGroup>
+      </FieldSet>
     </form>
   )
 }

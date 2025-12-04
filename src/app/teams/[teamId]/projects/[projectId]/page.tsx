@@ -9,6 +9,8 @@ import DeleteProjectForm
   from '@/app/teams/[teamId]/projects/[projectId]/_components/project-item/delete-project-form'
 import EditProjectForm
   from '@/app/teams/[teamId]/projects/[projectId]/_components/project-item/edit-project-form'
+import ChangeProjectStatusForm
+  from '@/app/teams/[teamId]/projects/[projectId]/_components/project-item/change-project-status-form'
 
 type Props = {
   params: Promise<{
@@ -33,7 +35,7 @@ export default async function ProjectPage({ params }: Props) {
         <h1 className="text-xl font-semibold">Проект не найден</h1>
         <Link
           href={`/teams/${teamId}/projects`}
-          className="text-blue-500 hover:underline"
+          className="text-primary hover:underline"
         >
           Назад к списку проектов
         </Link>
@@ -50,10 +52,16 @@ export default async function ProjectPage({ params }: Props) {
     <div className="flex flex-col md:flex-row gap-6 p-4 md:p-8 justify-center items-stretch min-h-[calc(100vh-5rem)]">
       <section className="flex-1 flex flex-col">
         <Card className="h-full flex flex-col shadow-sm">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg md:text-xl font-semibold text-center md:text-left">
+          <CardHeader className="border-b pb-2 flex justify-between items-center">
+            <CardTitle className="text-lg md:text-xl font-semibold">
               Информация о проекте
             </CardTitle>
+            <Link
+              href={`/teams/${teamId}/projects`}
+              className="text-primary hover:underline"
+            >
+              Назад к проектам
+            </Link>
           </CardHeader>
           <CardContent className="flex-1 overflow-hidden">
             <ProjectItem project={project} />
@@ -70,6 +78,7 @@ export default async function ProjectPage({ params }: Props) {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-4 mt-4 items-start">
+              <ChangeProjectStatusForm project={project} />
               <DeleteProjectForm project={project} />
               <EditProjectForm project={project} />
             </CardContent>
