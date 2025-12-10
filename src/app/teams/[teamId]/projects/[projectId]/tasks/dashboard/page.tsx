@@ -4,6 +4,7 @@ import { TaskDAL } from '@/app/data/task/task.dal'
 import { ProjectDAL } from '@/app/data/project/project.dal'
 import 'react-modern-gantt/dist/index.css'
 import GanttChartItem from './_components/gantt-chart-item'
+import { ArrowLeft } from 'lucide-react'
 
 type Props = {
   params: Promise<{
@@ -38,7 +39,13 @@ export default async function TasksDashboard({ params }: Props) {
   }
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 p-4 md:p-8 justify-center items-center h-full">
+    <div className="flex flex-col gap-6 p-4 md:p-8 justify-start items-start h-full">
+      <Link
+          href={`/teams/${teamId}/projects/${projectId}/tasks`}
+          className="text-primary hover:underline flex items-center gap-1"
+        >
+          <ArrowLeft className="w-4 h-4" /> Назад к списку задач
+        </Link>
       <GanttChartItem
         tasks={tasks}
         project={project}
