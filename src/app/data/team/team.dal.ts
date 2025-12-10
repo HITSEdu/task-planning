@@ -60,6 +60,14 @@ export class TeamDAL {
       }
     }
 
+    const teams = await prisma.team.findMany();
+    if (teams.some(t => t.name === parsed.data.name)) {
+      return {
+        status: 'error',
+        message: 'Название команды занято!'
+      }
+    }
+
     if (!canCreateTeam(this.user)) return {
       status: 'error',
       message: 'Невозможно создать команду!'
@@ -92,6 +100,14 @@ export class TeamDAL {
     if (!parsed.success) return {
       status: 'error',
       message: createError(parsed.error.issues)
+    }
+
+    const teams = await prisma.team.findMany();
+    if (teams.some(t => t.name === parsed.data.name)) {
+      return {
+        status: 'error',
+        message: 'Название команды занято!'
+      }
     }
 
     const team = await prisma.team.findUnique({
