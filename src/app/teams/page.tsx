@@ -14,7 +14,7 @@ export default async function TeamsPage() {
   const { teams, invites } = await dal.getUserTeams()
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 p-4 md:p-8 justify-center items-stretch min-h-[calc(100vh-5rem)]">
+    <div className="overflow-y-auto flex flex-col md:flex-row gap-6 p-4 md:p-8 justify-center items-stretch h-[calc(100vh-5rem)]">
       <section className="flex-1 flex flex-col">
         <Card className="h-full flex flex-col shadow-sm">
           <CardHeader className="pb-2">
