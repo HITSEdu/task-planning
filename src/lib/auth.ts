@@ -1,17 +1,17 @@
-import { betterAuth } from 'better-auth'
-import { prismaAdapter } from 'better-auth/adapters/prisma'
-import prisma from '@/lib/prisma'
-import { username } from 'better-auth/plugins'
+import { betterAuth } from "better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import prisma from "@/lib/prisma";
+import { username } from "better-auth/plugins";
+
+const trustedOrigin = process.env.BETTER_AUTH_URL!!;
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
-    provider: 'postgresql',
+    provider: "postgresql",
   }),
   emailAndPassword: {
     enabled: true,
   },
-  plugins: [
-    username()
-  ],
-  trustedOrigins: ['http://localhost:3000'],
-})
+  plugins: [username()],
+  trustedOrigins: [trustedOrigin],
+});
