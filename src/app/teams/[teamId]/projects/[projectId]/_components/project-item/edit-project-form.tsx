@@ -49,7 +49,7 @@ export default function EditProjectForm({ project }: EditProjectFormProps) {
         toast.success(state.message)
       }
     }
-  }, [state.status, pending])
+  }, [state, pending])
 
   if (project.team.role !== 'OWNER') return null
 

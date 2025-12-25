@@ -39,7 +39,7 @@ export default function ChangeProjectStatusForm({ project }: ChangeProjectStatus
         toast.success(state.message)
       }
     }
-  }, [state.status, pending])
+  }, [state, pending])
 
   return (
     <Dialog>

@@ -24,7 +24,7 @@ export default function GiveAnswerForm({
       if (state.status === 'error') toast.error(state.message)
       if (state.status === 'success') toast.success(state.message)
     }
-  }, [state.status, pending])
+  }, [state, pending])
 
   return (
     <form

@@ -29,7 +29,7 @@ export default function DeleteTeamForm({ team }: DeleteTeamFormProps) {
         redirect(`/teams/`)
       }
     }
-  }, [state.status, pending])
+  }, [state, pending])
 
   if (team.role !== 'OWNER') return null
 

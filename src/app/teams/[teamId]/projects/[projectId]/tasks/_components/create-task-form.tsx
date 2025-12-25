@@ -44,7 +44,7 @@ export default function CreateTaskForm({
         toast.success(state.message)
       }
     }
-  }, [state.status, pending])
+  }, [state, pending])
 
   return (
     <form

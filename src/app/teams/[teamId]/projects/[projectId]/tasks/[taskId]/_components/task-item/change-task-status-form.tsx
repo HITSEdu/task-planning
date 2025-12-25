@@ -37,7 +37,7 @@ export default function ChangeTaskStatusForm({ task }: ChangeTaskStatusFormProps
         toast.success(state.message)
       }
     }
-  }, [state.status, pending])
+  }, [state, pending])
 
   return (
     <Dialog>

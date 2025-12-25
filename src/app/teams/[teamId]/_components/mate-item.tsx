@@ -54,7 +54,7 @@ export default function MateItem({ mate, user, teamId }: MateItemProps) {
         }
       }
     }
-  }, [state.status, pending])
+  }, [state, pending])
 
   const isSelf = mate.id === user.id
   const canKick = user.role === 'OWNER' || isSelf

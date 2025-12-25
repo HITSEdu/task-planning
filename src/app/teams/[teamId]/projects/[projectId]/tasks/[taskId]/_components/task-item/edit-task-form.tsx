@@ -51,7 +51,7 @@ export default function EditTaskForm({
         toast.success(state.message)
       }
     }
-  }, [state.status, pending])
+  }, [state, pending])
 
   return (
     <Dialog>

@@ -27,7 +27,7 @@ export default function CreateTeamForm() {
         if (teamId) redirect(`/teams/${teamId}`)
       }
     }
-  }, [state.status, pending])
+  }, [state, pending])
 
   return (
     <form

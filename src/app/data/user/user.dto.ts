@@ -8,12 +8,16 @@ export const AddUserToTeamSchema = z.object({
 export type AddUserToTeamInput = z.infer<typeof AddUserToTeamSchema>;
 
 export const CreateUserSchema = z.object({
-  name: z.string('Некорректное полное имя').min(3),
+  name: z.string('Некорректное полное имя')
+    .min(3, 'Полное имя не может быть короче 3-х символов')
+    .max(32, 'Полное имя не может быть длиннее 32-х символов'),
   email: z.email('Некорректный email'),
-  password: z.string().min(8, 'Минимальная длина пароля: 8 символов'),
+  password: z.string()
+    .min(8, 'Пароль не может быть короче 8 символов')
+    .max(32, 'Пароль не может быть длиннее 32-х символов'),
   username: z.string()
-    .min(3, 'Имя пользователя должно быть как минимум 3 символа')
-    .max(30, 'Превышена длина имени пользователя'),
+    .min(3, 'username не может быть короче 3-х символов')
+    .max(32, 'username не может быть длиннее 32-х символов'),
 })
 
 export type CreateUser = z.infer<typeof CreateUserSchema>;

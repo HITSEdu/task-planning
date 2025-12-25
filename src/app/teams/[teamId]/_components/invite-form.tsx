@@ -26,7 +26,7 @@ export default function InviteForm({ teamId }: InviteFormProps) {
         toast.success(state.message)
       }
     }
-  }, [state.status, pending])
+  }, [state, pending])
 
   return (
     <form

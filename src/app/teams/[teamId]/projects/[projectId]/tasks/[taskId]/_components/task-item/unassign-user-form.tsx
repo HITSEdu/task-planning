@@ -31,7 +31,7 @@ export default function UnassignUserForm({
         toast.success(state.message)
       }
     }
-  }, [state.status, pending])
+  }, [state, pending])
 
   return (
     <Dialog>

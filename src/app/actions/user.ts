@@ -12,7 +12,7 @@ export async function signUpAction(_prevState: StateType, formData: FormData): P
 
   if (!parsed.success) return {
     status: 'error',
-    message: 'Некорректные данные'
+    message: parsed.error.issues.map(issue => issue.message).join(';')
   }
 
   return await UserDAL.signUp(parsed.data)

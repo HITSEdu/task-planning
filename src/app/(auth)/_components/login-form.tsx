@@ -28,7 +28,7 @@ export default function LoginForm() {
         redirect('/teams')
       }
     }
-  }, [state.status])
+  }, [state])
 
   return (
     <form

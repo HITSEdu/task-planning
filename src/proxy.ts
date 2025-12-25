@@ -12,7 +12,7 @@ export default async function proxy(request: NextRequest) {
   }
 
   if (request.nextUrl.pathname === '/') {
-    return NextResponse.rewrite(new URL('/teams', request.url))
+    return NextResponse.redirect(new URL('/teams', request.url))
   }
 
   return NextResponse.next()

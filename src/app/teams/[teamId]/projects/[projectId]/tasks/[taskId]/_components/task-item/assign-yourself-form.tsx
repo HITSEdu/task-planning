@@ -27,7 +27,7 @@ export default function AssignYourselfForm({ task }: AssignYourselfFormProps) {
         toast.success(state.message)
       }
     }
-  }, [state.status, pending])
+  }, [state, pending])
 
   return (
     <Dialog>

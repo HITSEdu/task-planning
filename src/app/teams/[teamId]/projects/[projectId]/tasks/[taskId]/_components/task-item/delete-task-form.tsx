@@ -37,7 +37,7 @@ export default function DeleteTaskForm({ task }: DeleteTaskFormProps) {
         router.push(parentPath)
       }
     }
-  }, [state.status, pending])
+  }, [state, pending])
 
   return (
     <Dialog>

@@ -30,7 +30,7 @@ export default function EditTeamForm({ team }: DeleteTeamFormProps) {
         toast.success(state.message)
       }
     }
-  }, [state.status, pending])
+  }, [state, pending])
 
   if (team.role !== 'OWNER') return null
 
