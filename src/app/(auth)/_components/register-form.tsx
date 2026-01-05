@@ -29,7 +29,7 @@ export default function RegisterForm() {
         redirect('/teams')
       }
     }
-  }, [state])
+  }, [state, pending])
 
   return (
     <form
