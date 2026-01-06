@@ -9,17 +9,10 @@
 
 .npm_base:
   image: node:24
-  script:
-    - echo "CI_PROJECT: $CI_PROJECT_PATH"
-    - echo "CI_COMMIT_REF_NAME: $CI_COMMIT_REF_NAME"
-    - node -v
-    - npm -v
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - node_modules/
-  variables:
-    NODE_ENV: 'development'
 
 workflow:
   rules:
@@ -27,10 +20,15 @@ workflow:
     - if: $CI_COMMIT_REF_PROTECTED == 'true'
     - if: $CI_COMMIT_BRANCH == 'main'
 
+before_script:
+  - npm install --global corepack@latest
+  - corepack enable
+  - corepack prepare pnpm@latest-10 --activate
+  - pnpm config set store-dir .pnpm-store
+
 stages:
   - install
-  - lint
-  - test
+  - validate
   - build
   - deploy
 
@@ -38,29 +36,33 @@ install:
   stage: install
   extends: .npm_base
   script:
-    - npm install
+    - echo "CI_PROJECT $CI_PROJECT_PATH"
+    - echo "CI_COMMIT_REF_NAME $CI_COMMIT_REF_NAME"
+    - node -v
+    - pnpm -v
+    - pnpm install --frozen-lockfile
   artifacts:
     paths:
       - node_modules/
     expire_in: 1h
 
 lint:
-  stage: lint
+  stage: validate
   extends: .npm_base
   needs:
     - job: install
       artifacts: true
   script:
-    - npm run lint
+    - pnpm lint
 
 test:
-  stage: test
+  stage: validate
   extends: .npm_base
   needs:
     - job: install
       artifacts: true
   script:
-    - npm test
+    - pnpm test
   artifacts:
     when: always
     reports:
@@ -71,14 +73,16 @@ test:
 
 build:
   stage: build
+  dependencies:
+    - validate
   needs:
-    - job: test
+    - job: install
       artifacts: true
   script:
     - echo "DATABASE_URL is set ${DATABASE_URL:+yes}"
     - echo "BETTER_AUTH_SECRET is set ${BETTER_AUTH_SECRET:+yes}"
     - echo "BETTER_AUTH_URL is set ${BETTER_AUTH_URL:+yes}"
-    - npm run build
+    - pnpm build
   artifacts:
     paths:
       - .next/
