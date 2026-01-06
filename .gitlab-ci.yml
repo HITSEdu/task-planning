@@ -9,7 +9,7 @@
 
 .npm_base:
   image: node:24
-  before_script:
+  script:
     - echo "CI_PROJECT: $CI_PROJECT_PATH"
     - echo "CI_COMMIT_REF_NAME: $CI_COMMIT_REF_NAME"
     - node -v
