@@ -14,6 +14,7 @@ stages:
   - setup
   - install
   - lint
+  - security
   - test
   - build
   - deploy
@@ -49,6 +50,12 @@ lint:
   #   - changes:
   #     - src/**
   #     - biome.json
+
+secret_detection:
+  stage: security
+
+sast:
+  stage: security
 
 test:
   stage: test
@@ -103,18 +110,11 @@ build:
 
 release:
   stage: deploy
-  image: node:24
-  needs:
-    - job: build
-      artifacts: true
-  before_script:
-    - pnpm install
-    - git config --global user.name "$GIT_USER_NAME"
-    - git config --global user.email "$GIT_USER_EMAIL"
-  script:
-    - npx release-it --ci --no-npm.publish
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $MAIN_BRANCH'
+  image: registry.gitlab.com/gitlab-org/cli:latest
+  release:
+    tag_name: $CI_COMMIT_TAG
+    name: 'Release $CI_COMMIT_TAG'
+    description: 'Release created using the CLI.'
 
 include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
