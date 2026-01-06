@@ -1,34 +1,35 @@
-'use client'
+"use client";
 
-import { useActionState, useEffect } from 'react'
-import { signInAction } from '@/app/actions/user'
-import { toast } from 'sonner'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { useActionState, useEffect } from "react";
+import { signInAction } from "@/app/actions/user";
+import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldDescription,
-  FieldGroup, FieldLabel,
+  FieldGroup,
+  FieldLabel,
   FieldLegend,
-  FieldSet
-} from '@/components/ui/field'
-import { redirect } from 'next/navigation'
-import Link from 'next/link'
-import { sitePages } from '@/app/config/site.config'
+  FieldSet,
+} from "@/components/ui/field";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import { sitePages } from "@/app/config/site.config";
 
 export default function LoginForm() {
-  const [state, action, pending] = useActionState(signInAction, {})
+  const [state, action, pending] = useActionState(signInAction, {});
 
   useEffect(() => {
     if (!pending) {
-      if (state.status === 'error') {
-        toast.error(state.message)
-      } else if (state.status === 'success') {
-        toast.success(state.message)
-        redirect('/teams')
+      if (state.status === "error") {
+        toast.error(state.message);
+      } else if (state.status === "success") {
+        toast.success(state.message);
+        redirect("/teams");
       }
     }
-  }, [state])
+  }, [state]);
 
   return (
     <form
@@ -55,9 +56,7 @@ export default function LoginForm() {
               />
             </Field>
             <Field>
-              <FieldLabel htmlFor="checkout-password">
-                Пароль
-              </FieldLabel>
+              <FieldLabel htmlFor="checkout-password">Пароль</FieldLabel>
               <Input
                 type="password"
                 name="password"
@@ -69,21 +68,21 @@ export default function LoginForm() {
           </FieldGroup>
         </FieldSet>
         <Field orientation="horizontal">
-          <Button type="submit"> {pending ? 'Вход...' : 'Войти в аккаунт'}</Button>
-          <Button
-            variant='outline'
-            asChild
-          >
+          <Button type="submit">
+            {" "}
+            {pending ? "Вход..." : "Войти в аккаунт"}
+          </Button>
+          <Button variant="outline" asChild>
             <Link
               key={sitePages.register.path}
               href={sitePages.register.path}
               className={`transition-colors hover:text-primary`}
             >
-            {sitePages.register.labelKey}
+              {sitePages.register.labelKey}
             </Link>
           </Button>
         </Field>
       </FieldGroup>
     </form>
-  )
+  );
 }

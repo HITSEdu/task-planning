@@ -1,9 +1,9 @@
-import { TeamWithRoleDTO } from '@/app/data/team/team.dto'
-import Link from 'next/link'
+import { TeamWithRoleDTO } from "@/app/data/team/team.dto";
+import Link from "next/link";
 
 type TeamsListProps = {
-  teams: TeamWithRoleDTO[]
-}
+  teams: TeamWithRoleDTO[];
+};
 
 export default function TeamsList({ teams }: TeamsListProps) {
   return (
@@ -17,10 +17,10 @@ export default function TeamsList({ teams }: TeamsListProps) {
             href={`/teams/${team.id}`}
             className="font-medium hover:underline"
           >
-            {team.name} --{'>'} Роль {team.role}
+            {team.name} --{">"} Роль {team.role}
           </Link>
         </li>
       ))}
     </ul>
-  )
+  );
 }

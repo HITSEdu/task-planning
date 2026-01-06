@@ -1,45 +1,37 @@
-'use client'
+"use client";
 
-import { useActionState, useEffect } from 'react'
-import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
-import {
-  FieldLegend, FieldSet,
-} from '@/components/ui/field'
-import { answerInviteAction } from '@/app/actions/teams'
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { FieldLegend, FieldSet } from "@/components/ui/field";
+import { answerInviteAction } from "@/app/actions/teams";
 
 type CreateTeamFormProps = {
-  teamId: string
-  teamName: string
-}
+  teamId: string;
+  teamName: string;
+};
 
 export default function GiveAnswerForm({
-                                         teamId,
-                                         teamName
-                                       }: CreateTeamFormProps) {
-  const [state, action, pending] = useActionState(answerInviteAction, {})
+  teamId,
+  teamName,
+}: CreateTeamFormProps) {
+  const [state, action, pending] = useActionState(answerInviteAction, {});
 
   useEffect(() => {
     if (!pending && state.status) {
-      if (state.status === 'error') toast.error(state.message)
-      if (state.status === 'success') toast.success(state.message)
+      if (state.status === "error") toast.error(state.message);
+      if (state.status === "success") toast.success(state.message);
     }
-  }, [state, pending])
+  }, [state, pending]);
 
   return (
     <form
       action={action}
       className="flex w-full gap-3 items-center bg-card p-3 rounded-lg"
     >
-      <input
-        type="hidden"
-        name="teamId"
-        value={teamId}
-      />
+      <input type="hidden" name="teamId" value={teamId} />
       <FieldSet className="w-full">
-        <FieldLegend
-          variant="label"
-        >{teamName}</FieldLegend>
+        <FieldLegend variant="label">{teamName}</FieldLegend>
         <div className="flex gap-4">
           <Button
             type="submit"
@@ -48,7 +40,7 @@ export default function GiveAnswerForm({
             size="sm"
             disabled={pending}
           >
-            {pending ? 'Отправка...' : 'Принять'}
+            {pending ? "Отправка..." : "Принять"}
           </Button>
           <Button
             type="submit"
@@ -58,10 +50,10 @@ export default function GiveAnswerForm({
             size="sm"
             disabled={pending}
           >
-            {pending ? 'Отправка...' : 'Отклонить'}
+            {pending ? "Отправка..." : "Отклонить"}
           </Button>
         </div>
       </FieldSet>
     </form>
-  )
+  );
 }

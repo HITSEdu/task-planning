@@ -1,29 +1,33 @@
-import 'server-only'
-import { z } from 'zod'
-import { TaskStatus } from '@/generated/prisma/enums'
+import "server-only";
+import { z } from "zod";
+import { TaskStatus } from "@/generated/prisma/enums";
 
 export const TaskCreateInputSchema = z.object({
-  title: z.string().min(2, 'Название задачи должно быть не короче 2 символов'),
+  title: z.string().min(2, "Название задачи должно быть не короче 2 символов"),
   description: z.string().optional(),
-  deadline: z.date()
-    .min(new Date(), 'Срок сдачи не может быть в прошлом')
+  deadline: z
+    .date()
+    .min(new Date(), "Срок сдачи не может быть в прошлом")
     .optional(),
   dependsOn: z.array(z.string()).default([]),
-})
+});
 
-
-export type TaskCreateInput = z.infer<typeof TaskCreateInputSchema>
+export type TaskCreateInput = z.infer<typeof TaskCreateInputSchema>;
 
 export const TaskUpdateInputSchema = z.object({
-  title: z.string().min(2, 'Название задачи должно быть не короче 2 символов').optional(),
+  title: z
+    .string()
+    .min(2, "Название задачи должно быть не короче 2 символов")
+    .optional(),
   description: z.string().optional(),
-  deadline: z.date()
-    .min(new Date(), 'Срок сдачи не может быть в прошлом')
+  deadline: z
+    .date()
+    .min(new Date(), "Срок сдачи не может быть в прошлом")
     .optional(),
   dependsOn: z.array(z.string()).optional(),
-})
+});
 
-export type TaskUpdateInput = z.infer<typeof TaskUpdateInputSchema>
+export type TaskUpdateInput = z.infer<typeof TaskUpdateInputSchema>;
 
 export const TaskDTOSchema = z.object({
   id: z.string(),
@@ -31,24 +35,24 @@ export const TaskDTOSchema = z.object({
   description: z.string().optional(),
   deadline: z.date().optional(),
   createdAt: z.date(),
-})
+});
 
 export type TaskDTO = z.infer<typeof TaskDTOSchema> & { projectId: string };
 
 export type TaskWithStatusDTO = TaskDTO & {
-  status: TaskStatus
-}
+  status: TaskStatus;
+};
 
 export type TaskWithDependenciesDTO = TaskWithStatusDTO & {
-  dependsOn: TaskWithStatusDTO[],
-  requiredFor: TaskWithStatusDTO[],
-}
+  dependsOn: TaskWithStatusDTO[];
+  requiredFor: TaskWithStatusDTO[];
+};
 
 export const TaskChangeStatusSchema = z.object({
   TaskId: z.string(),
-  answer: z.enum(['CREATED', 'IN_PROGRESS', 'COMPLETED']),
-})
+  answer: z.enum(["CREATED", "IN_PROGRESS", "COMPLETED"]),
+});
 
 export const TaskAssignUserSchema = z.object({
   UserId: z.string(),
-})
+});

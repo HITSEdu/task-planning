@@ -1,32 +1,37 @@
-'use client'
+"use client";
 
-import { useActionState, useEffect } from 'react'
-import { toast } from 'sonner'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Field,
-  FieldGroup, FieldLabel, FieldLegend,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
   FieldSet,
-} from '@/components/ui/field'
-import { inviteAction } from '@/app/actions/teams'
+} from "@/components/ui/field";
+import { inviteAction } from "@/app/actions/teams";
 
 type InviteFormProps = {
-  teamId: string
-}
+  teamId: string;
+};
 
 export default function InviteForm({ teamId }: InviteFormProps) {
-  const [state, action, pending] = useActionState(inviteAction.bind(null, teamId), {})
+  const [state, action, pending] = useActionState(
+    inviteAction.bind(null, teamId),
+    {},
+  );
 
   useEffect(() => {
     if (!pending) {
-      if (state.status === 'error') {
-        toast.error(state.message)
-      } else if (state.status === 'success') {
-        toast.success(state.message)
+      if (state.status === "error") {
+        toast.error(state.message);
+      } else if (state.status === "success") {
+        toast.success(state.message);
       }
     }
-  }, [state, pending])
+  }, [state, pending]);
 
   return (
     <form
@@ -51,10 +56,13 @@ export default function InviteForm({ teamId }: InviteFormProps) {
             </Field>
           </FieldGroup>
           <Field orientation="horizontal">
-            <Button type="submit"> {pending ? 'Приглашение...' : 'Пригласить'}</Button>
+            <Button type="submit">
+              {" "}
+              {pending ? "Приглашение..." : "Пригласить"}
+            </Button>
           </Field>
         </FieldSet>
       </FieldGroup>
     </form>
-  )
+  );
 }

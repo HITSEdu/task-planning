@@ -1,7 +1,6 @@
-import { CreateUser, LoginUser } from './user.dto'
-import { StateType } from '@/app/config/site.config'
-import { authClient } from '@/lib/auth-client'
-
+import { CreateUser, LoginUser } from "./user.dto";
+import { StateType } from "@/app/config/site.config";
+import { authClient } from "@/lib/auth-client";
 
 export class UserDAL {
   static async signUp(data: CreateUser): Promise<StateType> {
@@ -11,19 +10,20 @@ export class UserDAL {
         email: data.email,
         password: data.password,
         username: data.username,
-      })
+      });
 
-      if (res.error) return {
-        status: 'error',
-        message: 'Почта или имя пользователя уже используются'
-      }
+      if (res.error)
+        return {
+          status: "error",
+          message: "Почта или имя пользователя уже используются",
+        };
 
       return {
-        status: 'success',
-        message: 'Успешная регистрация',
-      }
+        status: "success",
+        message: "Успешная регистрация",
+      };
     } catch {
-      return { status: 'error', message: 'Ошибка регистрации!' }
+      return { status: "error", message: "Ошибка регистрации!" };
     }
   }
 
@@ -32,22 +32,22 @@ export class UserDAL {
       const res = await authClient.signIn.username({
         username: data.username,
         password: data.password,
-      })
+      });
 
-      if (res.error) return { status: 'error', message: res.error.message }
+      if (res.error) return { status: "error", message: res.error.message };
 
-      return { status: 'success', message: 'Успешный вход' }
+      return { status: "success", message: "Успешный вход" };
     } catch {
-      return { status: 'error', message: 'Ошибка входа!' }
+      return { status: "error", message: "Ошибка входа!" };
     }
   }
 
   static async signOut(): Promise<StateType> {
     try {
-      await authClient.signOut()
-      return { status: 'success', message: 'Успешный выход' }
+      await authClient.signOut();
+      return { status: "success", message: "Успешный выход" };
     } catch {
-      return { status: 'error', message: 'Ошибка выхода!' }
+      return { status: "error", message: "Ошибка выхода!" };
     }
   }
 }

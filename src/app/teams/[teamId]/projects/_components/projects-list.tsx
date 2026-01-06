@@ -1,9 +1,9 @@
-import Link from 'next/link'
-import { ProjectWithTeamDTO } from '@/app/data/project/project.dto'
+import Link from "next/link";
+import { ProjectWithTeamDTO } from "@/app/data/project/project.dto";
 
 type ProjectsListProps = {
-  projects: ProjectWithTeamDTO[]
-}
+  projects: ProjectWithTeamDTO[];
+};
 
 export default function ProjectsList({ projects }: ProjectsListProps) {
   return (
@@ -22,5 +22,5 @@ export default function ProjectsList({ projects }: ProjectsListProps) {
         </li>
       ))}
     </ul>
-  )
+  );
 }

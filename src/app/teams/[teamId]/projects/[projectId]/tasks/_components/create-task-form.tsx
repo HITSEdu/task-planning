@@ -1,50 +1,54 @@
-'use client'
+"use client";
 
-import { useActionState, useEffect, useState } from 'react'
-import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
   Field,
-  FieldGroup, FieldLabel,
+  FieldGroup,
+  FieldLabel,
   FieldLegend,
   FieldSet,
-} from '@/components/ui/field'
-import { createTaskAction } from '@/app/actions/tasks'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { formatDateForInput } from '@/app/data/utils/format-date'
+} from "@/components/ui/field";
+import { createTaskAction } from "@/app/actions/tasks";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { formatDateForInput } from "@/app/data/utils/format-date";
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover'
-import { ChevronDownIcon } from 'lucide-react'
-import { Calendar } from '@/components/ui/calendar'
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ChevronDownIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
 
 type CreateTaskFormProps = {
-  projectId: string
-  availableTasks: Array<{ id: string; title: string }>
-}
+  projectId: string;
+  availableTasks: Array<{ id: string; title: string }>;
+};
 
 export default function CreateTaskForm({
-                                         projectId,
-                                         availableTasks
-                                       }: CreateTaskFormProps) {
-  const [open, setOpen] = useState(false)
-  const [date, setDate] = useState<Date | undefined>(undefined)
+  projectId,
+  availableTasks,
+}: CreateTaskFormProps) {
+  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(undefined);
 
-  const [state, action, pending] = useActionState(createTaskAction.bind(null, projectId), {})
+  const [state, action, pending] = useActionState(
+    createTaskAction.bind(null, projectId),
+    {},
+  );
 
   useEffect(() => {
     if (!pending && state.time && state.time + 10 > Date.now()) {
-      if (state.status === 'error') {
-        toast.error(state.message)
-      } else if (state.status === 'success') {
-        toast.success(state.message)
+      if (state.status === "error") {
+        toast.error(state.message);
+      } else if (state.status === "success") {
+        toast.success(state.message);
       }
     }
-  }, [state, pending])
+  }, [state, pending]);
 
   return (
     <form
@@ -58,7 +62,9 @@ export default function CreateTaskForm({
           </FieldLegend>
 
           <Field className="flex flex-col gap-2">
-            <FieldLabel htmlFor="checkout-task-title">Название задачи</FieldLabel>
+            <FieldLabel htmlFor="checkout-task-title">
+              Название задачи
+            </FieldLabel>
             <Input
               type="text"
               name="title"
@@ -69,7 +75,9 @@ export default function CreateTaskForm({
           </Field>
 
           <Field className="flex flex-col gap-2">
-            <FieldLabel htmlFor="checkout-task-description">Описание</FieldLabel>
+            <FieldLabel htmlFor="checkout-task-description">
+              Описание
+            </FieldLabel>
             <Textarea
               name="description"
               placeholder="Что-то важное..."
@@ -85,10 +93,7 @@ export default function CreateTaskForm({
               name="deadline"
               value={formatDateForInput(date)}
             />
-            <Popover
-              open={open}
-              onOpenChange={setOpen}
-            >
+            <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
@@ -96,7 +101,7 @@ export default function CreateTaskForm({
                   type="button"
                   className="justify-between"
                 >
-                  {date ? date.toLocaleDateString() : 'Выбрать дату'}
+                  {date ? date.toLocaleDateString() : "Выбрать дату"}
                   <ChevronDownIcon />
                 </Button>
               </PopoverTrigger>
@@ -109,8 +114,8 @@ export default function CreateTaskForm({
                   selected={date}
                   captionLayout="dropdown"
                   onSelect={(selectedDate) => {
-                    setDate(selectedDate)
-                    setOpen(false)
+                    setDate(selectedDate);
+                    setOpen(false);
                   }}
                 />
               </PopoverContent>
@@ -125,27 +130,22 @@ export default function CreateTaskForm({
               multiple
               className="w-full border rounded-md p-2"
             >
-              {availableTasks.map(task => (
-                <option
-                  key={task.id}
-                  value={task.id}
-                >
+              {availableTasks.map((task) => (
+                <option key={task.id} value={task.id}>
                   {task.title}
                 </option>
               ))}
             </select>
-            <small className="text-gray-500">Удерживайте Ctrl для выбора нескольких задач</small>
+            <small className="text-gray-500">
+              Удерживайте Ctrl для выбора нескольких задач
+            </small>
           </Field>
         </FieldSet>
 
-        <Button
-          type="submit"
-          disabled={pending}
-          className="mt-4"
-        >
-          {pending ? 'Создание...' : 'Создать задачу'}
+        <Button type="submit" disabled={pending} className="mt-4">
+          {pending ? "Создание..." : "Создать задачу"}
         </Button>
       </FieldGroup>
     </form>
-  )
+  );
 }

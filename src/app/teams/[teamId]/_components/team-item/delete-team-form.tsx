@@ -1,45 +1,51 @@
-'use client'
+"use client";
 
-import { useActionState, useEffect } from 'react'
-import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
-import { redirect } from 'next/navigation'
-import { deleteTeamAction } from '@/app/actions/teams'
-import { TeamWithRoleDTO } from '@/app/data/team/team.dto'
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
+import { deleteTeamAction } from "@/app/actions/teams";
+import { TeamWithRoleDTO } from "@/app/data/team/team.dto";
 import {
   Dialog,
-  DialogClose, DialogContent, DialogDescription,
-  DialogFooter, DialogHeader, DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog'
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 type DeleteTeamFormProps = {
-  team: TeamWithRoleDTO
-}
+  team: TeamWithRoleDTO;
+};
 
 export default function DeleteTeamForm({ team }: DeleteTeamFormProps) {
-  const [state, action, pending] = useActionState(deleteTeamAction.bind(null, team.id), {})
+  const [state, action, pending] = useActionState(
+    deleteTeamAction.bind(null, team.id),
+    {},
+  );
 
   useEffect(() => {
     if (!pending) {
-      if (state.status === 'error') {
-        toast.error(state.message)
-      } else if (state.status === 'success') {
-        toast.success(state.message)
-        redirect(`/teams/`)
+      if (state.status === "error") {
+        toast.error(state.message);
+      } else if (state.status === "success") {
+        toast.success(state.message);
+        redirect(`/teams/`);
       }
     }
-  }, [state, pending])
+  }, [state, pending]);
 
-  if (team.role !== 'OWNER') return null
+  if (team.role !== "OWNER") return null;
 
   return (
     <Dialog>
-      <Button
-        asChild
-        variant="destructive"
-      >
-        <DialogTrigger>{pending ? 'Удаление...' : 'Перейти к удалению'}</DialogTrigger>
+      <Button asChild variant="destructive">
+        <DialogTrigger>
+          {pending ? "Удаление..." : "Перейти к удалению"}
+        </DialogTrigger>
       </Button>
       <DialogContent>
         <DialogHeader>
@@ -51,10 +57,9 @@ export default function DeleteTeamForm({ team }: DeleteTeamFormProps) {
             className="flex items-center bg-card rounded-lg"
           >
             <DialogClose asChild>
-              <Button
-                type="submit"
-                variant="destructive"
-              >{pending ? 'Удаление...' : 'Удалить'}</Button>
+              <Button type="submit" variant="destructive">
+                {pending ? "Удаление..." : "Удалить"}
+              </Button>
             </DialogClose>
           </form>
           <DialogClose asChild>
@@ -63,5 +68,5 @@ export default function DeleteTeamForm({ team }: DeleteTeamFormProps) {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

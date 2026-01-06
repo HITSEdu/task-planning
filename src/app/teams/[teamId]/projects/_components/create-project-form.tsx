@@ -1,49 +1,53 @@
-'use client'
+"use client";
 
-import { useActionState, useEffect, useState } from 'react'
-import { toast } from 'sonner'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Field,
-  FieldGroup, FieldLabel,
+  FieldGroup,
+  FieldLabel,
   FieldLegend,
-  FieldSet
-} from '@/components/ui/field'
-import { redirect } from 'next/navigation'
-import { createProjectAction } from '@/app/actions/projects'
-import { Label } from '@/components/ui/label'
+  FieldSet,
+} from "@/components/ui/field";
+import { redirect } from "next/navigation";
+import { createProjectAction } from "@/app/actions/projects";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover'
-import { ChevronDownIcon } from 'lucide-react'
-import { Calendar } from '@/components/ui/calendar'
-import { formatDateForInput } from '@/app/data/utils/format-date'
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ChevronDownIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { formatDateForInput } from "@/app/data/utils/format-date";
 
 type CreateProjectFormProps = {
-  teamId: string
-}
+  teamId: string;
+};
 
 export default function CreateProjectForm({ teamId }: CreateProjectFormProps) {
-  const [open, setOpen] = useState(false)
-  const [date, setDate] = useState<Date | undefined>(undefined)
+  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(undefined);
 
-  const [state, action, pending] = useActionState(createProjectAction.bind(null, teamId), {})
+  const [state, action, pending] = useActionState(
+    createProjectAction.bind(null, teamId),
+    {},
+  );
 
   useEffect(() => {
     if (!pending) {
-      if (state.status === 'error') {
-        toast.error(state.message)
-      } else if (state.status === 'success') {
-        toast.success(state.message)
+      if (state.status === "error") {
+        toast.error(state.message);
+      } else if (state.status === "success") {
+        toast.success(state.message);
 
-        const projectId = state.data?.id
-        if (projectId) redirect(`/teams/${teamId}/projects/${projectId}`)
+        const projectId = state.data?.id;
+        if (projectId) redirect(`/teams/${teamId}/projects/${projectId}`);
       }
     }
-  }, [state, pending])
+  }, [state, pending]);
 
   return (
     <form
@@ -78,10 +82,7 @@ export default function CreateProjectForm({ teamId }: CreateProjectFormProps) {
               />
             </Field>
             <Field>
-              <Label
-                htmlFor="checkout-project-deadline"
-                className="px-1"
-              >
+              <Label htmlFor="checkout-project-deadline" className="px-1">
                 Срок сдачи
               </Label>
               <input
@@ -89,10 +90,7 @@ export default function CreateProjectForm({ teamId }: CreateProjectFormProps) {
                 name="deadline"
                 value={formatDateForInput(date)}
               />
-              <Popover
-                open={open}
-                onOpenChange={setOpen}
-              >
+              <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -100,7 +98,7 @@ export default function CreateProjectForm({ teamId }: CreateProjectFormProps) {
                     className="w-48 justify-between font-normal"
                     type="button"
                   >
-                    {date ? date.toLocaleDateString() : 'Выбрать дату'}
+                    {date ? date.toLocaleDateString() : "Выбрать дату"}
                     <ChevronDownIcon />
                   </Button>
                 </PopoverTrigger>
@@ -113,8 +111,8 @@ export default function CreateProjectForm({ teamId }: CreateProjectFormProps) {
                     selected={date}
                     captionLayout="dropdown"
                     onSelect={(selectedDate) => {
-                      setDate(selectedDate)
-                      setOpen(false)
+                      setDate(selectedDate);
+                      setOpen(false);
                     }}
                   />
                 </PopoverContent>
@@ -123,9 +121,9 @@ export default function CreateProjectForm({ teamId }: CreateProjectFormProps) {
           </FieldGroup>
         </FieldSet>
         <Field orientation="horizontal">
-          <Button type="submit"> {pending ? 'Создание...' : 'Создать'}</Button>
+          <Button type="submit"> {pending ? "Создание..." : "Создать"}</Button>
         </Field>
       </FieldGroup>
     </form>
-  )
+  );
 }

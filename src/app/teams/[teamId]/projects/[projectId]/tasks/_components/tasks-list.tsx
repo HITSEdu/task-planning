@@ -1,12 +1,10 @@
-import Link from 'next/link'
-import {
-  TaskWithDependenciesDTO
-} from '@/app/data/task/task.dto'
+import Link from "next/link";
+import { TaskWithDependenciesDTO } from "@/app/data/task/task.dto";
 
 type TasksListProps = {
-  tasks: TaskWithDependenciesDTO[]
-  teamId: string
-}
+  tasks: TaskWithDependenciesDTO[];
+  teamId: string;
+};
 
 export default function TasksList({ tasks, teamId }: TasksListProps) {
   return (
@@ -25,5 +23,5 @@ export default function TasksList({ tasks, teamId }: TasksListProps) {
         </li>
       ))}
     </ul>
-  )
+  );
 }

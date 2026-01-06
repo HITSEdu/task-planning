@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { Button } from '@/components/ui/button'
+import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldDescription,
@@ -8,28 +8,28 @@ import {
   FieldLabel,
   FieldLegend,
   FieldSet,
-} from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
-import { useActionState, useEffect } from 'react'
-import { signUpAction } from '@/app/actions/user'
-import { toast } from 'sonner'
-import { redirect } from 'next/navigation'
-import Link from 'next/link'
-import { sitePages } from '@/app/config/site.config'
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { useActionState, useEffect } from "react";
+import { signUpAction } from "@/app/actions/user";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import { sitePages } from "@/app/config/site.config";
 
 export default function RegisterForm() {
-  const [state, action, pending] = useActionState(signUpAction, {})
+  const [state, action, pending] = useActionState(signUpAction, {});
 
   useEffect(() => {
     if (!pending) {
-      if (state.status === 'error') {
-        toast.error(state.message)
-      } else if (state.status === 'success') {
-        toast.success(state.message)
-        redirect('/teams')
+      if (state.status === "error") {
+        toast.error(state.message);
+      } else if (state.status === "success") {
+        toast.success(state.message);
+        redirect("/teams");
       }
     }
-  }, [state])
+  }, [state]);
 
   return (
     <form
@@ -39,14 +39,10 @@ export default function RegisterForm() {
       <FieldGroup>
         <FieldSet>
           <FieldLegend className="text-center">Регистрация</FieldLegend>
-          <FieldDescription>
-            Создать новый аккаунт
-          </FieldDescription>
+          <FieldDescription>Создать новый аккаунт</FieldDescription>
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="checkout-full-name">
-                Полное имя
-              </FieldLabel>
+              <FieldLabel htmlFor="checkout-full-name">Полное имя</FieldLabel>
               <Input
                 id="checkout-full-name"
                 type="text"
@@ -56,9 +52,7 @@ export default function RegisterForm() {
               />
             </Field>
             <Field>
-              <FieldLabel htmlFor="checkout-email">
-                Почта
-              </FieldLabel>
+              <FieldLabel htmlFor="checkout-email">Почта</FieldLabel>
               <Input
                 type="email"
                 name="email"
@@ -80,9 +74,7 @@ export default function RegisterForm() {
               />
             </Field>
             <Field>
-              <FieldLabel htmlFor="checkout-password">
-                Пароль
-              </FieldLabel>
+              <FieldLabel htmlFor="checkout-password">Пароль</FieldLabel>
               <Input
                 type="password"
                 name="password"
@@ -94,11 +86,11 @@ export default function RegisterForm() {
           </FieldGroup>
         </FieldSet>
         <Field orientation="horizontal">
-          <Button type="submit"> {pending ? 'Регистрация...' : 'Зарегистрироваться'}</Button>
-          <Button
-            variant='outline'
-            asChild
-          >
+          <Button type="submit">
+            {" "}
+            {pending ? "Регистрация..." : "Зарегистрироваться"}
+          </Button>
+          <Button variant="outline" asChild>
             <Link
               key={sitePages.login.path}
               href={sitePages.login.path}
@@ -110,5 +102,5 @@ export default function RegisterForm() {
         </Field>
       </FieldGroup>
     </form>
-  )
+  );
 }

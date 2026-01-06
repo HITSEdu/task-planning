@@ -1,33 +1,34 @@
-'use client'
+"use client";
 
-import { useActionState, useEffect } from 'react'
-import { toast } from 'sonner'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Field,
-  FieldGroup, FieldLabel,
+  FieldGroup,
+  FieldLabel,
   FieldLegend,
-  FieldSet
-} from '@/components/ui/field'
-import { redirect } from 'next/navigation'
-import { createTeamAction } from '@/app/actions/teams'
+  FieldSet,
+} from "@/components/ui/field";
+import { redirect } from "next/navigation";
+import { createTeamAction } from "@/app/actions/teams";
 
 export default function CreateTeamForm() {
-  const [state, action, pending] = useActionState(createTeamAction, {})
+  const [state, action, pending] = useActionState(createTeamAction, {});
 
   useEffect(() => {
     if (!pending) {
-      if (state.status === 'error') {
-        toast.error(state.message)
-      } else if (state.status === 'success') {
-        toast.success(state.message)
+      if (state.status === "error") {
+        toast.error(state.message);
+      } else if (state.status === "success") {
+        toast.success(state.message);
 
-        const teamId = state.data?.id
-        if (teamId) redirect(`/teams/${teamId}`)
+        const teamId = state.data?.id;
+        if (teamId) redirect(`/teams/${teamId}`);
       }
     }
-  }, [state, pending])
+  }, [state, pending]);
 
   return (
     <form
@@ -50,9 +51,9 @@ export default function CreateTeamForm() {
           </Field>
         </FieldGroup>
         <Field orientation="horizontal">
-          <Button type="submit"> {pending ? 'Создание...' : 'Создать'}</Button>
+          <Button type="submit"> {pending ? "Создание..." : "Создать"}</Button>
         </Field>
       </FieldGroup>
     </form>
-  )
+  );
 }

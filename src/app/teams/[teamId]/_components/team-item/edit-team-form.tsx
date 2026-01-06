@@ -1,46 +1,51 @@
-'use client'
+"use client";
 
-import { useActionState, useEffect } from 'react'
-import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
-import { updateTeamAction } from '@/app/actions/teams'
-import { TeamWithRoleDTO } from '@/app/data/team/team.dto'
+import { updateTeamAction } from "@/app/actions/teams";
+import { TeamWithRoleDTO } from "@/app/data/team/team.dto";
 import {
   Dialog,
-  DialogClose, DialogContent,
-  DialogFooter, DialogHeader, DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog'
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
 type DeleteTeamFormProps = {
-  team: TeamWithRoleDTO
-}
+  team: TeamWithRoleDTO;
+};
 
 export default function EditTeamForm({ team }: DeleteTeamFormProps) {
-  const [state, action, pending] = useActionState(updateTeamAction.bind(null, team.id), {})
+  const [state, action, pending] = useActionState(
+    updateTeamAction.bind(null, team.id),
+    {},
+  );
 
   useEffect(() => {
     if (!pending) {
-      if (state.status === 'error') {
-        toast.error(state.message)
-      } else if (state.status === 'success') {
-        toast.success(state.message)
+      if (state.status === "error") {
+        toast.error(state.message);
+      } else if (state.status === "success") {
+        toast.success(state.message);
       }
     }
-  }, [state, pending])
+  }, [state, pending]);
 
-  if (team.role !== 'OWNER') return null
+  if (team.role !== "OWNER") return null;
 
   return (
     <Dialog>
-      <Button
-        asChild
-        variant="outline"
-      >
-        <DialogTrigger>{pending ? 'Изменение...' : 'Перейти к редактированию'}</DialogTrigger>
+      <Button asChild variant="outline">
+        <DialogTrigger>
+          {pending ? "Изменение..." : "Перейти к редактированию"}
+        </DialogTrigger>
       </Button>
       <DialogContent>
         <DialogHeader>
@@ -66,7 +71,9 @@ export default function EditTeamForm({ team }: DeleteTeamFormProps) {
             </Field>
             <DialogFooter className="flex gap-2">
               <DialogClose asChild>
-                <Button type="submit">{pending ? 'Изменение...' : 'Изменить'}</Button>
+                <Button type="submit">
+                  {pending ? "Изменение..." : "Изменить"}
+                </Button>
               </DialogClose>
               <DialogClose asChild>
                 <Button variant="outline">Назад</Button>
@@ -76,5 +83,5 @@ export default function EditTeamForm({ team }: DeleteTeamFormProps) {
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

@@ -1,17 +1,17 @@
-import { TeamDAL } from '@/app/data/team/team.dal'
-import { redirect } from 'next/navigation'
-import CreateTeamForm from '@/app/teams/_components/create-team-form'
-import InvitesList from '@/app/teams/_components/invites-list'
-import TeamsList from './_components/teams-list'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import EmptyList from '../_components/lists/empty-list'
+import { TeamDAL } from "@/app/data/team/team.dal";
+import { redirect } from "next/navigation";
+import CreateTeamForm from "@/app/teams/_components/create-team-form";
+import InvitesList from "@/app/teams/_components/invites-list";
+import TeamsList from "./_components/teams-list";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import EmptyList from "../_components/lists/empty-list";
 
 export default async function TeamsPage() {
-  const dal = await TeamDAL.create()
-  if (!dal) redirect('/sign-in')
+  const dal = await TeamDAL.create();
+  if (!dal) redirect("/sign-in");
 
-  const { teams, invites } = await dal.getUserTeams()
+  const { teams, invites } = await dal.getUserTeams();
 
   return (
     <div className="overflow-y-auto flex flex-col md:flex-row gap-6 p-4 md:p-8 justify-center items-stretch h-[calc(100vh-5rem)]">
@@ -66,5 +66,5 @@ export default async function TeamsPage() {
         </Card>
       </section>
     </div>
-  )
+  );
 }

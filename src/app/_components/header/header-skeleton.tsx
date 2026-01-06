@@ -1,5 +1,5 @@
-import { ModeToggle } from '@/app/_components/header/mode-toggle'
-import { Skeleton } from '@/components/ui/skeleton'
+import { ModeToggle } from "@/app/_components/header/mode-toggle";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function HeaderSkeleton() {
   return (
@@ -14,5 +14,5 @@ export default function HeaderSkeleton() {
         </div>
       </div>
     </header>
-  )
+  );
 }

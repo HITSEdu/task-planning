@@ -3,5 +3,13 @@ stages:
 
 test:
   stage: test
+  image: node:20
   script:
-    - echo "test"
+    - pnpm install
+    - pnpm test
+  artifacts:
+    when: always
+    reports:
+      junit: reports/junit/junit.xml
+    paths:
+      - reports/

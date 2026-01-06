@@ -1,63 +1,71 @@
-'use client'
+"use client";
 
-import { UserWithTeamDTO } from '@/app/data/user/user.dto'
+import { UserWithTeamDTO } from "@/app/data/user/user.dto";
 import {
   Item,
   ItemActions,
   ItemContent,
   ItemDescription,
-  ItemTitle
-} from '@/components/ui/item'
-import { Button } from '@/components/ui/button'
+  ItemTitle,
+} from "@/components/ui/item";
+import { Button } from "@/components/ui/button";
 import {
-  Dialog, DialogClose, DialogContent,
-  DialogDescription, DialogFooter, DialogHeader, DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog'
-import { useActionState, useEffect } from 'react'
-import { kickFromTeamAction } from '@/app/actions/teams'
-import { toast } from 'sonner'
-import { redirect } from 'next/navigation'
-import { UserRole } from '@/generated/prisma/enums'
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useActionState, useEffect } from "react";
+import { kickFromTeamAction } from "@/app/actions/teams";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
+import { UserRole } from "@/generated/prisma/enums";
 
 const roleMapper = {
-  'OWNER': 'Владелец',
-  'MEMBER': 'Участник',
-  'PENDING': 'Приглашен'
-}
+  OWNER: "Владелец",
+  MEMBER: "Участник",
+  PENDING: "Приглашен",
+};
 
-type Variants = 'outline' | 'default' | 'muted'
+type Variants = "outline" | "default" | "muted";
 
 const buttonVariants: Record<UserRole, Variants> = {
-  'OWNER': 'outline',
-  'MEMBER': 'default',
-  'PENDING': 'muted'
-}
+  OWNER: "outline",
+  MEMBER: "default",
+  PENDING: "muted",
+};
 
 type MateItemProps = {
-  mate: UserWithTeamDTO
-  user: UserWithTeamDTO
-  teamId: string
-}
+  mate: UserWithTeamDTO;
+  user: UserWithTeamDTO;
+  teamId: string;
+};
 
 export default function MateItem({ mate, user, teamId }: MateItemProps) {
-  const [state, action, pending] = useActionState(kickFromTeamAction.bind(null, teamId, mate.id), {})
+  const [state, action, pending] = useActionState(
+    kickFromTeamAction.bind(null, teamId, mate.id),
+    {},
+  );
 
   useEffect(() => {
     if (!pending) {
-      if (state.status === 'error') {
-        toast.error(state.message)
-      } else if (state.status === 'success') {
-        toast.success(state.message)
+      if (state.status === "error") {
+        toast.error(state.message);
+      } else if (state.status === "success") {
+        toast.success(state.message);
         if (mate.id === user.id) {
-          redirect(`/teams/`)
+          redirect(`/teams/`);
         }
       }
     }
-  }, [state, pending])
+  }, [state, pending]);
 
-  const isSelf = mate.id === user.id
-  const canKick = user.role === 'OWNER' || isSelf
+  const isSelf = mate.id === user.id;
+  const canKick = user.role === "OWNER" || isSelf;
 
   return (
     <Item variant={buttonVariants[mate.role]}>
@@ -68,10 +76,7 @@ export default function MateItem({ mate, user, teamId }: MateItemProps) {
 
       <ItemActions className="flex gap-2">
         <Dialog>
-          <Button
-            asChild
-            variant="outline"
-          >
+          <Button asChild variant="outline">
             <DialogTrigger>Подробнее</DialogTrigger>
           </Button>
 
@@ -93,10 +98,10 @@ export default function MateItem({ mate, user, teamId }: MateItemProps) {
               </DialogClose>
               {canKick && (
                 <form action={action}>
-                  <Button
-                    type="submit"
-                    variant="destructive"
-                  > {pending ? 'Ожидание...' : isSelf ? 'Покинуть' : 'Выгнать'}</Button>
+                  <Button type="submit" variant="destructive">
+                    {" "}
+                    {pending ? "Ожидание..." : isSelf ? "Покинуть" : "Выгнать"}
+                  </Button>
                 </form>
               )}
             </DialogFooter>
@@ -104,5 +109,5 @@ export default function MateItem({ mate, user, teamId }: MateItemProps) {
         </Dialog>
       </ItemActions>
     </Item>
-  )
+  );
 }

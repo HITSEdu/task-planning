@@ -1,16 +1,16 @@
-'use client'
-import Link from 'next/link'
-import { ModeToggle } from '@/app/_components/header/mode-toggle'
-import { sitePages } from '@/app/config/site.config'
-import UserBlock from '@/app/_components/header/user-block'
-import useUserData from '@/hooks/useUserData'
-import HeaderSkeleton from '@/app/_components/header/header-skeleton'
+"use client";
+import Link from "next/link";
+import { ModeToggle } from "@/app/_components/header/mode-toggle";
+import { sitePages } from "@/app/config/site.config";
+import UserBlock from "@/app/_components/header/user-block";
+import useUserData from "@/hooks/useUserData";
+import HeaderSkeleton from "@/app/_components/header/header-skeleton";
 
 export default function Header() {
-  const { user, isPending } = useUserData()
+  const { user, isPending } = useUserData();
 
   if (isPending) {
-    return <HeaderSkeleton/>
+    return <HeaderSkeleton />;
   }
 
   return (
@@ -25,5 +25,5 @@ export default function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }
