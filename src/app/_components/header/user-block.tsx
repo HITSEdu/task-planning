@@ -23,7 +23,7 @@ export default function UserBlock({ user }: UserBlockProps) {
         redirect("/sign-in");
       }
     }
-  }, [state])
+  }, [state]);
 
   return (
     <div className="flex items-center justify-between gap-4">
