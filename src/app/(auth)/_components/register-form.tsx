@@ -26,7 +26,7 @@ export default function RegisterForm() {
         toast.error(state.message);
       } else if (state.status === "success") {
         toast.success(state.message);
-        redirect("/teams");
+        redirect("/");
       }
     }
   }, [state, pending]);
