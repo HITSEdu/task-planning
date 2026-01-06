@@ -23,7 +23,7 @@ export class TaskDAL {
     try {
       const user = await requireUser();
       return new TaskDAL(user);
-    } catch (error) {
+    } catch (_error) {
       return null;
     }
   }
@@ -388,7 +388,7 @@ export class TaskDAL {
 
     tasks.forEach((t) => {
       t.dependsOn?.forEach((dep) => {
-        graph.get(t.id)!.push(dep.id);
+        graph.get(t.id)?.push(dep.id);
       });
     });
 

@@ -47,7 +47,7 @@ export default function CreateProjectForm({ teamId }: CreateProjectFormProps) {
         if (projectId) redirect(`/teams/${teamId}/projects/${projectId}`);
       }
     }
-  }, [state, pending]);
+  }, [state, pending, teamId]);
 
   return (
     <form

@@ -39,11 +39,11 @@ export default function DeleteTaskForm({ task }: DeleteTaskFormProps) {
         const segments = pathname.split("/").filter(Boolean);
         segments.pop();
 
-        const parentPath = "/" + segments.join("/");
+        const parentPath = `/${segments.join("/")}`;
         router.push(parentPath);
       }
     }
-  }, [state, pending]);
+  }, [state, pending, pathname, router]);
 
   return (
     <Dialog>

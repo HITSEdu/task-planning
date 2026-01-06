@@ -62,7 +62,9 @@ export function mapTasksToGanttGroups(
   });
 
   const byId = new Map<string, Tmp>();
-  items.forEach((it) => byId.set(it.id, it));
+  for (const it of items) {
+    byId.set(it.id, it);
+  }
 
   const visiting = new Set<string>();
   const visited = new Set<string>();

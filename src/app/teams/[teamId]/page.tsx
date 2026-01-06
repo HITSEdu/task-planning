@@ -32,7 +32,8 @@ export default async function TeamPage({ params }: Props) {
   }
 
   const mates = await dal.getUsersInTeam(teamId);
-  const user = mates.find((el) => el.id === dal.getUser().id)!;
+  const user = mates.find((el) => el.id === dal.getUser().id);
+  if (!user) throw new Error("Пользователь не найден в команде");
 
   return (
     <div className="overflow-y-auto flex flex-col md:flex-row gap-6 p-4 md:p-8 justify-center items-stretch h-[calc(100vh-5rem)]">

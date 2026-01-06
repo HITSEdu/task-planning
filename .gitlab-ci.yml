@@ -13,7 +13,7 @@ stages:
 
 test:
   stage: test
-  image: node:20
+  image: node:24
   script:
     - npm install
     - npm test

@@ -35,7 +35,7 @@ export default function DeleteProjectForm({ project }: DeleteProjectFormProps) {
         redirect(`/teams/${project.teamId}/projects`);
       }
     }
-  }, [state, pending]);
+  }, [state, pending, project.teamId]);
 
   if (project.team.role !== "OWNER") return null;
 

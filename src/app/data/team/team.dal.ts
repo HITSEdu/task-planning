@@ -24,7 +24,7 @@ export class TeamDAL {
     try {
       const user = await requireUser();
       return new TeamDAL(user);
-    } catch (error) {
+    } catch (_error) {
       return null;
     }
   }

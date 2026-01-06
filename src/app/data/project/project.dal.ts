@@ -20,7 +20,7 @@ export class ProjectDAL {
     try {
       const user = await requireUser();
       return new ProjectDAL(user);
-    } catch (error) {
+    } catch (_error) {
       return null;
     }
   }

@@ -5,13 +5,7 @@ import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 import { createTeamAction } from "@/app/actions/teams";
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-} from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
 export default function CreateTeamForm() {

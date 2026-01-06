@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="3" failures="0" errors="0" time="3.193">
-  <testsuite name="formatDateForInput" errors="0" failures="0" skipped="0" timestamp="2026-01-06T09:08:13" time="1.223" tests="3">
-    <testcase classname="formatDateForInput returns empty string if date is undefined" name="formatDateForInput returns empty string if date is undefined" time="0.004">
+<testsuites name="jest tests" tests="3" failures="0" errors="0" time="3.641">
+  <testsuite name="formatDateForInput" errors="0" failures="0" skipped="0" timestamp="2026-01-06T10:16:43" time="1.246" tests="3">
+    <testcase classname="formatDateForInput returns empty string if date is undefined" name="formatDateForInput returns empty string if date is undefined" time="0.006">
     </testcase>
     <testcase classname="formatDateForInput formats date to YYYY-MM-DD" name="formatDateForInput formats date to YYYY-MM-DD" time="0.008">
     </testcase>

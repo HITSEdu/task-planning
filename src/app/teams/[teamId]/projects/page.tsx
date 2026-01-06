@@ -23,7 +23,8 @@ export default async function ProjectsPage({ params }: Props) {
   if (!prDal || !teamDal) redirect("/sign-in");
 
   const prs = await prDal.getUserProjects(teamId);
-  const team = (await teamDal.getUserTeam(teamId))!;
+  const team = await teamDal.getUserTeam(teamId);
+  if (!team) throw new Error("Команда не найдена");
 
   const projects: ProjectWithTeamDTO[] = prs.map((el) => ({
     ...el,
