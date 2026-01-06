@@ -10,12 +10,6 @@ workflow:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == $DEV_BRANCH || $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
 
-before_script:
-  # - npm install --global corepack@latest
-  - corepack enable
-  - corepack prepare pnpm@latest-10 --activate
-  - pnpm config set store-dir .pnpm-store
-
 stages:
   - install
   - validate
@@ -29,6 +23,10 @@ install:
     paths:
       - node_modules/
     policy: pull-push
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm@latest-10 --activate
+    - pnpm config set store-dir .pnpm-store
   script:
     - echo "CI_PROJECT $CI_PROJECT_PATH"
     - echo "CI_COMMIT_REF_NAME $CI_COMMIT_REF_NAME"
