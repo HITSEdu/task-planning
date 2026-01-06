@@ -41,17 +41,12 @@ install:
     - node -v
     - pnpm -v
     - pnpm install --frozen-lockfile
-  artifacts:
-    paths:
-      - node_modules/
-    expire_in: 1h
 
 lint:
   stage: validate
   extends: .npm_base
   needs:
     - job: install
-      artifacts: true
   script:
     - pnpm lint
 
@@ -60,7 +55,6 @@ test:
   extends: .npm_base
   needs:
     - job: install
-      artifacts: true
   script:
     - pnpm test
   artifacts:
@@ -75,9 +69,7 @@ build:
   stage: build
   needs:
     - job: lint
-      artifacts: true
     - job: test
-      artifacts: true
   script:
     - echo "DATABASE_URL is set ${DATABASE_URL:+yes}"
     - echo "BETTER_AUTH_SECRET is set ${BETTER_AUTH_SECRET:+yes}"
@@ -86,7 +78,6 @@ build:
   artifacts:
     paths:
       - .next/
-      - node_modules/
     expire_in: 1 week
 
 # deploy:
