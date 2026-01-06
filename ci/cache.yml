@@ -1,7 +1,13 @@
-.npm_cache_pull:
+.cache:
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - node_modules/
-      - .pnpm-store/
     policy: pull
+
+.cache.write:
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+    policy: pull-push

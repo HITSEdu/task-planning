@@ -1,0 +1,15 @@
+.setup.pnpm:
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm@latest-10 --activate
+
+.setup.info:
+  before_script:
+    - echo "CI_COMMIT_REF_NAME $CI_COMMIT_REF_NAME"
+    - node -v
+
+.setup.env.production:
+  before_script:
+    - echo "DATABASE_URL is set ${DATABASE_URL}"
+    - echo "BETTER_AUTH_SECRET is set ${BETTER_AUTH_SECRET}"
+    - echo "BETTER_AUTH_URL is set ${BETTER_AUTH_URL}"

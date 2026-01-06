@@ -12,72 +12,55 @@ workflow:
 
 stages:
   - install
-  - validate
+  - lint
+  - test
   - build
   - deploy
 
 install:
   stage: install
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - node_modules/
-    policy: pull-push
-  before_script:
-    - corepack enable
-    - corepack prepare pnpm@latest-10 --activate
-    - pnpm config set store-dir .pnpm-store
+  extends: 
+    - .setup.pnpm
+    - .setup.info
+    - .cache.write
   script:
-    - echo "CI_PROJECT $CI_PROJECT_PATH"
-    - echo "CI_COMMIT_REF_NAME $CI_COMMIT_REF_NAME"
-    - node -v
-    - pnpm -v
     - pnpm install --frozen-lockfile
 
-secret_detection:
-  stage: validate 
+lint:
+  stage: lint
+  extends:
+    - .setup.pnpm
+    - .setup.info
+    - .cache
+  script:
+    - pnpm lint
 
-sast:
-  stage: validate
-
-# lint:
-#   stage: validate
-#   extends: .npm_cache_pull
-#   needs:
-#     - job: install
-#   cache:
-#     key: ${CI_COMMIT_REF_SLUG}
-#     paths:
-#       - node_modules/
-#     policy: pull
-#   script:
-#     - pnpm lint
-
-# test:
-#   stage: validate
-#   extends: .npm_cache_pull
-#   needs:
-#     - job: install
-#   script:
-#     - pnpm test
-#   artifacts:
-#     when: always
-#     reports:
-#       junit: reports/junit/junit.xml
-#     paths:
-#       - reports/
-#     expire_in: 1 week
-#   rules:
-#     - if: $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
-#     - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH'
+test:
+  stage: test
+  extends:
+    - .setup.pnpm
+    - .setup.info
+    - .cache
+  script:
+    - pnpm test
+  artifacts:
+    when: always
+    reports:
+      junit: reports/junit/junit.xml
+    paths:
+      - reports/
+    expire_in: 1 week
+  rules:
+    # - if: $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
+    - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH'
 
 build:
   stage: build
-  extends: .npm_cache_pull
-  before_script:
-    - echo "DATABASE_URL is set ${DATABASE_URL}"
-    - echo "BETTER_AUTH_SECRET is set ${BETTER_AUTH_SECRET}"
-    - echo "BETTER_AUTH_URL is set ${BETTER_AUTH_URL}"
+  extends:
+    - .setup.pnpm
+    - .setup.info
+    - .setup.env.production
+    - .cache
   script:
     - pnpm build
   artifacts:
@@ -121,3 +104,4 @@ include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - template: Jobs/SAST.gitlab-ci.yml
   - local: 'ci/cache.yml'
+  - local: 'ci/setup.yml'
