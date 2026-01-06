@@ -1,8 +1,12 @@
 "use client";
 
+import { ChevronDownIcon } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { createTaskAction } from "@/app/actions/tasks";
+import { formatDateForInput } from "@/app/data/utils/format-date";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Field,
   FieldGroup,
@@ -10,18 +14,14 @@ import {
   FieldLegend,
   FieldSet,
 } from "@/components/ui/field";
-import { createTaskAction } from "@/app/actions/tasks";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { formatDateForInput } from "@/app/data/utils/format-date";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ChevronDownIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
+import { Textarea } from "@/components/ui/textarea";
 
 type CreateTaskFormProps = {
   projectId: string;

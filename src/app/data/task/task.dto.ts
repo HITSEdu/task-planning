@@ -1,6 +1,6 @@
 import "server-only";
 import { z } from "zod";
-import { TaskStatus } from "@/generated/prisma/enums";
+import type { TaskStatus } from "@/generated/prisma/enums";
 
 export const TaskCreateInputSchema = z.object({
   title: z.string().min(2, "Название задачи должно быть не короче 2 символов"),

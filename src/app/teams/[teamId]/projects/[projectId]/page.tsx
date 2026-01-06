@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ProjectDAL } from "@/app/data/project/project.dal";
+import type { ProjectWithTeamDTO } from "@/app/data/project/project.dto";
 import { TeamDAL } from "@/app/data/team/team.dal";
-import { ProjectWithTeamDTO } from "@/app/data/project/project.dto";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import ProjectItem from "./_components/project-item/project-item";
+import ChangeProjectStatusForm from "@/app/teams/[teamId]/projects/[projectId]/_components/project-item/change-project-status-form";
 import DeleteProjectForm from "@/app/teams/[teamId]/projects/[projectId]/_components/project-item/delete-project-form";
 import EditProjectForm from "@/app/teams/[teamId]/projects/[projectId]/_components/project-item/edit-project-form";
-import ChangeProjectStatusForm from "@/app/teams/[teamId]/projects/[projectId]/_components/project-item/change-project-status-form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import ProjectItem from "./_components/project-item/project-item";
 
 type Props = {
   params: Promise<{

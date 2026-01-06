@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { UserDTO } from "@/app/data/user/user.dto";
-import { useActionState, useEffect } from "react";
-import { signOutAction } from "@/app/actions/user";
-import { toast } from "sonner";
 import { redirect } from "next/navigation";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
+import { signOutAction } from "@/app/actions/user";
+import type { UserDTO } from "@/app/data/user/user.dto";
+import { Button } from "@/components/ui/button";
 
 type UserBlockProps = {
   user: UserDTO;

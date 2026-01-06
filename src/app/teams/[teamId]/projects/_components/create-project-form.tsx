@@ -1,9 +1,13 @@
 "use client";
 
+import { ChevronDownIcon } from "lucide-react";
+import { redirect } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
+import { createProjectAction } from "@/app/actions/projects";
+import { formatDateForInput } from "@/app/data/utils/format-date";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Field,
   FieldGroup,
@@ -11,17 +15,13 @@ import {
   FieldLegend,
   FieldSet,
 } from "@/components/ui/field";
-import { redirect } from "next/navigation";
-import { createProjectAction } from "@/app/actions/projects";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ChevronDownIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import { formatDateForInput } from "@/app/data/utils/format-date";
 
 type CreateProjectFormProps = {
   teamId: string;

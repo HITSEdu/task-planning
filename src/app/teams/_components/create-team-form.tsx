@@ -1,8 +1,9 @@
 "use client";
 
+import { redirect } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
+import { createTeamAction } from "@/app/actions/teams";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -11,8 +12,7 @@ import {
   FieldLegend,
   FieldSet,
 } from "@/components/ui/field";
-import { redirect } from "next/navigation";
-import { createTeamAction } from "@/app/actions/teams";
+import { Input } from "@/components/ui/input";
 
 export default function CreateTeamForm() {
   const [state, action, pending] = useActionState(createTeamAction, {});

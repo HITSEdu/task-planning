@@ -1,7 +1,7 @@
 import "server-only";
 import { z } from "zod";
-import { ProjectStatus } from "@/generated/prisma/enums";
-import { TeamWithRoleDTO } from "@/app/data/team/team.dto";
+import type { TeamWithRoleDTO } from "@/app/data/team/team.dto";
+import type { ProjectStatus } from "@/generated/prisma/enums";
 
 export const ProjectCreateInputSchema = z.object({
   title: z.string().min(2, "Название проекта должно быть не короче 2 символов"),

@@ -1,5 +1,5 @@
 import "server-only";
-import { UserDTO } from "@/app/data/user/user.dto";
+import type { UserDTO } from "@/app/data/user/user.dto";
 
 export function canCreateTeam(user: UserDTO | null) {
   return Boolean(user);

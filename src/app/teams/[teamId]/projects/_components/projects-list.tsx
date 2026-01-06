@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ProjectWithTeamDTO } from "@/app/data/project/project.dto";
+import type { ProjectWithTeamDTO } from "@/app/data/project/project.dto";
 
 type ProjectsListProps = {
   projects: ProjectWithTeamDTO[];

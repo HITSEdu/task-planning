@@ -1,4 +1,4 @@
-import { UserRole } from "@/generated/prisma/enums";
+import type { UserRole } from "@/generated/prisma/enums";
 import "server-only";
 import { z } from "zod";
 

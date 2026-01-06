@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
+import { redirect } from "next/navigation";
 import { useActionState, useEffect } from "react";
-import { signInAction } from "@/app/actions/user";
 import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
+import { signInAction } from "@/app/actions/user";
+import { sitePages } from "@/app/config/site.config";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -13,9 +15,7 @@ import {
   FieldLegend,
   FieldSet,
 } from "@/components/ui/field";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import { sitePages } from "@/app/config/site.config";
+import { Input } from "@/components/ui/input";
 
 export default function LoginForm() {
   const [state, action, pending] = useActionState(signInAction, {});

@@ -1,9 +1,14 @@
 "use client";
 
+import { ChevronDownIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { updateProjectAction } from "@/app/actions/projects";
+import type { ProjectWithTeamDTO } from "@/app/data/project/project.dto";
+import { formatDateForInput } from "@/app/data/utils/format-date";
 import { Button } from "@/components/ui/button";
-
+import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
   DialogClose,
@@ -16,17 +21,11 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { formatDateForInput } from "@/app/data/utils/format-date";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ChevronDownIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import { updateProjectAction } from "@/app/actions/projects";
-import { ProjectWithTeamDTO } from "@/app/data/project/project.dto";
-import { useRouter } from "next/navigation";
 
 type EditProjectFormProps = {
   project: ProjectWithTeamDTO;

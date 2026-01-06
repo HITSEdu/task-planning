@@ -1,6 +1,6 @@
-import { StateType } from "@/app/config/site.config";
-import { UserDAL } from "../data/user/user.dal";
+import type { StateType } from "@/app/config/site.config";
 import { CreateUserSchema, LoginUserSchema } from "@/app/data/user/user.dto";
+import { UserDAL } from "../data/user/user.dal";
 
 export async function signUpAction(
   _prevState: StateType,

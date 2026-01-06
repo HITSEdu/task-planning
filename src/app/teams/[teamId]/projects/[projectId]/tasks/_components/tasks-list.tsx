@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { TaskWithDependenciesDTO } from "@/app/data/task/task.dto";
+import type { TaskWithDependenciesDTO } from "@/app/data/task/task.dto";
 
 type TasksListProps = {
   tasks: TaskWithDependenciesDTO[];

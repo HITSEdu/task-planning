@@ -1,9 +1,9 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import prisma from "@/lib/prisma";
 import { username } from "better-auth/plugins";
+import prisma from "@/lib/prisma";
 
-const trustedOrigin = process.env.BETTER_AUTH_URL!!;
+const trustedOrigin = process.env.BETTER_AUTH_URL!;
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {

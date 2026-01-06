@@ -1,9 +1,13 @@
 "use client";
 
+import { ChevronDownIcon } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { updateTaskAction } from "@/app/actions/tasks";
+import type { TaskWithDependenciesDTO } from "@/app/data/task/task.dto";
+import { formatDateForInput } from "@/app/data/utils/format-date";
 import { Button } from "@/components/ui/button";
-
+import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
   DialogClose,
@@ -16,16 +20,11 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { formatDateForInput } from "@/app/data/utils/format-date";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ChevronDownIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import { TaskWithDependenciesDTO } from "@/app/data/task/task.dto";
-import { updateTaskAction } from "@/app/actions/tasks";
 import { Textarea } from "@/components/ui/textarea";
 
 type EditTaskFormProps = {

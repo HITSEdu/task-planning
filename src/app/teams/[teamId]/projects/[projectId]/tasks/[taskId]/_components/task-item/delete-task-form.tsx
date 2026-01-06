@@ -1,9 +1,11 @@
 "use client";
 
+import { usePathname, useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
+import { deleteTaskAction } from "@/app/actions/tasks";
+import type { TaskWithDependenciesDTO } from "@/app/data/task/task.dto";
 import { Button } from "@/components/ui/button";
-import { usePathname, useRouter } from "next/navigation";
 import {
   Dialog,
   DialogClose,
@@ -13,8 +15,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { deleteTaskAction } from "@/app/actions/tasks";
-import { TaskWithDependenciesDTO } from "@/app/data/task/task.dto";
 
 type DeleteTaskFormProps = {
   task: TaskWithDependenciesDTO;

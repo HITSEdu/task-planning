@@ -1,9 +1,9 @@
 "use server";
 
-import { StateType } from "@/app/config/site.config";
-import { TeamDAL } from "../data/team/team.dal";
-import { TeamDTO } from "@/app/data/team/team.dto";
 import { revalidatePath } from "next/cache";
+import type { StateType } from "@/app/config/site.config";
+import type { TeamDTO } from "@/app/data/team/team.dto";
+import { TeamDAL } from "../data/team/team.dal";
 
 export async function createTeamAction(
   _prevState: StateType,

@@ -1,5 +1,9 @@
 "use client";
 
+import Link from "next/link";
+import type { ProjectWithTeamDTO } from "@/app/data/project/project.dto";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Item,
   ItemActions,
@@ -7,10 +11,6 @@ import {
   ItemDescription,
   ItemTitle,
 } from "@/components/ui/item";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ProjectWithTeamDTO } from "@/app/data/project/project.dto";
-import { Badge } from "@/components/ui/badge";
 
 type ProjectItemProps = {
   project: ProjectWithTeamDTO;

@@ -1,5 +1,5 @@
-import { TeamWithRoleDTO } from "@/app/data/team/team.dto";
 import Link from "next/link";
+import type { TeamWithRoleDTO } from "@/app/data/team/team.dto";
 
 type TeamsListProps = {
   teams: TeamWithRoleDTO[];

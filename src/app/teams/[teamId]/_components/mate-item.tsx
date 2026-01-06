@@ -1,13 +1,10 @@
 "use client";
 
-import { UserWithTeamDTO } from "@/app/data/user/user.dto";
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemTitle,
-} from "@/components/ui/item";
+import { redirect } from "next/navigation";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
+import { kickFromTeamAction } from "@/app/actions/teams";
+import type { UserWithTeamDTO } from "@/app/data/user/user.dto";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,11 +16,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useActionState, useEffect } from "react";
-import { kickFromTeamAction } from "@/app/actions/teams";
-import { toast } from "sonner";
-import { redirect } from "next/navigation";
-import { UserRole } from "@/generated/prisma/enums";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemTitle,
+} from "@/components/ui/item";
+import type { UserRole } from "@/generated/prisma/enums";
 
 const roleMapper = {
   OWNER: "Владелец",

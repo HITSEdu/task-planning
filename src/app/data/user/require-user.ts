@@ -1,8 +1,8 @@
 import "server-only";
 import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
-import { UserDTO } from "@/app/data/user/user.dto";
 import { cache } from "react";
+import type { UserDTO } from "@/app/data/user/user.dto";
+import { auth } from "@/lib/auth";
 
 export const requireUser = cache(async (): Promise<UserDTO> => {
   const user = await getCurrentUser();

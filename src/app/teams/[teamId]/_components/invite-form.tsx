@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
+import { inviteAction } from "@/app/actions/teams";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -11,7 +11,7 @@ import {
   FieldLegend,
   FieldSet,
 } from "@/components/ui/field";
-import { inviteAction } from "@/app/actions/teams";
+import { Input } from "@/components/ui/input";
 
 type InviteFormProps = {
   teamId: string;

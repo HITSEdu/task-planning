@@ -1,8 +1,10 @@
 "use client";
 
+import type { TaskWithDependenciesDTO } from "@/app/data/task/task.dto";
+import type { UserWithTaskDTO } from "@/app/data/user/user.dto";
+import UnassignUserForm from "@/app/teams/[teamId]/projects/[projectId]/tasks/[taskId]/_components/task-item/unassign-user-form";
 import { Badge } from "@/components/ui/badge";
-import { TaskWithDependenciesDTO } from "@/app/data/task/task.dto";
-import { UserRole } from "@/generated/prisma/enums";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Item,
   ItemActions,
@@ -10,9 +12,7 @@ import {
   ItemDescription,
   ItemTitle,
 } from "@/components/ui/item";
-import { UserWithTaskDTO } from "@/app/data/user/user.dto";
-import { Card, CardContent } from "@/components/ui/card";
-import UnassignUserForm from "@/app/teams/[teamId]/projects/[projectId]/tasks/[taskId]/_components/task-item/unassign-user-form";
+import type { UserRole } from "@/generated/prisma/enums";
 
 type TaskItemProps = {
   task: TaskWithDependenciesDTO;

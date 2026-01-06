@@ -1,5 +1,5 @@
-import { UserRole } from "@/generated/prisma/enums";
 import { z } from "zod";
+import type { UserRole } from "@/generated/prisma/enums";
 
 export const AddUserToTeamSchema = z.object({
   username: z.string().min(2, "Некорректное имя пользователя"),

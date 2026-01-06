@@ -1,11 +1,9 @@
 "use client";
 
-import { TaskWithDependenciesDTO } from "@/app/data/task/task.dto";
 import { useActionState, useEffect } from "react";
-import { assignUserAction } from "@/app/actions/tasks";
 import { toast } from "sonner";
-import { Field, FieldGroup } from "@/components/ui/field";
-import { Label } from "@/components/ui/label";
+import { assignUserAction } from "@/app/actions/tasks";
+import type { TaskWithDependenciesDTO } from "@/app/data/task/task.dto";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,6 +14,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Field, FieldGroup } from "@/components/ui/field";
+import { Label } from "@/components/ui/label";
 
 type AssignUserFormProps = {
   task: TaskWithDependenciesDTO;

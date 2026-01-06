@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { TeamDAL } from "@/app/data/team/team.dal";
 import { redirect } from "next/navigation";
+import { TeamDAL } from "@/app/data/team/team.dal";
+import InviteForm from "@/app/teams/[teamId]/_components/invite-form";
+import TeamItem from "@/app/teams/[teamId]/_components/team-item/team-item";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import MatesList from "./_components/mates-list";
-import InviteForm from "@/app/teams/[teamId]/_components/invite-form";
-import TeamItem from "@/app/teams/[teamId]/_components/team-item/team-item";
 
 type Props = {
   params: Promise<{ teamId: string }>;

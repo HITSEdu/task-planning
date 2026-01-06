@@ -1,5 +1,5 @@
-import { UserRole } from "@/generated/prisma/enums";
-import { TeamWithRoleDTO } from "@/app/data/team/team.dto";
+import type { TeamWithRoleDTO } from "@/app/data/team/team.dto";
+import type { UserRole } from "@/generated/prisma/enums";
 
 export type UserTeam = {
   team: { id: string; name: string; createdAt: Date };

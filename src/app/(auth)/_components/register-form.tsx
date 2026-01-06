@@ -1,5 +1,11 @@
 "use client";
 
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
+import { signUpAction } from "@/app/actions/user";
+import { sitePages } from "@/app/config/site.config";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -10,12 +16,6 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useActionState, useEffect } from "react";
-import { signUpAction } from "@/app/actions/user";
-import { toast } from "sonner";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import { sitePages } from "@/app/config/site.config";
 
 export default function RegisterForm() {
   const [state, action, pending] = useActionState(signUpAction, {});

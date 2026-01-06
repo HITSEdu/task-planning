@@ -2,6 +2,8 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { changeProjectStatusAction } from "@/app/actions/projects";
+import type { ProjectWithTeamDTO } from "@/app/data/project/project.dto";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,8 +14,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ProjectWithTeamDTO } from "@/app/data/project/project.dto";
-import { changeProjectStatusAction } from "@/app/actions/projects";
 
 type ChangeProjectStatusFormProps = {
   project: ProjectWithTeamDTO;

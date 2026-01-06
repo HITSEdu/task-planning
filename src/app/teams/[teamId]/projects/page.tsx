@@ -1,13 +1,13 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import EmptyList from "@/app/_components/lists/empty-list";
+import { ProjectDAL } from "@/app/data/project/project.dal";
+import type { ProjectWithTeamDTO } from "@/app/data/project/project.dto";
+import { TeamDAL } from "@/app/data/team/team.dal";
+import CreateProjectForm from "@/app/teams/[teamId]/projects/_components/create-project-form";
+import ProjectsList from "@/app/teams/[teamId]/projects/_components/projects-list";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ProjectDAL } from "@/app/data/project/project.dal";
-import EmptyList from "@/app/_components/lists/empty-list";
-import ProjectsList from "@/app/teams/[teamId]/projects/_components/projects-list";
-import { TeamDAL } from "@/app/data/team/team.dal";
-import { ProjectWithTeamDTO } from "@/app/data/project/project.dto";
-import CreateProjectForm from "@/app/teams/[teamId]/projects/_components/create-project-form";
-import Link from "next/link";
 
 type Props = {
   params: Promise<{

@@ -1,9 +1,9 @@
 "use client";
 
-import { TaskWithDependenciesDTO } from "@/app/data/task/task.dto";
 import { useActionState, useEffect, useState } from "react";
-import { changeTaskStatusAction } from "@/app/actions/tasks";
 import { toast } from "sonner";
+import { changeTaskStatusAction } from "@/app/actions/tasks";
+import type { TaskWithDependenciesDTO } from "@/app/data/task/task.dto";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

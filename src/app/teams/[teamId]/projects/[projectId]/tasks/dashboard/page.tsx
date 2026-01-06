@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { TaskDAL } from "@/app/data/task/task.dal";
 import { ProjectDAL } from "@/app/data/project/project.dal";
+import { TaskDAL } from "@/app/data/task/task.dal";
 import "react-modern-gantt/dist/index.css";
-import GanttChartItem from "./_components/gantt-chart-item";
 import { ArrowLeft } from "lucide-react";
+import GanttChartItem from "./_components/gantt-chart-item";
 
 type Props = {
   params: Promise<{

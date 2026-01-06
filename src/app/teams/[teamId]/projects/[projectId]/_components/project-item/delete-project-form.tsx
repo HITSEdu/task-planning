@@ -1,11 +1,11 @@
 "use client";
 
+import { redirect } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { redirect } from "next/navigation";
-import { ProjectWithTeamDTO } from "@/app/data/project/project.dto";
 import { deleteProjectAction } from "@/app/actions/projects";
+import type { ProjectWithTeamDTO } from "@/app/data/project/project.dto";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,

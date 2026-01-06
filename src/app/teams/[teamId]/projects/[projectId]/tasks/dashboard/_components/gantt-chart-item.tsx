@@ -1,9 +1,9 @@
 "use client";
 
-import { TaskWithDependenciesDTO } from "@/app/data/task/task.dto";
 import { useTheme } from "next-themes";
 import { useMemo } from "react";
 import GanttChart, { ViewMode } from "react-modern-gantt";
+import type { TaskWithDependenciesDTO } from "@/app/data/task/task.dto";
 
 type GanttChartItemProps = {
   tasks: TaskWithDependenciesDTO[];

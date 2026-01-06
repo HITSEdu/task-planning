@@ -1,6 +1,6 @@
-import { CreateUser, LoginUser } from "./user.dto";
-import { StateType } from "@/app/config/site.config";
+import type { StateType } from "@/app/config/site.config";
 import { authClient } from "@/lib/auth-client";
+import type { CreateUser, LoginUser } from "./user.dto";
 
 export class UserDAL {
   static async signUp(data: CreateUser): Promise<StateType> {

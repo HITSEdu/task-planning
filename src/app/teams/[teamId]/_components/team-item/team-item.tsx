@@ -1,6 +1,8 @@
 "use client";
 
-import { TeamWithRoleDTO } from "@/app/data/team/team.dto";
+import Link from "next/link";
+import type { TeamWithRoleDTO } from "@/app/data/team/team.dto";
+import { Button } from "@/components/ui/button";
 import {
   Item,
   ItemActions,
@@ -8,10 +10,8 @@ import {
   ItemDescription,
   ItemTitle,
 } from "@/components/ui/item";
-import { Button } from "@/components/ui/button";
 import DeleteTeamForm from "./delete-team-form";
 import EditTeamForm from "./edit-team-form";
-import Link from "next/link";
 
 type TeamItemProps = {
   team: TeamWithRoleDTO;

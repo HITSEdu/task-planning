@@ -1,9 +1,9 @@
 "use server";
 
-import { StateType } from "@/app/config/site.config";
-import { ProjectDAL } from "@/app/data/project/project.dal";
-import { ProjectWithStatusDTO } from "@/app/data/project/project.dto";
 import { revalidatePath } from "next/cache";
+import type { StateType } from "@/app/config/site.config";
+import { ProjectDAL } from "@/app/data/project/project.dal";
+import type { ProjectWithStatusDTO } from "@/app/data/project/project.dto";
 
 export async function createProjectAction(
   teamId: string,

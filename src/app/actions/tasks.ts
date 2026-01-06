@@ -1,9 +1,9 @@
 "use server";
 
-import { StateType } from "@/app/config/site.config";
-import { TaskDAL } from "@/app/data/task/task.dal";
-import { TaskWithStatusDTO } from "@/app/data/task/task.dto";
 import { revalidatePath } from "next/cache";
+import type { StateType } from "@/app/config/site.config";
+import { TaskDAL } from "@/app/data/task/task.dal";
+import type { TaskWithStatusDTO } from "@/app/data/task/task.dto";
 
 export async function createTaskAction(
   projectId: string,

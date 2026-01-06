@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
-import { ModeToggle } from "@/app/_components/header/mode-toggle";
-import { sitePages } from "@/app/config/site.config";
-import UserBlock from "@/app/_components/header/user-block";
-import useUserData from "@/hooks/useUserData";
 import HeaderSkeleton from "@/app/_components/header/header-skeleton";
+import { ModeToggle } from "@/app/_components/header/mode-toggle";
+import UserBlock from "@/app/_components/header/user-block";
+import { sitePages } from "@/app/config/site.config";
+import useUserData from "@/hooks/useUserData";
 
 export default function Header() {
   const { user, isPending } = useUserData();

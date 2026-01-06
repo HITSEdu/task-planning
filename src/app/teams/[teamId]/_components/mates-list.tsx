@@ -1,4 +1,4 @@
-import { UserWithTeamDTO } from "@/app/data/user/user.dto";
+import type { UserWithTeamDTO } from "@/app/data/user/user.dto";
 import { ItemGroup } from "@/components/ui/item";
 import MateItem from "./mate-item";
 

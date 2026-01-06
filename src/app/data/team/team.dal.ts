@@ -1,21 +1,21 @@
 import "server-only";
+import type { StateType } from "@/app/config/site.config";
 import { requireUser } from "@/app/data/user/require-user";
+import {
+  AddUserToTeamSchema,
+  type UserDTO,
+  type UserWithTeamDTO,
+} from "@/app/data/user/user.dto";
+import { teamMapper } from "@/app/data/utils/team-mapper";
+import prisma from "@/lib/prisma";
+import { createError } from "@/lib/utils";
 import {
   TeamAnswerSchema,
   TeamCreateInputSchema,
-  TeamDTO,
-  TeamWithRoleDTO,
+  type TeamDTO,
+  type TeamWithRoleDTO,
 } from "./team.dto";
 import { canCreateTeam, isOwner } from "./team.policy";
-import prisma from "@/lib/prisma";
-import {
-  AddUserToTeamSchema,
-  UserDTO,
-  UserWithTeamDTO,
-} from "@/app/data/user/user.dto";
-import { createError } from "@/lib/utils";
-import { StateType } from "@/app/config/site.config";
-import { teamMapper } from "@/app/data/utils/team-mapper";
 
 export class TeamDAL {
   private constructor(private readonly user: UserDTO) {}

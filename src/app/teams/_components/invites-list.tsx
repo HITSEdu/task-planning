@@ -1,4 +1,4 @@
-import { TeamDTO } from "@/app/data/team/team.dto";
+import type { TeamDTO } from "@/app/data/team/team.dto";
 import GiveAnswerForm from "@/app/teams/_components/give-answer-form";
 
 type InvitesListProps = {

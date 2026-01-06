@@ -1,11 +1,11 @@
-import { TeamDAL } from "@/app/data/team/team.dal";
 import { redirect } from "next/navigation";
+import { TeamDAL } from "@/app/data/team/team.dal";
 import CreateTeamForm from "@/app/teams/_components/create-team-form";
 import InvitesList from "@/app/teams/_components/invites-list";
-import TeamsList from "./_components/teams-list";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import EmptyList from "../_components/lists/empty-list";
+import TeamsList from "./_components/teams-list";
 
 export default async function TeamsPage() {
   const dal = await TeamDAL.create();

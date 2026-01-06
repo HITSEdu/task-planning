@@ -1,11 +1,11 @@
 "use client";
 
+import { redirect } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { redirect } from "next/navigation";
 import { deleteTeamAction } from "@/app/actions/teams";
-import { TeamWithRoleDTO } from "@/app/data/team/team.dto";
+import type { TeamWithRoleDTO } from "@/app/data/team/team.dto";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
