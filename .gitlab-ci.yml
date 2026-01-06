@@ -1,27 +1,14 @@
 image: node:24
 
-# include:
-#   - local: 'ci/templates.yml'
-
-# .npm_cache:
-#   cache: 
-#     key: ${CI_COMMIT_REF_SLUG}
-#   paths:
-#     - node_modules/
-
-.npm_cache_pull:
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - node_modules/
-      - .pnpm-store/
-    policy: pull
+variables:
+  MAIN_BRANCH: 'main'
+  DEV_BRANCH: 'dev'
+  TEST_BRANCH: 'test'
 
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_COMMIT_REF_PROTECTED == 'true'
-    - if: $CI_COMMIT_BRANCH == 'main'
+    - if: $CI_COMMIT_BRANCH == $DEV_BRANCH || $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
 
 before_script:
   # - npm install --global corepack@latest
@@ -49,46 +36,55 @@ install:
     - pnpm -v
     - pnpm install --frozen-lockfile
 
-lint:
-  stage: validate
-  extends: .npm_cache_pull
-  needs:
-    - job: install
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - node_modules/
-    policy: pull
-  script:
-    - pnpm lint
+# lint:
+#   stage: validate
+#   extends: .npm_cache_pull
+#   needs:
+#     - job: install
+#   cache:
+#     key: ${CI_COMMIT_REF_SLUG}
+#     paths:
+#       - node_modules/
+#     policy: pull
+#   script:
+#     - pnpm lint
 
-test:
-  stage: validate
-  extends: .npm_cache_pull
-  needs:
-    - job: install
-  script:
-    - pnpm test
-  artifacts:
-    when: always
-    reports:
-      junit: reports/junit/junit.xml
-    paths:
-      - reports/
-    expire_in: 1 week
+# test:
+#   stage: validate
+#   extends: .npm_cache_pull
+#   needs:
+#     - job: install
+#   script:
+#     - pnpm test
+#   artifacts:
+#     when: always
+#     reports:
+#       junit: reports/junit/junit.xml
+#     paths:
+#       - reports/
+#     expire_in: 1 week
+#   rules:
+#     - if: $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
+#     - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH'
 
 build:
   stage: build
   extends: .npm_cache_pull
+  before_script:
+    - echo "DATABASE_URL is set ${DATABASE_URL}"
+    - echo "BETTER_AUTH_SECRET is set ${BETTER_AUTH_SECRET}"
+    - echo "BETTER_AUTH_URL is set ${BETTER_AUTH_URL}"
   script:
-    - echo "DATABASE_URL is set ${DATABASE_URL:+yes}"
-    - echo "BETTER_AUTH_SECRET is set ${BETTER_AUTH_SECRET:+yes}"
-    - echo "BETTER_AUTH_URL is set ${BETTER_AUTH_URL:+yes}"
     - pnpm build
   artifacts:
     paths:
       - .next/
     expire_in: 1 week
+
+include:
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
+  - template: Jobs/SAST.gitlab-ci.yml
+  - local: 'ci/cache.yml'
 
 # deploy:
 #   stage: deploy
