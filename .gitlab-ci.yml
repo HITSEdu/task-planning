@@ -1,3 +1,5 @@
+image: node:24
+
 # include:
 #   - local: 'ci/templates.yml'
 
@@ -7,12 +9,13 @@
 #   paths:
 #     - node_modules/
 
-.npm_base:
-  image: node:24
+.npm_cache_pull:
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - node_modules/
+      - .pnpm-store/
+    policy: pull
 
 workflow:
   rules:
@@ -21,7 +24,7 @@ workflow:
     - if: $CI_COMMIT_BRANCH == 'main'
 
 before_script:
-  - npm install --global corepack@latest
+  # - npm install --global corepack@latest
   - corepack enable
   - corepack prepare pnpm@latest-10 --activate
   - pnpm config set store-dir .pnpm-store
@@ -34,7 +37,11 @@ stages:
 
 install:
   stage: install
-  extends: .npm_base
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+    policy: pull-push
   script:
     - echo "CI_PROJECT $CI_PROJECT_PATH"
     - echo "CI_COMMIT_REF_NAME $CI_COMMIT_REF_NAME"
@@ -44,15 +51,20 @@ install:
 
 lint:
   stage: validate
-  extends: .npm_base
+  extends: .npm_cache_pull
   needs:
     - job: install
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+    policy: pull
   script:
     - pnpm lint
 
 test:
   stage: validate
-  extends: .npm_base
+  extends: .npm_cache_pull
   needs:
     - job: install
   script:
@@ -67,9 +79,7 @@ test:
 
 build:
   stage: build
-  needs:
-    - job: lint
-    - job: test
+  extends: .npm_cache_pull
   script:
     - echo "DATABASE_URL is set ${DATABASE_URL:+yes}"
     - echo "BETTER_AUTH_SECRET is set ${BETTER_AUTH_SECRET:+yes}"
