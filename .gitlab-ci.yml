@@ -36,6 +36,9 @@ install:
     - pnpm -v
     - pnpm install --frozen-lockfile
 
+secret_detection:
+  stage: validate 
+
 # lint:
 #   stage: validate
 #   extends: .npm_cache_pull
