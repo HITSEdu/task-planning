@@ -45,10 +45,10 @@ lint:
     - .cache
   script:
     - npm run lint
-  rules:
-    - changes:
-      - src/**
-      - biome.json
+  # rules:
+  #   - changes:
+  #     - src/**
+  #     - biome.json
 
 test:
   stage: test
@@ -64,12 +64,12 @@ test:
     paths:
       - reports/
     expire_in: 1 week
-  rules:
+  # rules:
     # - if: $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
-    - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH'
-    - changes:
-      - src/**
-      - biome.json
+    # - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH'
+    # - changes:
+    #   - src/**
+    #   - biome.json
 
 build:
   stage: build
