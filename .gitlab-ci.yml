@@ -39,6 +39,9 @@ install:
 secret_detection:
   stage: validate 
 
+sast:
+  stage: validate
+
 # lint:
 #   stage: validate
 #   extends: .npm_cache_pull
