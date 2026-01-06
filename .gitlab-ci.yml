@@ -1,5 +1,22 @@
-include:
-  - local: 'ci/templates.yml'
+# include:
+#   - local: 'ci/templates.yml'
+
+.npm_cache:
+  cache: 
+    key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+
+.npm_base:
+  image: node:24
+  cache: npm_cache
+  before_script:
+    - echo "CI_PROJECT: $CI_PROJECT_PATH"
+    - echo "CI_COMMIT_REF_NAME: $CI_COMMIT_REF_NAME"
+    - node -v
+    - npm -v
+  variables:
+    NODE_ENV: 'development'
 
 workflow:
   rules:
@@ -18,12 +35,11 @@ install:
   stage: install
   extends: .npm_base
   script:
-    - npm ci --prefer-offline --no-audit --no-fund
+    - npm ci
   artifacts:
     paths:
       - node_modules/
     expire_in: 1h
-  tags: ["test"]
 
 lint:
   stage: lint
@@ -33,7 +49,6 @@ lint:
       artifacts: true
   script:
     - npm run lint
-  allow_failure: false
 
 test:
   stage: test
@@ -42,7 +57,6 @@ test:
     - job: install
       artifacts: true
   script:
-    - npm ci --prefer-offline --no-audit --no-fund
     - npm test
   artifacts:
     when: always
@@ -54,13 +68,13 @@ test:
 
 build:
   stage: build
-  image: node:24
   needs:
     - job: test
       artifacts: true
   script:
-    - printf 'DATABASE_URL="%s"\nBETTER_AUTH_SECRET="%s"\nBETTER_AUTH_URL="%s"\n' "$DATABASE_URL" "$BETTER_AUTH_SECRET" "$BETTER_AUTH_URL" > .env.production
-    - npm ci --prefer-offline --no-audit --no-fund
+    - echo "DATABASE_URL is set ${DATABASE_URL:+yes}"
+    - echo "BETTER_AUTH_SECRET is set ${BETTER_AUTH_SECRET:+yes}"
+    - echo "BETTER_AUTH_URL is set ${BETTER_AUTH_URL:+yes}"
     - npm run build
   artifacts:
     paths:
@@ -68,19 +82,19 @@ build:
       - node_modules/
     expire_in: 1 week
 
-deploy:
-  stage: deploy
-  image: node:24
-  needs:
-    - job: build
-      artifacts: true
-  when: manual
-  environment:
-    name: production
-  script:
-    - echo "DATABASE_URL is set ${DATABASE_URL:+yes}"
-    - echo "BETTER_AUTH_SECRET is set ${BETTER_AUTH_SECRET:+yes}"
-    - echo "BETTER_AUTH_URL is set ${BETTER_AUTH_URL:+yes}"
-    - npm run deploy --if-present
-  only:
-    - main
+# deploy:
+#   stage: deploy
+#   image: node:24
+#   needs:
+#     - job: build
+#       artifacts: true
+#   when: manual
+#   environment:
+#     name: production
+#   script:
+#     - echo "DATABASE_URL is set ${DATABASE_URL:+yes}"
+#     - echo "BETTER_AUTH_SECRET is set ${BETTER_AUTH_SECRET:+yes}"
+#     - echo "BETTER_AUTH_URL is set ${BETTER_AUTH_URL:+yes}"
+#     - npm run deploy --if-present
+#   only:
+#     - main
