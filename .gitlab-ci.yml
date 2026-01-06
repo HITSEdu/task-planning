@@ -73,10 +73,10 @@ test:
 
 build:
   stage: build
-  dependencies:
-    - validate
   needs:
-    - job: install
+    - job: lint
+      artifacts: true
+    - job: test
       artifacts: true
   script:
     - echo "DATABASE_URL is set ${DATABASE_URL:+yes}"
