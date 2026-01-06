@@ -81,11 +81,6 @@ build:
       - .next/
     expire_in: 1 week
 
-include:
-  - template: Jobs/Secret-Detection.gitlab-ci.yml
-  - template: Jobs/SAST.gitlab-ci.yml
-  - local: 'ci/cache.yml'
-
 # deploy:
 #   stage: deploy
 #   image: node:24
@@ -117,3 +112,8 @@ release:
     - npx release-it --ci --no-npm.publish
   rules:
     - if: '$CI_COMMIT_BRANCH == $MAIN_BRANCH'
+
+include:
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
+  - template: Jobs/SAST.gitlab-ci.yml
+  - local: 'ci/cache.yml'
