@@ -38,7 +38,7 @@ install:
   stage: install
   extends: .npm_base
   script:
-    - npm ci
+    - pnpm install --frozen-lockfile
   artifacts:
     paths:
       - node_modules/
