@@ -9,7 +9,7 @@ export default function useUserData() {
     ? {
         id: user.id,
         email: user.email,
-        username: user.username,
+        username: user.username ?? "",
         createdAt: user.createdAt,
       }
     : null;

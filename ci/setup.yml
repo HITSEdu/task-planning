@@ -2,7 +2,7 @@
   before_script:
     - echo "CI_COMMIT_REF_NAME=$CI_COMMIT_REF_NAME"
     - node -v
-    - pnpm -v
+    - npm -v
 
 .setup.env.production:
   before_script:

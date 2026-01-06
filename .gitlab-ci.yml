@@ -20,18 +20,13 @@ stages:
 
 setup:
   stage: setup
-  extends:
-    - .cache
-  script:
-    - corepack enable
-    - corepack prepare pnpm@latest-10 --activate
-  after_script:
-    - pnpm -v
+  script: 
+    - npm install --package-lock-only
   artifacts:
     paths:
-      - .pnpm-store/
+      - package-lock.json
     expire_in: 1 hour
-
+    
 install:
   stage: install
   extends: 
@@ -41,18 +36,15 @@ install:
     - job: setup
       artifacts: true
   script:
-    - pnpm install --frozen-lockfile
+    - npm ci
 
 lint:
   stage: lint
   extends:
     - .setup.info
     - .cache
-  needs:
-    - job: setup
-      artifacts: true
   script:
-    - pnpm lint
+    - npm run lint
   rules:
     - changes:
       - src/**
@@ -63,11 +55,8 @@ test:
   extends:
     - .setup.info
     - .cache
-  needs:
-    - job: setup
-      artifacts: true
   script:
-    - pnpm test
+    - npm test
   artifacts:
     when: always
     reports:
@@ -88,11 +77,8 @@ build:
     - .setup.info
     - .setup.env.production
     - .cache
-  needs:
-    - job: setup
-      artifacts: true
   script:
-    - pnpm build
+    - npm run build
   artifacts:
     paths:
       - .next/
