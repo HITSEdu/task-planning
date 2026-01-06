@@ -9,7 +9,10 @@
 
 .npm_base:
   image: node:24
-  cache: npm_cache
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
   before_script:
     - echo "CI_PROJECT: $CI_PROJECT_PATH"
     - echo "CI_COMMIT_REF_NAME: $CI_COMMIT_REF_NAME"
