@@ -1,13 +1,19 @@
 .cache:
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
+    key:
+      files:
+        - pnpm-lock.yaml
     paths:
       - node_modules/
+      - .pnpm-store/
     policy: pull
 
 .cache.write:
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
+    key:
+      files:
+        - pnpm-lock.yaml
     paths:
       - node_modules/
+      - .pnpm-store/
     policy: pull-push

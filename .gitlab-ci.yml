@@ -11,36 +11,61 @@ workflow:
     - if: $CI_COMMIT_BRANCH == $DEV_BRANCH || $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
 
 stages:
+  - setup
   - install
   - lint
   - test
   - build
   - deploy
 
+setup:
+  stage: setup
+  extends:
+    - .cache
+  script:
+    - corepack enable
+    - corepack prepare pnpm@latest-10 --activate
+  after_script:
+    - pnpm -v
+  artifacts:
+    paths:
+      - .pnpm-store/
+    expire_in: 1 hour
+
 install:
   stage: install
   extends: 
-    - .setup.pnpm
     - .setup.info
     - .cache.write
+  needs:
+    - job: setup
+      artifacts: true
   script:
     - pnpm install --frozen-lockfile
 
 lint:
   stage: lint
   extends:
-    - .setup.pnpm
     - .setup.info
     - .cache
+  needs:
+    - job: setup
+      artifacts: true
   script:
     - pnpm lint
+  rules:
+    - changes:
+      - src/**
+      - biome.json
 
 test:
   stage: test
   extends:
-    - .setup.pnpm
     - .setup.info
     - .cache
+  needs:
+    - job: setup
+      artifacts: true
   script:
     - pnpm test
   artifacts:
@@ -53,14 +78,19 @@ test:
   rules:
     # - if: $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
     - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH'
+    - changes:
+      - src/**
+      - biome.json
 
 build:
   stage: build
   extends:
-    - .setup.pnpm
     - .setup.info
     - .setup.env.production
     - .cache
+  needs:
+    - job: setup
+      artifacts: true
   script:
     - pnpm build
   artifacts:
