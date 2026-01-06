@@ -5,8 +5,8 @@ test:
   stage: test
   image: node:20
   script:
-    - pnpm install
-    - pnpm test
+    - npm install
+    - npm test
   artifacts:
     when: always
     reports:
