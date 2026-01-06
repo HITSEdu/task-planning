@@ -1,3 +1,6 @@
+include:
+  - local: 'ci/templates.yml'
+
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
@@ -5,17 +8,41 @@ workflow:
     - if: $CI_COMMIT_BRANCH == 'main'
 
 stages:
+  - install
   - lint
   - test
   - build
   - deploy
 
+install:
+  stage: install
+  extends: .npm_base
+  script:
+    - npm ci --prefer-offline --no-audit --no-fund
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 1h
+  tags: ["test"]
+
+lint:
+  stage: lint
+  extends: .npm_base
+  needs:
+    - job: install
+      artifacts: true
+  script:
+    - npm run lint
+  allow_failure: false
 
 test:
   stage: test
-  image: node:24
+  extends: .npm_base
+  needs:
+    - job: install
+      artifacts: true
   script:
-    - npm install
+    - npm ci --prefer-offline --no-audit --no-fund
     - npm test
   artifacts:
     when: always
@@ -23,3 +50,37 @@ test:
       junit: reports/junit/junit.xml
     paths:
       - reports/
+    expire_in: 1 week
+
+build:
+  stage: build
+  image: node:24
+  needs:
+    - job: test
+      artifacts: true
+  script:
+    - printf 'DATABASE_URL="%s"\nBETTER_AUTH_SECRET="%s"\nBETTER_AUTH_URL="%s"\n' "$DATABASE_URL" "$BETTER_AUTH_SECRET" "$BETTER_AUTH_URL" > .env.production
+    - npm ci --prefer-offline --no-audit --no-fund
+    - npm run build
+  artifacts:
+    paths:
+      - .next/
+      - node_modules/
+    expire_in: 1 week
+
+deploy:
+  stage: deploy
+  image: node:24
+  needs:
+    - job: build
+      artifacts: true
+  when: manual
+  environment:
+    name: production
+  script:
+    - echo "DATABASE_URL is set ${DATABASE_URL:+yes}"
+    - echo "BETTER_AUTH_SECRET is set ${BETTER_AUTH_SECRET:+yes}"
+    - echo "BETTER_AUTH_URL is set ${BETTER_AUTH_URL:+yes}"
+    - npm run deploy --if-present
+  only:
+    - main
