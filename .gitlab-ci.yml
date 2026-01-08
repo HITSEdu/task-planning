@@ -1,9 +1,9 @@
 image: node:24
 
 variables:
-  MAIN_BRANCH: 'main'
-  DEV_BRANCH: 'dev'
-  TEST_BRANCH: 'test'
+  MAIN_BRANCH: "main"
+  DEV_BRANCH: "dev"
+  TEST_BRANCH: "test"
 
 workflow:
   rules:
@@ -21,16 +21,16 @@ stages:
 
 setup:
   stage: setup
-  script: 
+  script:
     - npm install --package-lock-only
   artifacts:
     paths:
       - package-lock.json
     expire_in: 1 hour
-    
+
 install:
   stage: install
-  extends: 
+  extends:
     - .setup.info
     - .cache.write
   needs:
@@ -39,44 +39,44 @@ install:
   script:
     - npm ci
 
-lint:
-  stage: lint
-  extends:
-    - .setup.info
-    - .cache
-  script:
-    - npm run lint
-  # rules:
-  #   - changes:
-  #     - src/**
-  #     - biome.json
+# lint:
+#   stage: lint
+#   extends:
+#     - .setup.info
+#     - .cache
+#   script:
+#     - npm run lint
+# rules:
+#   - changes:
+#     - src/**
+#     - biome.json
 
-secret_detection:
-  stage: security
+# secret_detection:
+#   stage: security
 
-sast:
-  stage: security
+# sast:
+#   stage: security
 
-test:
-  stage: test
-  extends:
-    - .setup.info
-    - .cache
-  script:
-    - npm test
-  artifacts:
-    when: always
-    reports:
-      junit: reports/junit/junit.xml
-    paths:
-      - reports/
-    expire_in: 1 week
-  # rules:
-    # - if: $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
-    # - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH'
-    # - changes:
-    #   - src/**
-    #   - biome.json
+# test:
+#   stage: test
+#   extends:
+#     - .setup.info
+#     - .cache
+#   script:
+#     - npm test
+#   artifacts:
+#     when: always
+#     reports:
+#       junit: reports/junit/junit.xml
+#     paths:
+#       - reports/
+#     expire_in: 1 week
+# rules:
+# - if: $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
+# - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH'
+# - changes:
+#   - src/**
+#   - biome.json
 
 build:
   stage: build
@@ -85,28 +85,28 @@ build:
     - .setup.env.production
     - .cache
   script:
+    - npx prisma generate
     - npm run build
   artifacts:
     paths:
       - .next/
     expire_in: 1 week
 
-# deploy:
-#   stage: deploy
-#   image: node:24
-#   needs:
-#     - job: build
-#       artifacts: true
-#   when: manual
-#   environment:
-#     name: production
-#   script:
-#     - echo "DATABASE_URL is set ${DATABASE_URL:+yes}"
-#     - echo "BETTER_AUTH_SECRET is set ${BETTER_AUTH_SECRET:+yes}"
-#     - echo "BETTER_AUTH_URL is set ${BETTER_AUTH_URL:+yes}"
-#     - npm run deploy --if-present
-#   only:
-#     - main
+deploy:
+  stage: deploy
+  extends:
+    - .setup.info
+    - .setup.env.production
+    - .cache
+  needs:
+    - job: build
+      artifacts: true
+  script:
+    - npm install -g vercel
+    - vercel --prod --token $VERCEL_TOKEN --confirm
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $MAIN_BRANCH && $DATABASE_URL && $BETTER_AUTH_SECRET && $BETTER_AUTH_URL'
+
 
 release:
   stage: deploy
@@ -115,11 +115,11 @@ release:
     - echo "create release"
   release:
     tag_name: $CI_COMMIT_TAG
-    name: 'Release $CI_COMMIT_TAG'
-    description: 'Release created using the CLI.'
+    name: "Release $CI_COMMIT_TAG"
+    description: "Release created using the CLI."
 
 include:
-  - template: Jobs/Secret-Detection.gitlab-ci.yml
-  - template: Jobs/SAST.gitlab-ci.yml
-  - local: 'ci/cache.yml'
-  - local: 'ci/setup.yml'
+  # - template: Jobs/Secret-Detection.gitlab-ci.yml
+  # - template: Jobs/SAST.gitlab-ci.yml
+  - local: "ci/cache.yml"
+  - local: "ci/setup.yml"

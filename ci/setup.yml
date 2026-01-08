@@ -6,6 +6,7 @@
 
 .setup.env.production:
   before_script:
+    - echo "VERCEL_TOKEN=${VERCEL_TOKEN}"
     - echo "DATABASE_URL=${DATABASE_URL}"
     - echo "BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}"
     - echo "BETTER_AUTH_URL=${BETTER_AUTH_URL}"
