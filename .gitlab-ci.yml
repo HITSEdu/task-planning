@@ -19,14 +19,14 @@ stages:
   - build
   - deploy
 
-setup:
-  stage: setup
-  script:
-    - npm install --package-lock-only
-  artifacts:
-    paths:
-      - package-lock.json
-    expire_in: 1 hour
+# setup:
+#   stage: setup
+#   script:
+#     - npm install --package-lock-only
+#   artifacts:
+#     paths:
+#       - package-lock.json
+#     expire_in: 1 hour
 
 # install:
 #   stage: install
@@ -84,10 +84,9 @@ build:
     - .setup.info
     - .setup.env.production
     - .cache
-  needs:
-    - job: setup
-      artifacts: true
   script:
+    - corepack enable
+    - corepack prepare pnpm --activate
     - npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
     - npx vercel build --prod --token=$VERCEL_TOKEN
   artifacts:
