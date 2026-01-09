@@ -81,13 +81,12 @@ install:
 build:
   stage: build
   extends:
-    - .setup.build
     - .setup.info
     - .setup.env.production
     - .cache
   script:
-    - vercel pull --yes --environment=production --token=$VERCEL_TOKEN
-    - vercel build --prod --token=$VERCEL_TOKEN
+    - npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+    - npx vercel build --prod --token=$VERCEL_TOKEN
   artifacts:
     paths:
       - .next/
@@ -97,7 +96,6 @@ build:
 deploy:
   stage: deploy
   extends:
-    - .setup.build
     - .setup.info
     - .setup.env.production
     - .cache
@@ -105,7 +103,7 @@ deploy:
     - job: build
       artifacts: true
   script:
-    - vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+    - npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
   rules:
     - if: '$CI_COMMIT_BRANCH == $MAIN_BRANCH && $DATABASE_URL && $BETTER_AUTH_SECRET && $BETTER_AUTH_URL'
 
