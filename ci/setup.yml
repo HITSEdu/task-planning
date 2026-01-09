@@ -13,4 +13,4 @@
 
 .setup.build:
   before_script:
-    - npm install -g vercel
+    - npm install vercel
