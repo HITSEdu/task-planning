@@ -9,7 +9,9 @@
     "lint": "biome check",
     "check": "biome check --fix",
     "format": "biome format --write",
-    "test": "jest"
+    "test": "jest",
+    "build:docs": "docusaurus build",
+    "start:docs": "docusaurus start"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
