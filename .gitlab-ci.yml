@@ -19,25 +19,25 @@ stages:
   - build
   - deploy
 
-setup:
-  stage: setup
-  script:
-    - npm install --package-lock-only
-  artifacts:
-    paths:
-      - package-lock.json
-    expire_in: 1 hour
+# setup:
+#   stage: setup
+#   script:
+#     - npm install --package-lock-only
+#   artifacts:
+#     paths:
+#       - package-lock.json
+#     expire_in: 1 hour
 
-install:
-  stage: install
-  extends:
-    - .setup.info
-    - .cache.write
-  needs:
-    - job: setup
-      artifacts: true
-  script:
-    - npm ci
+# install:
+#   stage: install
+#   extends:
+#     - .setup.info
+#     - .cache.write
+#   needs:
+#     - job: setup
+#       artifacts: true
+#   script:
+#     - npm ci
 
 # lint:
 #   stage: lint
