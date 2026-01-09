@@ -81,20 +81,23 @@ install:
 build:
   stage: build
   extends:
+    - .setup.build
     - .setup.info
     - .setup.env.production
     - .cache
   script:
-    - npx prisma generate
-    - npm run build
+    - vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+    - vercel build --prod --token=$VERCEL_TOKEN
   artifacts:
     paths:
       - .next/
-    expire_in: 1 week
+      - .vercel/
+    expire_in: 1 day
 
 deploy:
   stage: deploy
   extends:
+    - .setup.build
     - .setup.info
     - .setup.env.production
     - .cache
@@ -102,8 +105,7 @@ deploy:
     - job: build
       artifacts: true
   script:
-    - npm install -g vercel
-    - vercel --prod --token $VERCEL_TOKEN --confirm
+    - vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
   rules:
     - if: '$CI_COMMIT_BRANCH == $MAIN_BRANCH && $DATABASE_URL && $BETTER_AUTH_SECRET && $BETTER_AUTH_URL'
 
