@@ -102,7 +102,6 @@ build:
   extends:
     - .setup.info
     - .setup.env.production
-    - .cache
   script:
     - corepack enable
     - corepack prepare pnpm --activate
@@ -119,7 +118,6 @@ deploy:
   extends:
     - .setup.info
     - .setup.env.production
-    - .cache
   needs:
     - job: build
       artifacts: true
