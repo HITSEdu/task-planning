@@ -118,6 +118,7 @@ deploy:
   extends:
     - .setup.info
     - .setup.env.production
+    - .setup.corepack
   needs:
     - job: build
       artifacts: true
@@ -138,11 +139,16 @@ release:
 
 docs:
   stage: docs
+  extends:
+    - .setup.info
+    - .setup.env.production
+    - .setup.corepack
   before_script:
     - cd docs
-    - npm ci
+    - pnpm i
   script:
-    - npm run build:docs
+    - pnpm build
+    - pnpm start
   artifacts:
     paths:
       - docs/build
