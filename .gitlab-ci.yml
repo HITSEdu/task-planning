@@ -107,6 +107,7 @@ deploy:
     - .setup.info
     - .setup.env.production
     - .setup.corepack
+    - .cache
   needs:
     - job: build
       artifacts: true
@@ -125,21 +126,20 @@ release:
     name: "Release $CI_COMMIT_TAG"
     description: "Release created using the CLI."
 
-docs:
+pages:
   stage: docs
   extends:
     - .setup.info
-    - .setup.env.production
     - .setup.corepack
   before_script:
     - cd docs
-    - pnpm i
+    - pnpm install
   script:
     - pnpm build
-    - pnpm start
+    - mv build ../public
   artifacts:
     paths:
-      - docs/build
+      - public
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
 
