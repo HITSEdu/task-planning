@@ -105,8 +105,8 @@ build:
   script:
     - corepack enable
     - corepack prepare pnpm --activate
-    - npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
-    - npx vercel build --prod --token=$VERCEL_TOKEN
+    - pnpm dlx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+    - pnpm dlx vercel build --prod --token=$VERCEL_TOKEN
   artifacts:
     paths:
       - .next/
