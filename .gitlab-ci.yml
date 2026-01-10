@@ -17,6 +17,7 @@ stages:
   - test
   - build
   - deploy
+  - release
   - rollback
   - docs
 
