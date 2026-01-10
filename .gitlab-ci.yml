@@ -17,6 +17,7 @@ stages:
   - test
   - build
   - deploy
+  - rollback
   - docs
 
 install:
@@ -83,7 +84,6 @@ install:
 # - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH'
 # - changes:
 #   - src/**
-#   - biome.json
 
 build:
   stage: build
@@ -99,13 +99,13 @@ build:
     paths:
       - .next/
       - .vercel/
+      - .env.local
     expire_in: 1 day
 
 deploy:
   stage: deploy
   extends:
     - .setup.info
-    - .setup.env.production
     - .setup.corepack
     - .cache
   needs:
@@ -125,6 +125,21 @@ release:
     tag_name: $CI_COMMIT_TAG
     name: "Release $CI_COMMIT_TAG"
     description: "Release created using the CLI."
+
+rollback:
+  stage: rollback
+  extends:
+    - .setup.info
+    - .setup.corepack
+    - .cache
+  script:
+    - echo "Triggering Vercel rollback to previous production deployment..."
+    - pnpm dlx vercel rollback --token "$VERCEL_TOKEN" --yes
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: manual
+    - when: never
+  allow_failure: false
 
 pages:
   stage: docs
