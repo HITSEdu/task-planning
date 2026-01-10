@@ -12,18 +12,10 @@
     "lint": "biome check",
     "check": "biome check --fix",
     "format": "biome format --write",
-    "test": "jest",
-    "build:docs": "docusaurus build docs",
-    "start:docs": "docusaurus start docs"
+    "test": "jest"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.9.2",
-    "@docusaurus/module-type-aliases": "^3.9.2",
-    "@docusaurus/preset-classic": "^3.9.2",
-    "@docusaurus/tsconfig": "^3.9.2",
-    "@docusaurus/types": "^3.9.2",
     "@hookform/resolvers": "^5.2.2",
-    "@mdx-js/react": "^3.1.1",
     "@prisma/client": "^6.19.0",
     "@prisma/extension-accelerate": "^2.0.2",
     "@radix-ui/react-alert-dialog": "^1.1.15",
@@ -44,7 +36,6 @@
     "lucide-react": "^0.552.0",
     "next": "16.0.7",
     "next-themes": "^0.4.6",
-    "prism-react-renderer": "^2.4.1",
     "react": "19.2.0",
     "react-day-picker": "^9.11.1",
     "react-dom": "19.2.0",

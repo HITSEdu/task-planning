@@ -105,7 +105,6 @@ build:
   script:
     - corepack enable
     - corepack prepare pnpm --activate
-    - pnpm -r install
     - npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
     - npx vercel build --prod --token=$VERCEL_TOKEN
   artifacts:
