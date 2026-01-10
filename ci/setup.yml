@@ -10,3 +10,8 @@
     - echo "DATABASE_URL=${DATABASE_URL}"
     - echo "BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}"
     - echo "BETTER_AUTH_URL=${BETTER_AUTH_URL}"
+
+.setup.corepack:
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm --activate

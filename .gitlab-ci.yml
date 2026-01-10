@@ -102,9 +102,8 @@ build:
   extends:
     - .setup.info
     - .setup.env.production
+    - .setup.corepack
   script:
-    - corepack enable
-    - corepack prepare pnpm --activate
     - pnpm -w install --no-frozen-lockfile
     - pnpm dlx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
     - pnpm dlx vercel build --prod --token=$VERCEL_TOKEN
@@ -149,6 +148,8 @@ docs:
       - docs/build
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
+
+# cd docs -> pnpm i -> pnpm build -> pnpm start
 
 include:
   # - template: Jobs/Secret-Detection.gitlab-ci.yml
