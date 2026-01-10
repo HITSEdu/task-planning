@@ -105,6 +105,7 @@ build:
   script:
     - corepack enable
     - corepack prepare pnpm --activate
+    - pnpm -w install --no-frozen-lockfile
     - pnpm dlx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
     - pnpm dlx vercel build --prod --token=$VERCEL_TOKEN
   artifacts:
