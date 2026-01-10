@@ -5,7 +5,7 @@ const createJestConfig = nextJest({
   dir: "./",
 });
 
-const config: Config = {
+const config: Config.InitialOptions = {
   coverageProvider: "v8",
   testEnvironment: "jsdom",
 
