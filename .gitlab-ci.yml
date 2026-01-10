@@ -11,7 +11,6 @@ workflow:
     - if: $CI_COMMIT_BRANCH == $DEV_BRANCH || $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
 
 stages:
-  - setup
   - install
   - lint
   - security
@@ -20,25 +19,14 @@ stages:
   - deploy
   - docs
 
-# setup:
-#   stage: setup
-#   script:
-#     - npm install --package-lock-only
-#   artifacts:
-#     paths:
-#       - package-lock.json
-#     expire_in: 1 hour
-
-# install:
-#   stage: install
-#   extends:
-#     - .setup.info
-#     - .cache.write
-#   needs:
-#     - job: setup
-#       artifacts: true
-#   script:
-#     - npm ci
+install:
+  stage: install
+  extends:
+    - .setup.info
+    - .setup.corepack
+    - .cache.write
+  script:
+    - pnpm -w install --no-frozen-lockfile
 
 # lint:
 #   stage: lint
@@ -103,8 +91,8 @@ build:
     - .setup.info
     - .setup.env.production
     - .setup.corepack
+    - .cache
   script:
-    - pnpm -w install --no-frozen-lockfile
     - pnpm dlx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
     - pnpm dlx vercel build --prod --token=$VERCEL_TOKEN
   artifacts:
