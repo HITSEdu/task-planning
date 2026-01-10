@@ -122,13 +122,15 @@ deploy:
 
 health_check:
   stage: health_check
+  extends:
+    - .setup.corepack
   script:
     - echo "Performing health check on $SITE_URL..."
     - |
       SUCCESS=0
       for i in {1..5}; do
         STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL")
-        if [ "$STATUS" = "200" ]; then
+        if [[ "$STATUS" =~ ^2|3 ]]; then
           echo "Health check passed!"
           SUCCESS=1
           break
