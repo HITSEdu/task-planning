@@ -63,11 +63,11 @@ code_quality:
     reports:
       codequality:
         - gl-code-quality-report.json
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - changes:
-      - src/**/*
-      - biome.json
+  # rules:
+  #   - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  #   - changes:
+  #     - src/**/*
+  #     - biome.json
 
 secret_detection:
   stage: security
