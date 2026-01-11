@@ -36,17 +36,17 @@ install:
   script:
     - pnpm -w install --no-frozen-lockfile
 
-# lint:
-#   stage: lint
-#   extends:
-#     - .setup.corepack
-#     - .cache
-#   script:
-#     - pnpm lint
-#   rules:
-#     - changes:
-#       - src/**/*
-#       - biome.json
+lint:
+  stage: lint
+  extends:
+    - .setup.corepack
+    - .cache
+  script:
+    - pnpm lint
+  rules:
+    - changes:
+      - src/**/*
+      - biome.json
 
 code_quality:
   stage: quality
@@ -65,42 +65,42 @@ code_quality:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
-# secret_detection:
-#   stage: security
+secret_detection:
+  stage: security
 
-# sast:
-#   stage: security
-#   image: returntocorp/semgrep:latest
-#   variables:
-#     SEMGREP_RULES: "p/default"
-#   script:
-#     - semgrep ci --sarif --output semgrep.sarif
-#   artifacts:
-#     when: always
-#     reports:
-#       sast: semgrep.sarif
-#     paths:
-#       - semgrep.sarif
+sast:
+  stage: security
+  image: returntocorp/semgrep:latest
+  variables:
+    SEMGREP_RULES: "p/default"
+  script:
+    - semgrep ci --sarif --output semgrep.sarif
+  artifacts:
+    when: always
+    reports:
+      sast: semgrep.sarif
+    paths:
+      - semgrep.sarif
 
-# test:
-#   stage: test
-#   extends:
-#     - .setup.corepack
-#     - .cache
-#   script:
-#     - pnpm test
-#   artifacts:
-#     when: always
-#     reports:
-#       junit: reports/junit/junit.xml
-#     paths:
-#       - reports/
-#     expire_in: 1 week
-#   rules:
-#   - if: $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
-#   # - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH'
-#   - changes:
-#     - src/**
+test:
+  stage: test
+  extends:
+    - .setup.corepack
+    - .cache
+  script:
+    - pnpm test
+  artifacts:
+    when: always
+    reports:
+      junit: reports/junit/junit.xml
+    paths:
+      - reports/
+    expire_in: 1 week
+  rules:
+  - if: $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
+  # - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH'
+  - changes:
+    - src/**
 
 # build:
 #   stage: build
@@ -180,10 +180,10 @@ code_quality:
 #           url: $SITE_URL
 #           link_type: 'other'
 
-# notify:
-#   stage: notify
-#   script:
-#     - echo "Notify by telegram"
+notify:
+  stage: notify
+  script:
+    - echo "Notify by telegram"
 
 docs:
   stage: docs
@@ -195,8 +195,5 @@ docs:
     - pnpm build
     - mv build ../public
   pages: true
-  # artifacts:
-  #   paths:
-  #     - public/build
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
