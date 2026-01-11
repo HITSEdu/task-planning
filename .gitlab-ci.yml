@@ -71,13 +71,8 @@ lint:
 #       - src/**
 #       - biome.json
 
-quality:
+code_quality:
   stage: quality
-  extends: code_quality
-  variables:
-    REPORT_FORMAT: html
-  artifacts:
-    paths: [gl-code-quality-report.html]
 
 secret_detection:
   stage: security

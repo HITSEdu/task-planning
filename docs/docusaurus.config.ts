@@ -16,7 +16,7 @@ const config: Config = {
 
   // Set the production url of your site here
   // url: 'https://gitlab.kupriyanov.space/kqkqkqkqkq/task-planning',
-  url: 'https://task-planning-e732b2.pages.kupriyanov.space/',
+  url: 'https://kqkqkqkqkq.pages.kupriyanov.space/task-planning',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
