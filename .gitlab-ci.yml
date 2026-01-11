@@ -19,6 +19,7 @@ stages:
   - deploy
   - health_check
   - release
+  - notify
   - docs
 
 install:
@@ -30,61 +31,60 @@ install:
   script:
     - pnpm -w install --no-frozen-lockfile
 
-# lint:
-#   stage: lint
-#   extends:
-#     - .setup.info
-#     - .cache
-#   script:
-#     - npm run lint
-# rules:
-#   - changes:
-#     - src/**
-#     - biome.json
+lint:
+  stage: lint
+  extends:
+    - .setup.info
+    - .setup.corepack
+    - .cache
+  script:
+    - pnpm lint
+  rules:
+    - changes:
+      - src/**
+      - biome.json
 
-# secret_detection:
-#   stage: security
-
-# sast:
-#   stage: security
+secret_detection:
+  stage: security
 
 # sast:
 #   stage: security
-#   image: returntocorp/semgrep:latest
-#   variables:
-#     SEMGREP_RULES: "p/default"
-#   script:
-#     - semgrep ci --sarif --output semgrep.sarif
-#   artifacts:
-#     when: always
-#     reports:
-#       sast: semgrep.sarif
-#     paths:
-#       - semgrep.sarif
-#   rules:
-#     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-#     - if: $CI_COMMIT_BRANCH == $MAIN_BRANCH
+
+sast:
+  stage: security
+  image: returntocorp/semgrep:latest
+  variables:
+    SEMGREP_RULES: "p/default"
+  script:
+    - semgrep ci --sarif --output semgrep.sarif
+  artifacts:
+    when: always
+    reports:
+      sast: semgrep.sarif
+    paths:
+      - semgrep.sarif
 
 
-# test:
-#   stage: test
-#   extends:
-#     - .setup.info
-#     - .cache
-#   script:
-#     - npm test
-#   artifacts:
-#     when: always
-#     reports:
-#       junit: reports/junit/junit.xml
-#     paths:
-#       - reports/
-#     expire_in: 1 week
-# rules:
-# - if: $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
-# - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH'
-# - changes:
-#   - src/**
+test:
+  stage: test
+  extends:
+    - .setup.info
+    - .setup.corepack
+    - .cache
+  script:
+    - pnpm test
+  artifacts:
+    when: always
+    reports:
+      junit: reports/junit/junit.xml
+    paths:
+      - reports/
+    expire_in: 1 week
+  rules:
+  - if: $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
+  # - if: '$CI_COMMIT_BRANCH == $TEST_BRANCH'
+  - changes:
+    - src/**
 
 build:
   stage: build
@@ -125,13 +125,13 @@ health_check:
   extends:
     - .setup.corepack
   script:
-    - echo "Performing health check on $SITE_URL..."
+    - echo "Performing health check on $SITE_URL"
     - |
       SUCCESS=0
       for i in {1..5}; do
         STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL")
         if [[ "$STATUS" =~ ^2|3 ]]; then
-          echo "Health check passed!"
+          echo "Health check passed! Status: $STATUS"
           SUCCESS=1
           break
         fi
@@ -140,12 +140,12 @@ health_check:
       done
 
       if [ "$SUCCESS" -ne 1 ]; then
-        echo "Health check failed. Triggering automatic rollback..."
+        echo "Health check failed. Triggering automatic rollback."
         pnpm dlx vercel rollback --token "$VERCEL_TOKEN" --yes
         exit 1
       fi
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == $MAIN_BRANCH'
 
 release:
   stage: release
@@ -165,29 +165,32 @@ release:
       links:
         - name: Task planning
           url: $SITE_URL
+          link_type: 'other'
 
-pages:
+notify:
+  stage: notify
+  script:
+    - echo "Notify by telegram"
+
+docs:
   stage: docs
   extends:
     - .setup.info
     - .setup.corepack
-  before_script:
+  script:
     - cd docs
     - pnpm install
-  script:
     - pnpm build
     - mv build ../public
+  pages: true
   artifacts:
     paths:
       - public
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
 
-# cd docs -> pnpm i -> pnpm build -> pnpm start
-
 include:
-  # - template: Jobs/Secret-Detection.gitlab-ci.yml
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
   # - template: Jobs/SAST.gitlab-ci.yml
   - local: "ci/cache.yml"
   - local: "ci/setup.yml"
-
