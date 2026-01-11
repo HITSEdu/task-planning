@@ -1,18 +1,24 @@
 image: node:24
 
-variables:
-  MAIN_BRANCH: "main"
-  DEV_BRANCH: "dev"
-  TEST_BRANCH: "test"
+include:
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
+  - local: "ci/cache.yml"
+  - local: "ci/setup.yml"
 
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == $DEV_BRANCH || $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
 
+variables:
+  MAIN_BRANCH: "main"
+  DEV_BRANCH: "dev"
+  TEST_BRANCH: "test"
+
 stages:
   - install
   - lint
+  - quality
   - security
   - test
   - build
@@ -44,11 +50,27 @@ lint:
       - src/**
       - biome.json
 
+code_quality:
+  stage: quality
+  extends:
+    - .setup.info
+    - .setup.corepack
+    - .cache
+  script:
+    - pnpm exec biome ci --reporter=gitlab --colors=off > code-quality.json
+  artifacts:
+    reports:
+      codequality: code-quality.json 
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == $DEV_BRANCH || $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
+    - changes:
+      - src/**
+      - biome.json
+
 secret_detection:
   stage: security
-
-# sast:
-#   stage: security
 
 sast:
   stage: security
@@ -63,7 +85,6 @@ sast:
       sast: semgrep.sarif
     paths:
       - semgrep.sarif
-
 
 test:
   stage: test
@@ -188,9 +209,3 @@ docs:
       - public
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
-
-include:
-  - template: Jobs/Secret-Detection.gitlab-ci.yml
-  # - template: Jobs/SAST.gitlab-ci.yml
-  - local: "ci/cache.yml"
-  - local: "ci/setup.yml"
