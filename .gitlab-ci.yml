@@ -198,8 +198,8 @@ docs:
     - pnpm build
     - mv build ../public
   pages: true
-  artifacts:
-    paths:
-      - public/build
+  # artifacts:
+  #   paths:
+  #     - public/build
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
