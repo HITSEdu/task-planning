@@ -57,11 +57,12 @@ code_quality:
     - .setup.corepack
     - .cache
   script:
-    - pnpm exec biome ci --reporter=gitlab --colors=off > reports/code-quality.json
+    - pnpm exec biome ci --reporter=gitlab --colors=off > /tmp/code-quality.json
+    - cp /tmp/code-quality.json code-quality.json
   artifacts:
     reports:
-      codequality: reports/code-quality.json 
-    expire_in: 1 week
+      codequality:
+        - code-quality.json 
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == $DEV_BRANCH || $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
