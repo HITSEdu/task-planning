@@ -14,7 +14,9 @@
       "!dist",
       "!build",
       "!src/components",
-      "!src/app/teams/\\[teamId\\]/projects/\\[projectId\\]/tasks/dashboard/_components/gantt-chart-item.tsx"
+      "!src/app/teams/\\[teamId\\]/projects/\\[projectId\\]/tasks/dashboard/_components/gantt-chart-item.tsx",
+      "!docs",
+      "!reports"
     ]
   },
   "formatter": {
