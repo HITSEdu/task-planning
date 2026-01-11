@@ -1,7 +1,7 @@
 image: node:24
 
 include:
-  # - template: Jobs/Secret-Detection.gitlab-ci.yml
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
   - local: "ci/cache.yml"
   - local: "ci/setup.yml"
 
