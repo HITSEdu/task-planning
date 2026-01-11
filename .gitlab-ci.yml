@@ -50,35 +50,25 @@ lint:
       - src/**
       - biome.json
 
-# code_quality:
-#   stage: quality
-#   extends:
-#     - .setup.info
-#     - .setup.corepack
-#     - .cache
-#   script:
-#     - pnpm exec biome ci --reporter=gitlab --colors=off > /tmp/code-quality.json
-#     - cp /tmp/code-quality.json code-quality.json
-#   artifacts:
-#     reports:
-#       codequality:
-#         - code-quality.json 
-#   rules:
-#     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-#     - if: $CI_COMMIT_BRANCH == $DEV_BRANCH || $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
-#     - changes:
-#       - src/**
-#       - biome.json
-
-eslint:
+code_quality:
   stage: quality
   extends:
+    - .setup.info
+    - .setup.corepack
     - .cache
   script:
-    - npx eslint . --format=@gitlab-formatters/gitlab --output-file=gl-codequality.json
+    - pnpm exec biome ci --reporter=gitlab --colors=off > /tmp/code-quality.json
+    - cp /tmp/code-quality.json code-quality.json
   artifacts:
     reports:
-      codequality: gl-codequality.json
+      codequality:
+        - code-quality.json 
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == $DEV_BRANCH || $CI_COMMIT_BRANCH == $TEST_BRANCH || $CI_COMMIT_BRANCH == $MAIN_BRANCH
+    - changes:
+      - src/**
+      - biome.json
 
 secret_detection:
   stage: security

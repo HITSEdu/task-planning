@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const router = useRouter();
+  const a = 6;
 
   return (
     <div className="flex gap-4 items-center justify-center">
