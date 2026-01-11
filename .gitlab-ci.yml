@@ -71,7 +71,7 @@ lint:
 #       - src/**
 #       - biome.json
 
-code_quality:
+quality:
   stage: quality
   extends: code_quality
   variables:
