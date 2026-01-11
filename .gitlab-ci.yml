@@ -2,7 +2,6 @@ image: node:24
 
 include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
-  - template: Jobs/Code-Quality.gitlab-ci.yml
   - local: "ci/cache.yml"
   - local: "ci/setup.yml"
 
@@ -71,8 +70,15 @@ lint:
 #       - src/**
 #       - biome.json
 
-code_quality:
+eslint:
   stage: quality
+  extends:
+    - .cache
+  script:
+    - npx eslint . --format=@gitlab-formatters/gitlab --output-file=gl-codequality.json
+  artifacts:
+    reports:
+      codequality: gl-codequality.json
 
 secret_detection:
   stage: security
