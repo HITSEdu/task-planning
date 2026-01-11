@@ -1,19 +1,7 @@
-.setup.info:
+.setup.corepack:
   before_script:
     - echo "CI_COMMIT_REF_NAME=$CI_COMMIT_REF_NAME"
     - node -v
-    - npm -v
-
-.setup.env.production:
-  before_script:
-    - echo "VERCEL_TOKEN=${VERCEL_TOKEN}"
-    - echo "DATABASE_URL=${DATABASE_URL}"
-    - echo "BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}"
-    - echo "BETTER_AUTH_URL=${BETTER_AUTH_URL}"
-    - echo "SITE_URL=${SITE_URL}"
-
-.setup.corepack:
-  before_script:
     - corepack enable
     - corepack prepare pnpm --activate
     - pnpm -v

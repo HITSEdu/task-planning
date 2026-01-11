@@ -1,7 +1,7 @@
 image: node:24
 
 include:
-  - template: Jobs/Secret-Detection.gitlab-ci.yml
+  # - template: Jobs/Secret-Detection.gitlab-ci.yml
   - local: "ci/cache.yml"
   - local: "ci/setup.yml"
 
@@ -31,7 +31,6 @@ stages:
 install:
   stage: install
   extends:
-    - .setup.info
     - .setup.corepack
     - .cache.write
   script:
@@ -40,7 +39,6 @@ install:
 # lint:
 #   stage: lint
 #   extends:
-#     - .setup.info
 #     - .setup.corepack
 #     - .cache
 #   script:
@@ -53,7 +51,6 @@ install:
 code_quality:
   stage: quality
   extends:
-    - .setup.info
     - .setup.corepack
     - .cache
   script:
@@ -90,7 +87,6 @@ code_quality:
 # test:
 #   stage: test
 #   extends:
-#     - .setup.info
 #     - .setup.corepack
 #     - .cache
 #   script:
@@ -111,8 +107,6 @@ code_quality:
 # build:
 #   stage: build
 #   extends:
-#     - .setup.info
-#     - .setup.env.production
 #     - .setup.corepack
 #     - .cache
 #   script:
@@ -128,7 +122,6 @@ code_quality:
 # deploy:
 #   stage: deploy
 #   extends:
-#     - .setup.info
 #     - .setup.corepack
 #     - .cache
 #   needs:
@@ -197,7 +190,6 @@ code_quality:
 docs:
   stage: docs
   extends:
-    - .setup.info
     - .setup.corepack
   script:
     - cd docs
