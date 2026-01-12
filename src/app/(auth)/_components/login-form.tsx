@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 import { signInAction } from "@/app/actions/user";
@@ -30,7 +30,7 @@ export default function LoginForm() {
         router.replace(sitePages.teams.path);
       }
     }
-  }, [state, pending]);
+  }, [state, pending, router]);
 
   return (
     <form

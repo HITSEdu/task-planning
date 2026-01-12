@@ -39,7 +39,7 @@ export async function updateProjectAction(
   if (!rawDeadline) {
     return { status: "error", message: "Срок сдачи обязателен" };
   }
-  
+
   const result = await dal.updateProject(projectId, {
     title: formData.get("title"),
     description: formData.get("description") ?? undefined,

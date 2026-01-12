@@ -14,7 +14,11 @@ export default async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL("/sign-in", request.url));
     }
   } else {
-    if (pathname === "/sign-in" || pathname === "/sign-up" || pathname === "/") {
+    if (
+      pathname === "/sign-in" ||
+      pathname === "/sign-up" ||
+      pathname === "/"
+    ) {
       return NextResponse.redirect(new URL("/teams", request.url));
     }
   }

@@ -4,6 +4,7 @@ import { ChevronDownIcon } from "lucide-react";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { createTaskAction } from "@/app/actions/tasks";
+import type { ProjectWithStatusDTO } from "@/app/data/project/project.dto";
 import { formatDateForInput } from "@/app/data/utils/format-date";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -22,7 +23,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { ProjectWithStatusDTO } from "@/app/data/project/project.dto";
 
 type CreateTaskFormProps = {
   project: ProjectWithStatusDTO;
@@ -44,7 +44,12 @@ export default function CreateTaskForm({
 
   useEffect(() => {
     const FRESH = 500;
-    if (!pending && state.time && Date.now() - state.time < FRESH && lastShownRef.current !== state.time) {
+    if (
+      !pending &&
+      state.time &&
+      Date.now() - state.time < FRESH &&
+      lastShownRef.current !== state.time
+    ) {
       if (state.status === "error") {
         toast.error(state.message);
       } else if (state.status === "success") {

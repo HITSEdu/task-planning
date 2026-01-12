@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import type { StateType } from "@/app/config/site.config";
 import { TaskDAL } from "@/app/data/task/task.dal";
 import type { TaskWithStatusDTO } from "@/app/data/task/task.dto";
-import { ProjectWithStatusDTO } from "../data/project/project.dto";
+import type { ProjectWithStatusDTO } from "../data/project/project.dto";
 
 export async function createTaskAction(
   project: ProjectWithStatusDTO,
@@ -19,7 +19,6 @@ export async function createTaskAction(
       time: Date.now(),
     };
 
-
   const rawDeadline = formData.get("deadline");
   const deadline = new Date(String(rawDeadline));
   const projectDeadline = new Date(project.deadline as string | Date);
@@ -30,7 +29,6 @@ export async function createTaskAction(
       time: Date.now(),
     };
   }
-      
 
   const result = await dal.createTask(project.id, {
     title: formData.get("title"),
