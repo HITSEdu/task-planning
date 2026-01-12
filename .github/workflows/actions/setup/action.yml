@@ -1,0 +1,24 @@
+name: Setup Node.js
+description: Setup Node.js, enable corepack and install pnpm dependencies
+
+inputs:
+  node-version:
+    required: true
+    description: Node.js version
+
+runs:
+  using: composite
+  steps:
+    - name: setup node
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: pnpm
+
+    - name: enable corepack
+      shell: bash
+      run: corepack enable
+
+    - name: pnpm install (workspace)
+      shell: bash
+      run: pnpm -w install --no-frozen-lockfile
