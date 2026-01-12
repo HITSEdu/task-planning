@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ProjectWithTeamDTO } from "@/app/data/project/project.dto";
+import { Badge } from "@/components/ui/badge";
 
 type ProjectsListProps = {
   projects: ProjectWithTeamDTO[];
@@ -19,6 +20,11 @@ export default function ProjectsList({ projects }: ProjectsListProps) {
           >
             {project.title}
           </Link>
+          <Badge
+            variant={project.status === "COMPLETED" ? "default" : "secondary"}
+          >
+            {project.status}
+          </Badge>
         </li>
       ))}
     </ul>
