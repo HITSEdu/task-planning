@@ -87,7 +87,7 @@ export default async function TasksPage({ params }: Props) {
         <section className="flex-1 flex flex-col">
           <Card className="h-full flex flex-col shadow-sm bg-card/70 backdrop-blur p-0">
             <CardContent className="flex-1 overflow-y-auto p-4">
-              <CreateTaskForm projectId={projectId} availableTasks={tasks} />
+              <CreateTaskForm project={project} availableTasks={tasks} />
             </CardContent>
           </Card>
         </section>

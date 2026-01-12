@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 import { signInAction } from "@/app/actions/user";
@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 
 export default function LoginForm() {
   const [state, action, pending] = useActionState(signInAction, {});
+  const router = useRouter();
 
   useEffect(() => {
     if (!pending) {
@@ -26,7 +27,7 @@ export default function LoginForm() {
         toast.error(state.message);
       } else if (state.status === "success") {
         toast.success(state.message);
-        redirect("/");
+        router.replace(sitePages.teams.path);
       }
     }
   }, [state, pending]);

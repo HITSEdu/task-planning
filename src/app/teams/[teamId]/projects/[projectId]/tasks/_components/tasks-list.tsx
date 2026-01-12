@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { TaskWithDependenciesDTO } from "@/app/data/task/task.dto";
+import { Badge } from "@/components/ui/badge";
 
 type TasksListProps = {
   tasks: TaskWithDependenciesDTO[];
@@ -20,6 +21,11 @@ export default function TasksList({ tasks, teamId }: TasksListProps) {
           >
             {task.title}
           </Link>
+          <Badge
+            variant={task.status === "COMPLETED" ? "default" : "secondary"}
+          >
+            {task.status}
+          </Badge>
         </li>
       ))}
     </ul>

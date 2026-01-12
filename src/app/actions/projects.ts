@@ -13,6 +13,11 @@ export async function createProjectAction(
   const dal = await ProjectDAL.create();
   if (!dal) return { status: "error", message: "Сессия недействительна!" };
 
+  const rawDeadline = formData.get("deadline");
+  if (!rawDeadline) {
+    return { status: "error", message: "Срок сдачи обязателен" };
+  }
+
   return await dal.createProject(teamId, {
     title: formData.get("title"),
     description: formData.get("description"),
@@ -30,6 +35,11 @@ export async function updateProjectAction(
   const dal = await ProjectDAL.create();
   if (!dal) return { status: "error", message: "Сессия недействительна!" };
 
+  const rawDeadline = formData.get("deadline");
+  if (!rawDeadline) {
+    return { status: "error", message: "Срок сдачи обязателен" };
+  }
+  
   const result = await dal.updateProject(projectId, {
     title: formData.get("title"),
     description: formData.get("description") ?? undefined,

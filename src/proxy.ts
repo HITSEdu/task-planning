@@ -7,17 +7,20 @@ export default async function proxy(request: NextRequest) {
     headers: await headers(),
   });
 
+  const { pathname } = request.nextUrl;
+
   if (!session) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+    if (pathname === "/" || pathname.startsWith("/teams")) {
+      return NextResponse.redirect(new URL("/sign-in", request.url));
+    }
+  } else {
+    if (pathname === "/sign-in" || pathname === "/sign-up" || pathname === "/") {
+      return NextResponse.redirect(new URL("/teams", request.url));
+    }
   }
-
-  if (request.nextUrl.pathname === "/") {
-    return NextResponse.redirect(new URL("/teams", request.url));
-  }
-
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/teams/:path*"],
+  matcher: ["/", "/teams/:path*", "/sign-in", "/sign-up"],
 };

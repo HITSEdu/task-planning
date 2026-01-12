@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronDownIcon } from "lucide-react";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { createTaskAction } from "@/app/actions/tasks";
 import { formatDateForInput } from "@/app/data/utils/format-date";
@@ -22,33 +22,36 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
+import { ProjectWithStatusDTO } from "@/app/data/project/project.dto";
 
 type CreateTaskFormProps = {
-  projectId: string;
+  project: ProjectWithStatusDTO;
   availableTasks: Array<{ id: string; title: string }>;
 };
 
 export default function CreateTaskForm({
-  projectId,
+  project,
   availableTasks,
 }: CreateTaskFormProps) {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
+  const lastShownRef = useRef<number | null>(null);
 
   const [state, action, pending] = useActionState(
-    createTaskAction.bind(null, projectId),
+    createTaskAction.bind(null, project),
     {},
   );
 
   useEffect(() => {
-    if (!pending && state.time && state.time + 10 > Date.now()) {
+    const FRESH = 500;
+    if (!pending && state.time && Date.now() - state.time < FRESH && lastShownRef.current !== state.time) {
       if (state.status === "error") {
         toast.error(state.message);
       } else if (state.status === "success") {
         toast.success(state.message);
       }
     }
-  }, [state, pending]);
+  }, [state, pending, state.time]);
 
   return (
     <form

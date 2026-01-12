@@ -4,9 +4,10 @@ import { revalidatePath } from "next/cache";
 import type { StateType } from "@/app/config/site.config";
 import { TaskDAL } from "@/app/data/task/task.dal";
 import type { TaskWithStatusDTO } from "@/app/data/task/task.dto";
+import { ProjectWithStatusDTO } from "../data/project/project.dto";
 
 export async function createTaskAction(
-  projectId: string,
+  project: ProjectWithStatusDTO,
   _prev: StateType,
   formData: FormData,
 ): Promise<StateType<TaskWithStatusDTO>> {
@@ -18,7 +19,20 @@ export async function createTaskAction(
       time: Date.now(),
     };
 
-  const result = await dal.createTask(projectId, {
+
+  const rawDeadline = formData.get("deadline");
+  const deadline = new Date(String(rawDeadline));
+  const projectDeadline = new Date(project.deadline as string | Date);
+  if (deadline.getTime() > projectDeadline.getTime()) {
+    return {
+      status: "error",
+      message: "Дедлайн задачи не может быть позже дедлайна проекта.",
+      time: Date.now(),
+    };
+  }
+      
+
+  const result = await dal.createTask(project.id, {
     title: formData.get("title"),
     description: formData.get("description"),
     deadline: formData.get("deadline")
@@ -99,6 +113,7 @@ export async function updateTaskAction(
   _prev: StateType,
   formData: FormData,
 ): Promise<StateType> {
+  // TODO: Если никто не заметит, то можно обновить дату и поставить ее больше чем дедлайн проекта
   const dal = await TaskDAL.create();
   if (!dal) return { status: "error", message: "Сессия недействительна!" };
 
