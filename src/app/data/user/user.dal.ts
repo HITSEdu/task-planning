@@ -34,7 +34,7 @@ export class UserDAL {
         password: data.password,
       });
 
-      if (res.error) return { status: "error", message: res.error.message };
+      if (res.error) return { status: "error", message: "Ошибка входа!" };
 
       return { status: "success", message: "Успешный вход" };
     } catch {

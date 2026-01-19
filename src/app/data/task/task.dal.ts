@@ -94,6 +94,13 @@ export class TaskDAL {
       };
     }
 
+    const deadlineValidation = await this.validateDeadlinesForDepends(
+      data.deadline,
+      deps.map((d) => ({ id: d.id, deadline: d.deadline })),
+    );
+
+    if (deadlineValidation) return deadlineValidation;
+
     const task = await prisma.task.create({
       data: {
         ...data,
@@ -298,6 +305,17 @@ export class TaskDAL {
       };
     }
 
+    const newDeadline = data.deadline ?? task.deadline;
+
+    if (dependsOn && dependsOn.length > 0) {
+      const deadlineValidation = await this.validateDeadlinesForDepends(
+        newDeadline,
+        deps.map((d) => ({ id: d.id, deadline: d.deadline })),
+      );
+
+      if (deadlineValidation) return deadlineValidation;
+    }
+
     await prisma.task.update({
       where: { id: taskId },
       data: {
@@ -309,6 +327,10 @@ export class TaskDAL {
           : { set: [] },
       },
     });
+
+    if (dependsOn) {
+      await this.propagateStatusDowngrade(taskId);
+    }
 
     return { status: "success", message: "Задача обновлена" };
   }
@@ -413,5 +435,53 @@ export class TaskDAL {
     };
 
     return dfs(taskId);
+  }
+
+  private async validateDeadlinesForDepends(
+    baseTaskDeadline: Date | null | undefined,
+    deps: { id: string; deadline?: Date | null }[],
+  ) {
+    if (!baseTaskDeadline) return null;
+
+    const invalid = deps.find(
+      (d) => d.deadline && d.deadline.getTime() > baseTaskDeadline.getTime(),
+    );
+
+    if (invalid) {
+      return {
+        status: "error" as const,
+        message:
+          "Невозможно добавить зависимость: дедлайн зависимой задачи позже дедлайна самой задачи",
+      };
+    }
+
+    return null;
+  }
+
+  private async propagateStatusDowngrade(startTaskId: string) {
+    const queue: string[] = [startTaskId];
+
+    while (queue.length > 0) {
+      const id = queue.shift() as string;
+      const t = await prisma.task.findUnique({
+        where: { id },
+        include: { dependsOn: true, requiredFor: true },
+      });
+
+      if (!t) continue;
+
+      const hasUncompletedDep = t.dependsOn?.some(
+        (d) => d.status !== "COMPLETED",
+      );
+      if (hasUncompletedDep && t.status === "COMPLETED") {
+        await prisma.task.update({
+          where: { id: t.id },
+          data: { status: "CREATED" },
+        });
+        for (const dependent of t.requiredFor ?? []) {
+          queue.push(dependent.id);
+        }
+      }
+    }
   }
 }
